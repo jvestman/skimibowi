@@ -128,8 +128,11 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         super(PeripheralsPage, self).__init__(parent)
         self.setTitle("Peripherals")
         self.peripherals = {}
+        self.onewireLabel = QtWidgets.QLabel()
+        self.onewireLabel.setText("Onewire")
         self.peripherals["18b20"] = QtWidgets.QCheckBox("18b20")
         layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.onewireLabel)
         layout.addWidget(self.peripherals["18b20"])
         self.setLayout(layout)
 
