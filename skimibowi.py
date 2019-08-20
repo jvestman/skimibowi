@@ -25,9 +25,9 @@ class QIComboBox(QtWidgets.QComboBox):
     def __init__(self,parent=None):
         super(QIComboBox, self).__init__(parent)
 
-class MagicWizard(QtWidgets.QWizard):
+class Skimibowi(QtWidgets.QWizard):
     def __init__(self, parent=None):
-        super(MagicWizard, self).__init__(parent)
+        super(Skimibowi, self).__init__(parent)
         self.addPage(MCU(self))
         self.addPage(PowerManagementPage(self))
         self.addPage(PeripheralsPage(self))
@@ -131,12 +131,20 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.onewireLabel = QtWidgets.QLabel()
         self.onewireLabel.setText("Onewire")
         self.peripherals["18b20"] = QtWidgets.QCheckBox("18b20")
+        self.spiLabel = QtWidgets.QLabel()
+        self.spiLabel.setText("SPI")
+        self.i2cLabel = QtWidgets.QLabel()
+        self.i2cLabel.setText("I2C")
+        self.peripherals["ina219"] = QtWidgets.QCheckBox("INA219")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.onewireLabel)
         layout.addWidget(self.peripherals["18b20"])
+        layout.addWidget(self.spiLabel)
+        layout.addWidget(self.i2cLabel)
+        layout.addWidget(self.peripherals["ina219"])
         self.setLayout(layout)
 
-class FinalPage(QtWidgets.QWizardPage):
+class FinalPage(QtWidgets.QWizardPage): 
     def __init__(self, parent=None):
         super(FinalPage, self).__init__(parent)
         self.setTitle("Generate netlist")
@@ -200,6 +208,6 @@ generate_netlist()
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    wizard = MagicWizard()
+    wizard = Skimibowi()
     wizard.show()
     sys.exit(app.exec_())
