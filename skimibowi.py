@@ -169,7 +169,7 @@ class FinalPage(QtWidgets.QWizardPage):
         }
 
         f = open("mcu.py", "w")
-        dict = {
+        variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
             'mcurail': self.field('mcurail'),
@@ -199,7 +199,7 @@ battery['+'] += nets['+VBatt']
 battery['-'] += nets['GND']
 
 generate_netlist()
-'''.format(**dict)
+'''.format(**variables)
 
         f.write(code)
         f.close()
