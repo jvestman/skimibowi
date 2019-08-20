@@ -153,10 +153,10 @@ class FinalPage(QtWidgets.QWizardPage):
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.filename)
         layout.addWidget(self.generate)
-        self.generate.clicked.connect(self.generateHandler)
+        self.generate.clicked.connect(self.generate_skidl)
         self.setLayout(layout)
     
-    def generateHandler(self):
+    def generate_skidl(self):
         
         footprints = {
             'ESP-07': 'RF_Module:ESP-07',
