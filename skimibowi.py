@@ -151,7 +151,7 @@ class FinalPage(QtWidgets.QWizardPage):
         self.filename = QtWidgets.QLineEdit();
         self.filename.setText("mcu.py")
         self.registerField("filename", self.filename)
-        self.generate = QtWidgets.QPushButton("Generate")
+        self.generate = QtWidgets.QPushButton("&Generate")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.filename)
         layout.addWidget(self.generate)
