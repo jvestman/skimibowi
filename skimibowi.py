@@ -149,6 +149,8 @@ class FinalPage(QtWidgets.QWizardPage):
         super(FinalPage, self).__init__(parent)
         self.setTitle("Generate netlist")
         self.filename = QtWidgets.QLineEdit();
+        self.filename.setText("mcu.py")
+        self.registerField("filename", self.filename)
         self.generate = QtWidgets.QPushButton("Generate")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.filename)
@@ -168,7 +170,7 @@ class FinalPage(QtWidgets.QWizardPage):
             '2xAA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA'
         }
 
-        f = open("mcu.py", "w")
+        f = open(self.field('filename'), "w")
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
