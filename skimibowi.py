@@ -66,7 +66,7 @@ class MCU(QtWidgets.QWizardPage):
         layout.addWidget(self.resetLine)
         layout.addWidget(self.flashButton)
         self.registerField("mcu", self.comboBox, "currentText")
-        self.registerField("Reset line", self.resetLine)
+        self.registerField("reset", self.resetLine)
         self.registerField("Reset button", self.resetButton)
         self.registerField("Flash button", self.flashButton)
         self.setLayout(layout)
@@ -204,6 +204,13 @@ BATTERY['+'] += NETS['+VBatt']
 BATTERY['-'] += NETS['GND']
 
 '''.format(**variables)
+
+        if self.field('reset') == True:
+            code += '''
+NETS['RST'] = Net('RST')
+U1['RST'] += NETS['RST']
+U1['GPIO16'] += NETS['RST']
+'''
 
         if self.field('18b20') == True:
             code += '''
