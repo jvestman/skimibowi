@@ -212,6 +212,13 @@ U1['RST'] += NETS['RST']
 U1['GPIO16'] += NETS['RST']
 '''
 
+        if self.field('Reset button') == True:
+            code += '''
+SW1 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW1[1] += NETS['RST']
+SW1[2] += NETS['GND']
+'''
+
         if self.field('18b20') == True:
             code += '''
 NETS['VDD'] = Net('VDD')
