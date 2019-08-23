@@ -60,15 +60,18 @@ class MCU(QtWidgets.QWizardPage):
         self.resetButton = QtWidgets.QCheckBox("Reset button")
         self.resetLine = QtWidgets.QCheckBox("Reset line")
         self.flashButton = QtWidgets.QCheckBox("Flash button")
+        self.ftdi_header = QtWidgets.QCheckBox("FTDI header")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.comboBox)
         layout.addWidget(self.resetButton)
         layout.addWidget(self.resetLine)
         layout.addWidget(self.flashButton)
+        layout.addWidget(self.ftdi_header)
         self.registerField("mcu", self.comboBox, "currentText")
         self.registerField("reset", self.resetLine)
         self.registerField("Reset button", self.resetButton)
         self.registerField("Flash button", self.flashButton)
+        self.registerField("FTDI header", self.ftdi_header)
         self.setLayout(layout)
     
 class PowerManagementPage(QtWidgets.QWizardPage):
@@ -217,6 +220,13 @@ U1['GPIO16'] += NETS['RST']
 SW1 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
 SW1[1] += NETS['RST']
 SW1[2] += NETS['GND']
+'''
+
+        if self.field('Flash button') == True:
+            code += '''
+SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW2[1] += NETS['GPIO15']
+SW2[2] += NETS['GND']
 '''
 
         if self.field('18b20') == True:
