@@ -38,14 +38,15 @@ class Skimibowi(QtWidgets.QWizard):
         self.label = QtWidgets.QLabel("")
         self.label.setAlignment(QtCore.Qt.AlignTop)
         self.setSideWidget(self.label)
-        self.currentIdChanged.connect(self.idchanged)
+        self.currentIdChanged.connect(self.id_changed)
         self.resize(640, 480)
 
-    def idchanged(self, i):
+    def id_changed(self):
+        """Update wizard pages list in the left side pane of the Wizard"""
         titles = ""
-        for i in self.pageIds():
-            pagename = self.page(i).title()
-            if i == self.currentId():
+        for id in self.pageIds():
+            pagename = self.page(id).title()
+            if id == self.currentId():
                 pagename = '<b>' + pagename + '</b>'
             titles += '<p>' + pagename + '</p>'
         self.label.setText(titles)
