@@ -57,6 +57,7 @@ U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_I
 U2['VDD'] += ONEWIRE['VDD']
 U2['GND'] += ONEWIRE['GND']
 U2['DQ'] += ONEWIRE['DQ']
+
 '''
     code += '''generate_netlist()
 '''
