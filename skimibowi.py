@@ -19,11 +19,11 @@
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtWidgets
 from generator import generate
 
 class QIComboBox(QtWidgets.QComboBox):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         super(QIComboBox, self).__init__(parent)
 
 class Skimibowi(QtWidgets.QWizard):
@@ -39,9 +39,9 @@ class Skimibowi(QtWidgets.QWizard):
         self.label.setAlignment(QtCore.Qt.AlignTop)
         self.setSideWidget(self.label)
         self.currentIdChanged.connect(self.idchanged)
-        self.resize(640,480)
+        self.resize(640, 480)
 
-    def idchanged(self,i):
+    def idchanged(self, i):
         titles = ""
         for i in self.pageIds():
             pagename = self.page(i).title()
@@ -74,7 +74,7 @@ class MCU(QtWidgets.QWizardPage):
         self.registerField("Flash button", self.flashButton)
         self.registerField("FTDI header", self.ftdi_header)
         self.setLayout(layout)
-    
+
 class PowerManagementPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(PowerManagementPage, self).__init__(parent)
@@ -99,7 +99,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.setLayout(self.layout)
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
-        
+
 class GeneralPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(GeneralPage, self).__init__(parent)
@@ -114,7 +114,7 @@ class GeneralPage(QtWidgets.QWizardPage):
         self.componentType.addItem("SMD 1210")
         self.label2 = QtWidgets.QLabel()
         self.bus3v3 = QtWidgets.QCheckBox("+3.3V")
-        self.bus5v = QtWidgets.QCheckBox("+5V") 
+        self.bus5v = QtWidgets.QCheckBox("+5V")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label1)
         layout.addWidget(self.componentType)
@@ -149,11 +149,11 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.peripherals["ina219"])
         self.setLayout(layout)
 
-class FinalPage(QtWidgets.QWizardPage): 
+class FinalPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(FinalPage, self).__init__(parent)
         self.setTitle("Generate netlist")
-        self.filename = QtWidgets.QLineEdit();
+        self.filename = QtWidgets.QLineEdit()
         self.filename.setText("mcu.py")
         self.registerField("filename", self.filename)
         self.generate = QtWidgets.QPushButton("&Generate")
@@ -162,9 +162,9 @@ class FinalPage(QtWidgets.QWizardPage):
         layout.addWidget(self.generate)
         self.generate.clicked.connect(self.generate_skidl)
         self.setLayout(layout)
-    
+
     def generate_skidl(self):
-        
+
         footprints = {
             'ESP-07': 'RF_Module:ESP-07',
             'ESP-12E': 'RF_Module:ESP-12E',
