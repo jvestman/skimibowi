@@ -83,7 +83,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.label1 = QtWidgets.QLabel('Battery')
         self.powersource = QIComboBox(self)
         self.powersource.addItem("No battery")
-        self.powersource.addItem("2xAA - Keystone 2462")
+        self.powersource.addItem("2x1.5V AA - Keystone 2462")
         self.powersource.addItem("2x1.5V AAA battery holder")
         self.powersource.addItem("2x1.5V AAAA battery holder")
         self.powersource.addItem("3.7V Li-ion 18650 battery holder")
@@ -174,7 +174,7 @@ class FinalPage(QtWidgets.QWizardPage):
 
         battery_footprints = {
             'No battery': '',
-            '2xAA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA'
+            '2x1.5V AA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA'
         }
 
         f = open(self.field('filename'), "w")
