@@ -22,8 +22,15 @@ U1['VCC'] += NETS['{mcurail}']
 U1['GND'] += NETS['GND']
 U1['EN'] += NETS['{mcurail}']
 U1['GPIO15'] += NETS['GND']
-
 '''.format(**args)
+
+    if args['powersource'] != 'No battery':
+        code += '''
+BATTERY = Part('Device', 'Battery', footprint='{powersource}')
+BATTERY['+'] += NETS['+VBatt']
+BATTERY['-'] += NETS['GND']
+'''.format(**args)
+
 
     if wizard.field('reset'):
         code += '''
@@ -42,7 +49,7 @@ SW1[2] += NETS['GND']
     if wizard.field('Flash button'):
         code += '''
 SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW2[1] += NETS['GPIO15']
+SW2[1] += U1['GPIO15']
 SW2[2] += NETS['GND']
 '''
 
@@ -50,16 +57,30 @@ SW2[2] += NETS['GND']
         code += '''
 NETS['VDD'] = Net('VDD')
 NETS['VDD'] += NETS['+VBatt']
-ONEWIRE = Bus('onewire', NETS['VDD'], NETS['GND'], Net('DQ'))
-U1['GPIO2'] += ONEWIRE['DQ']
+NETS['DQ'] = Net('DQ')
 
 U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
-U2['VDD'] += ONEWIRE['VDD']
-U2['GND'] += ONEWIRE['GND']
-U2['DQ'] += ONEWIRE['DQ']
-
+U2['VDD'] += NETS['VDD']
+U2['GND'] += NETS['GND']
+U2['DQ'] += NETS['DQ']
+U1['GPIO2'] += NETS['DQ']
 '''
-    code += '''generate_netlist()
+    if wizard.field('FTDI header'):
+        code += generate_ftdi_header()
+
+    code += '''
+generate_netlist()
 '''
 
     return code
+
+def generate_ftdi_header():
+    return '''
+FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
+FTDI_HEADER[1] += NETS['GND']
+FTDI_HEADER[2] += NC
+FTDI_HEADER[3] += NETS['VDD']
+FTDI_HEADER[4] += U1['TX']
+FTDI_HEADER[5] += U1['RX']
+FTDI_HEADER[6] += NC
+'''
