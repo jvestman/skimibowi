@@ -113,21 +113,14 @@ class GeneralPage(QtWidgets.QWizardPage):
         self.componentType.addItem("SMD 0805")
         self.componentType.addItem("SMD 1206")
         self.componentType.addItem("SMD 1210")
-        self.label2 = QtWidgets.QLabel()
-        self.bus3v3 = QtWidgets.QCheckBox("+3.3V")
-        self.bus5v = QtWidgets.QCheckBox("+5V")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label1)
         layout.addWidget(self.componentType)
-        layout.addWidget(self.label2)
-        layout.addWidget(self.bus3v3)
-        layout.addWidget(self.bus5v)
         self.setLayout(layout)
 
     def initializePage(self):
         self.label1.setText("Capasitor, resistor and diode form factor")
-        self.label2.setText("Bus voltage")
-
+        
 class PeripheralsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(PeripheralsPage, self).__init__(parent)
