@@ -90,6 +90,16 @@ U2['GND'] += NETS['GND']
 U2['DQ'] += NETS['DQ']
 U1['GPIO2'] += NETS['DQ']
 
+NETS['VDD'] = Net('VDD')
+NETS['VDD'] += NETS['+VBatt']
+NETS['DQ'] = Net('DQ')
+
+U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
+U3['VDD'] += NETS['VDD']
+U3['GND'] += NETS['GND']
+U3['DQ'] += NETS['DQ']
+U1['GPIO2'] += NETS['DQ']
+
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += NETS['GND']
 FTDI_HEADER[2] += NC
