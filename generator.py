@@ -102,7 +102,7 @@ FTDI_HEADER[6] += NC
 
 def generate_ftdi230():
     return '''
-FTDI230 = Part('Interface_USB', 'FTDI230XS', footprint="Package_SO:SSOP-16_3.9x4.9mm_P0.635mm")
+FTDI230 = Part('Interface_USB', 'FTDI231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
 FTDI230['VCC'] += NETS['VDD']
 FTDI230['GND] += NETS['GND']
@@ -112,4 +112,17 @@ FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
 USBMICRO['VBUS'] += NETS['VBus']
 USBMICRO['GND'] += NETS['GND']
+
+Q1 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
+Q2 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
+Q1['B'] += FTDI230['DTR']
+Q2['B'] += FTDI230['RST']
+Q1['E'] += U1['GPIO0']
+Q2['E'] += U1['RST']
+Q1['C'] + Q2['C']
+Q2['C'] += FTDI230['DTR']
+Q1['C'] += FTDI230['RST']
+
+
+
 '''
