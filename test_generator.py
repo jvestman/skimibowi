@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import Mock
 from generator import generate
 from generator import generate_ftdi_header
+from generator import generate_ftdi230
 
 class TestGenerator(unittest.TestCase):
     """Tests for SKiDL generator functions"""
@@ -123,6 +124,22 @@ FTDI_HEADER[3] += NETS['VDD']
 FTDI_HEADER[4] += U1['TX']
 FTDI_HEADER[5] += U1['RX']
 FTDI_HEADER[6] += NC
+''')
+
+    def test_ftdi230(self):
+        """Test generation of FTDI230"""
+        self.assertEqual(generate_ftdi230(),
+        '''
+FTDI230 = Part('Interface_USB', 'FTDI230XS', footprint="Package_SO:SSOP-16_3.9x4.9mm_P0.635mm")
+USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
+FTDI230['VCC'] += NETS['VDD']
+FTDI230['GND] += NETS['GND']
+FTDI230['TXD'] += U1['RX']
+FTDI230['RXD'] += U1['TX']
+FTDI230['USBDM'] += USBMICRO['D-']
+FTDI230['USBDP'] += USBMICRO['D+']
+USBMICRO['VBUS'] += NETS['VBus']
+USBMICRO['GND'] += NETS['GND']
 ''')
 
 if __name__ == '__main__':
