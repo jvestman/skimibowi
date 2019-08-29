@@ -198,6 +198,12 @@ class FinalPage(QtWidgets.QWizardPage):
             'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
         }
 
+        usb_connector_footprints = {
+            'USB B': 'USB_B_OST_USB-B1HSxx_Horizontal',
+            'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
+            'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal'
+        }
+
         f = open(self.field('filename'), "w")
         variables = {
             'mcu': self.field("mcu"),
