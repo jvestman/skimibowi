@@ -4,6 +4,8 @@ from unittest.mock import Mock
 from generator import generate
 from generator import generate_ftdi_header
 from generator import generate_ftdi230
+import sys
+from io import StringIO
 
 class TestGenerator(unittest.TestCase):
     """Tests for SKiDL generator functions"""
@@ -155,6 +157,32 @@ Q1['C'] += Q2['C']
 Q2['C'] += FTDI230['DTR']
 Q1['C'] += FTDI230['RTS']
 ''')
+
+    def test_esp12e_all_options_execution(self):
+        """Test execution of generated skidl code with all options true"""
+
+        codeOut = StringIO()
+        codeErr = StringIO()
+        sys.stdout = codeOut
+        sys.stderr = codeErr
+
+        wizard = Mock()
+        wizard.field.return_value = True
+
+        exec( generate({'mcu':'ESP-12E',
+                        'mcu_footprint':'RF_Module:ESP-12E',
+                        'mcurail':'+VBatt',
+                        'powersource':'No battery'}, wizard))
+
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+        self.assertTrue(codeErr.getvalue().endswith('No errors or warnings found during netlist generation.\n\n'))
+        self.assertEqual('', codeOut.getvalue())
+
+        codeOut.close()
+        codeErr.close()
+
 
 if __name__ == '__main__':
     unittest.main()
