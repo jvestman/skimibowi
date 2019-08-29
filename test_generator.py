@@ -128,18 +128,32 @@ FTDI_HEADER[6] += NC
 
     def test_ftdi230(self):
         """Test generation of FTDI230"""
-        self.assertEqual(generate_ftdi230(),
+        self.assertEqual(generate_ftdi230({'resistor_footprint':'Resistor_SMD:R_1206_3216Metric'}),
         '''
-FTDI230 = Part('Interface_USB', 'FTDI230XS', footprint="Package_SO:SSOP-16_3.9x4.9mm_P0.635mm")
+FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
 FTDI230['VCC'] += NETS['VDD']
-FTDI230['GND] += NETS['GND']
+FTDI230['GND'] += NETS['GND']
 FTDI230['TXD'] += U1['RX']
 FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
-USBMICRO['VBUS'] += NETS['VBus']
+USBMICRO['VBUS'] += NETS['+VBus']
 USBMICRO['GND'] += NETS['GND']
+
+Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+QR1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+QR2 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+Q1['B'] += QR1[1]
+QR1[2] += FTDI230['DTR']
+Q2['B'] += QR2[1]
+QR2[2] += FTDI230['RTS']
+Q1['E'] += U1['GPIO0']
+Q2['E'] += U1['RST']
+Q1['C'] += Q2['C']
+Q2['C'] += FTDI230['DTR']
+Q1['C'] += FTDI230['RTS']
 ''')
 
 if __name__ == '__main__':
