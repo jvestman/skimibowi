@@ -110,20 +110,20 @@ FTDI230['TXD'] += U1['RX']
 FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
-USBMICRO['VBUS'] += NETS['VBus']
+USBMICRO['VBUS'] += NETS['+VBus']
 USBMICRO['GND'] += NETS['GND']
 
-Q1 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
-Q2 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
-QR1 = Part('Device', 'R', footprint='{resistor_footprint}')
-QR2 = Part('Device', 'R', footprint='{resistor_footprint}')
+Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+QR1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+QR2 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 Q1['B'] += QR1[1]
 QR1[2] += FTDI230['DTR']
 Q2['B'] += QR2[1]
-QR2[2] += FTDI230['RST']
+QR2[2] += FTDI230['RTS']
 Q1['E'] += U1['GPIO0']
 Q2['E'] += U1['RST']
-Q1['C'] + Q2['C']
+Q1['C'] += Q2['C']
 Q2['C'] += FTDI230['DTR']
-Q1['C'] += FTDI230['RST']
+Q1['C'] += FTDI230['RTS']
 '''.format(**args)
