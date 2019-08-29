@@ -112,6 +112,7 @@ class GeneralPage(QtWidgets.QWizardPage):
         self.componentType.addItem("SMD 0805")
         self.componentType.addItem("SMD 1206")
         self.componentType.addItem("SMD 1210")
+        self.registerField('resistor_footprint', self.componentType, 'currentText')
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label1)
         layout.addWidget(self.componentType)
@@ -189,12 +190,21 @@ class FinalPage(QtWidgets.QWizardPage):
             '3.7V Li-ion 18650 battery holder': 'BatteryHolder_Keystone_1042_1x18650'
         }
 
+        resistor_footprints = {
+            'SMD 0402': 'Resistor_SMD:R_0402_1005Metric',
+            'SMD 0603': 'Resistor_SMD:R_0603_1608Metric',
+            'SMD 0805': 'Resistor_SMD:R_0805_2012Metric',
+            'SMD 1206': 'Resistor_SMD:R_1206_3216Metric',
+            'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
+        }
+
         f = open(self.field('filename'), "w")
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
             'mcurail': self.field('mcurail'),
-            'powersource': battery_footprints[self.field('powersource')]
+            'powersource': battery_footprints[self.field('powersource')],
+            'resistor_footprint': resistor_footprints[self.field('resistor_footprint')]
             }
 
         code = generate(variables, self)

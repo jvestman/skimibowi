@@ -80,8 +80,8 @@ U1['GPIO2'] += NETS['DQ']
     if wizard.field('FTDI header'):
         code += generate_ftdi_header()
 
-    if wizard.field('Serial') == 'FTDI & USB micro connector':
-        code += generate_ftdi230()
+    if wizard.field('usb_serial') == 'FTDI & USB micro connector':
+        code += generate_ftdi230(args)
 
     code += '''
 generate_netlist()
@@ -100,12 +100,12 @@ FTDI_HEADER[5] += U1['RX']
 FTDI_HEADER[6] += NC
 '''
 
-def generate_ftdi230():
+def generate_ftdi230(args):
     return '''
-FTDI230 = Part('Interface_USB', 'FTDI231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
+FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
 FTDI230['VCC'] += NETS['VDD']
-FTDI230['GND] += NETS['GND']
+FTDI230['GND'] += NETS['GND']
 FTDI230['TXD'] += U1['RX']
 FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
@@ -115,14 +115,15 @@ USBMICRO['GND'] += NETS['GND']
 
 Q1 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
 Q2 = Part('Transistor_BJT', 'PZT2222', footprint='Package_TO_SOT_SMD:SOT-223')
-Q1['B'] += FTDI230['DTR']
-Q2['B'] += FTDI230['RST']
+QR1 = Part('Device', 'R', footprint='{resistor_footprint}')
+QR2 = Part('Device', 'R', footprint='{resistor_footprint}')
+Q1['B'] += QR1[1]
+QR1[2] += FTDI230['DTR']
+Q2['B'] += QR2[1]
+QR2[2] += FTDI230['RST']
 Q1['E'] += U1['GPIO0']
 Q2['E'] += U1['RST']
 Q1['C'] + Q2['C']
 Q2['C'] += FTDI230['DTR']
 Q1['C'] += FTDI230['RST']
-
-
-
-'''
+'''.format(**args)
