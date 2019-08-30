@@ -89,6 +89,13 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.label1)
         self.layout.addWidget(self.powersource)
+        self.layout.addWidget(QtWidgets.QLabel("Regulator"))
+        self.regulator = QIComboBox(self)
+        self.regulator.addItem("LD1117S33TR")
+        self.regulator.addItem("LD1117S50TR")
+        self.regulator.addItem("LP2985-33DBVR")
+        self.regulator.addItem("LP2985-50DBVR")
+        self.layout.addWidget(self.regulator)
         self.layout.addWidget(QtWidgets.QLabel("MCU power rail"))
         self.mcurail = QIComboBox(self)
         self.mcurail.addItem("+VBatt")
@@ -99,6 +106,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.setLayout(self.layout)
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
+        self.registerField("regulator", self.regulator, "currentText")
 
 class GeneralPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
