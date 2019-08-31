@@ -51,7 +51,7 @@ SW1[2] += NETS['GND']
     if wizard.field('Flash button'):
         code += '''
 SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW2[1] += U1['GPIO15']
+SW2[1] += U1['GPIO0']
 SW2[2] += NETS['GND']
 '''
 
