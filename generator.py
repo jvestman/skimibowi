@@ -31,6 +31,8 @@ BATTERY['+'] += NETS['+VBatt']
 BATTERY['-'] += NETS['GND']
 '''.format(**args)
 
+    if 'regulator' in args and args['regulator'] is not None:
+        code += generate_regulator(args)
 
     if wizard.field('reset'):
         code += '''
@@ -127,3 +129,12 @@ Q1['C'] += Q2['C']
 Q2['C'] += FTDI230['DTR']
 Q1['C'] += FTDI230['RTS']
 '''.format(**args)
+
+def generate_regulator(args):
+    print(args)
+    return '''
+REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
+REGULATOR['VI'] += NETS['+VBatt']
+REGULATOR['VO'] += NETS['{output}']
+REGULATOR['GND'] += NETS['GND']
+'''.format(**(args['regulator']))

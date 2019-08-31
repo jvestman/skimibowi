@@ -91,10 +91,12 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.layout.addWidget(self.powersource)
         self.layout.addWidget(QtWidgets.QLabel("Regulator"))
         self.regulator = QIComboBox(self)
+        self.regulator.addItem("No regulator")
         self.regulator.addItem("LD1117S33TR")
         self.regulator.addItem("LD1117S50TR")
-        self.regulator.addItem("LP2985-33DBVR")
-        self.regulator.addItem("LP2985-50DBVR")
+        self.regulator.addItem("LP2985-30")
+        self.regulator.addItem("LP2985-33")
+        self.regulator.addItem("LP2985-50")
         self.layout.addWidget(self.regulator)
         self.layout.addWidget(QtWidgets.QLabel("MCU power rail"))
         self.mcurail = QIComboBox(self)
@@ -198,7 +200,17 @@ class FinalPage(QtWidgets.QWizardPage):
             '3.7V Li-ion 18650 battery holder': 'BatteryHolder_Keystone_1042_1x18650'
         }
 
+        regulators = {
+            'No regulator': None,
+            'LD1117S33TR': { 'module': 'Regulator_Linear', 'part': 'LD1117S33TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+3V3'},
+            'LD1117S50TR': {'module': 'Regulator_Linear', 'part': 'LD1117S50TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+5V'},
+            'LP2985-30': {'module': 'Regulator_Linear', 'part': 'LP2985-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V'},
+            'LP2985-33': {'module': 'Regulator_Linear', 'part': 'LP2985-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3'},
+            'LP2985-50': {'module': 'Regulator_Linear', 'part': 'LP2985-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V'}
+        }
+
         resistor_footprints = {
+            'THT': 'R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal',
             'SMD 0402': 'Resistor_SMD:R_0402_1005Metric',
             'SMD 0603': 'Resistor_SMD:R_0603_1608Metric',
             'SMD 0805': 'Resistor_SMD:R_0805_2012Metric',
@@ -213,12 +225,14 @@ class FinalPage(QtWidgets.QWizardPage):
         }
 
         f = open(self.field('filename'), "w")
+        print(regulators[self.field('regulator')])
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
             'mcurail': self.field('mcurail'),
             'powersource': battery_footprints[self.field('powersource')],
-            'resistor_footprint': resistor_footprints[self.field('resistor_footprint')]
+            'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
+            'regulator': regulators[self.field('regulator')]
             }
 
         code = generate(variables, self)
