@@ -55,12 +55,19 @@ SW2[1] += U1['GPIO15']
 SW2[2] += NETS['GND']
 '''
 
-    if wizard.field('DS18B20'):
+    if wizard.field('DS18B20') or wizard.field('DS18B20U'):
         code += '''
 NETS['VDD'] = Net('VDD')
 NETS['VDD'] += NETS['+VBatt']
 NETS['DQ'] = Net('DQ')
 
+U3R1 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
+U3R1[1] += NETS['VDD']
+U3R1[2] += NETS['DQ']
+'''.format(**args)
+
+    if wizard.field('DS18B20'):
+        code += '''
 U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
 U2['VDD'] += NETS['VDD']
 U2['GND'] += NETS['GND']
@@ -69,16 +76,13 @@ U1['GPIO2'] += NETS['DQ']
 '''
     if wizard.field('DS18B20U'):
         code += '''
-NETS['VDD'] = Net('VDD')
-NETS['VDD'] += NETS['+VBatt']
-NETS['DQ'] = Net('DQ')
-
 U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
 U3['VDD'] += NETS['VDD']
 U3['GND'] += NETS['GND']
 U3['DQ'] += NETS['DQ']
 U1['GPIO2'] += NETS['DQ']
 '''
+
     if wizard.field('FTDI header'):
         code += generate_ftdi_header()
 
