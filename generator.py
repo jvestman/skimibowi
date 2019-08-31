@@ -92,6 +92,8 @@ generate_netlist()
     return code
 
 def generate_ftdi_header():
+    """Generate header for connecting FTDI programmer"""
+
     return '''
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += NETS['GND']
@@ -103,6 +105,7 @@ FTDI_HEADER[6] += NC
 '''
 
 def generate_ftdi230(args):
+    """Generate FTDI uart circuitry"""
     return '''
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
@@ -131,7 +134,8 @@ Q1['C'] += FTDI230['RTS']
 '''.format(**args)
 
 def generate_regulator(args):
-    print(args)
+    """Generate regulator that regulates battery voltage to corresponding voltage rail"""
+
     return '''
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
 REGULATOR['VI'] += NETS['+VBatt']
