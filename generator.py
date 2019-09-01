@@ -18,10 +18,10 @@ NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
 
-U1['VCC'] += NETS['{mcurail}']
-U1['GND'] += NETS['GND']
-U1['EN'] += NETS['{mcurail}']
-U1['GPIO15'] += NETS['GND']
+U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
+NETS['{mcurail}'] & U1R1 & U1['EN']
+NETS['GND'] & U1R2 & U1['GPIO15']
 '''.format(**args)
 
     if args['powersource'] != 'No battery':
