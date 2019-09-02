@@ -18,17 +18,26 @@ NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
 
+U1['VCC'] += NETS['{mcurail}']
+U1['GND'] += NETS['GND']
 U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
 NETS['{mcurail}'] & U1R1 & U1['EN']
 NETS['GND'] & U1R2 & U1['GPIO15']
 '''.format(**args)
 
-    if args['powersource'] != 'No battery':
+    if args['powersource'] not in ['No battery', 'JST PH S2B']:
         code += '''
-BATTERY = Part('Device', 'Battery', footprint='{powersource}')
+BATTERY = Part('Device', 'Battery', footprint='{powersource_footprint}')
 BATTERY['+'] += NETS['+VBatt']
 BATTERY['-'] += NETS['GND']
+'''.format(**args)
+
+    if args['powersource'] == 'JST PH S2B':
+        code += '''
+BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footprint}')
+BATTERY[1] += NETS['+VBatt']
+BATTERY[2] += NETS['GND']
 '''.format(**args)
 
     if 'regulator' in args and args['regulator'] is not None:
@@ -57,34 +66,33 @@ SW2[2] += NETS['GND']
 
     if wizard.field('DS18B20') or wizard.field('DS18B20U'):
         code += '''
-NETS['VDD'] = Net('VDD')
-NETS['VDD'] += NETS['+VBatt']
 NETS['DQ'] = Net('DQ')
 
 U3R1 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
-U3R1[1] += NETS['VDD']
+U3R1[1] += NETS['{mcurail}']
 U3R1[2] += NETS['DQ']
 '''.format(**args)
 
     if wizard.field('DS18B20'):
         code += '''
 U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
-U2['VDD'] += NETS['VDD']
+U2['VDD'] += NETS['{mcurail}']
 U2['GND'] += NETS['GND']
 U2['DQ'] += NETS['DQ']
 U1['GPIO2'] += NETS['DQ']
-'''
+'''.format(**args)
+
     if wizard.field('DS18B20U'):
         code += '''
 U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
-U3['VDD'] += NETS['VDD']
+U3['VDD'] += NETS['{mcurail}']
 U3['GND'] += NETS['GND']
 U3['DQ'] += NETS['DQ']
 U1['GPIO2'] += NETS['DQ']
-'''
+'''.format(**args)
 
     if wizard.field('FTDI header'):
-        code += generate_ftdi_header()
+        code += generate_ftdi_header(args)
 
     if wizard.field('usb_serial') == 'FTDI & USB micro connector':
         code += generate_ftdi230(args)
@@ -95,18 +103,18 @@ generate_netlist()
 
     return code
 
-def generate_ftdi_header():
+def generate_ftdi_header(args):
     """Generate header for connecting FTDI programmer"""
 
     return '''
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += NETS['GND']
 FTDI_HEADER[2] += NC
-FTDI_HEADER[3] += NETS['VDD']
+FTDI_HEADER[3] += NETS['{mcurail}']
 FTDI_HEADER[4] += U1['TX']
 FTDI_HEADER[5] += U1['RX']
 FTDI_HEADER[6] += NC
-'''
+'''.format(**args)
 
 def generate_ftdi230(args):
     """Generate FTDI uart circuitry"""

@@ -86,6 +86,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.powersource.addItem("2xAA - Keystone 2462")
         self.powersource.addItem("2xAAA - Keystone 2468")
         self.powersource.addItem("18650 - Keystone 1042")
+        self.powersource.addItem("JST PH S2B")
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.label1)
         self.layout.addWidget(self.powersource)
@@ -196,8 +197,9 @@ class FinalPage(QtWidgets.QWizardPage):
         battery_footprints = {
             'No battery': '',
             '2xAA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA',
-            '2xAAA - Keystone 2468': 'BatteryHolder_Keystone_2468_2xAAA',
-            '18650 - Keystone 1042': 'BatteryHolder_Keystone_1042_1x18650'
+            '2xAAA - Keystone 2468': 'Battery:BatteryHolder_Keystone_2468_2xAAA',
+            '18650 - Keystone 1042': 'Battery:BatteryHolder_Keystone_1042_1x18650',
+            'JST PH S2B': 'JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal'
         }
 
         regulators = {
@@ -225,12 +227,13 @@ class FinalPage(QtWidgets.QWizardPage):
         }
 
         f = open(self.field('filename'), "w")
-        print(regulators[self.field('regulator')])
+
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
             'mcurail': self.field('mcurail'),
-            'powersource': battery_footprints[self.field('powersource')],
+            'powersource': self.field('powersource'),
+            'powersource_footprint': battery_footprints[self.field('powersource')],
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
             'regulator': regulators[self.field('regulator')]
             }
