@@ -44,32 +44,16 @@ BATTERY[2] += NETS['GND']
         code += generate_regulator(args)
 
     if wizard.field('reset'):
-        code += '''
-NETS['RST'] = Net('RST')
-U1['RST'] += NETS['RST']
-U1['GPIO16'] += NETS['RST']
-'''
+        code += generate_reset_line(args)
 
     if wizard.field('Reset button'):
-        code += '''
-SW1 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW1[1] += NETS['RST']
-SW1[2] += NETS['GND']
-'''
+        code += generate_reset_button(args)
 
     if wizard.field('Flash button'):
-        code += '''
-SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW2[1] += U1['GPIO0']
-SW2[2] += NETS['GND']
-'''
+        code += generate_flash_button(args)
 
     if wizard.field("led"):
-        code += '''
-LED = Part('Device', 'LED', footprint='{led_footprint}')
-LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
-U1['GPIO0'] & LED_R & LED & NETS['{mcurail}']
-'''.format(**args)
+        code += generate_power_led(args)
 
     if wizard.field('DS18B20') or wizard.field('DS18B20U'):
         code += '''
@@ -109,6 +93,38 @@ generate_netlist()
 '''
 
     return code
+
+def generate_reset_line(args):
+    """Generate reset line from ESP GPIO16 to RST pin"""
+    return '''
+NETS['RST'] = Net('RST')
+U1['RST'] += NETS['RST']
+U1['GPIO16'] += NETS['RST']
+'''.format(**args)
+
+def generate_reset_button(args):
+    """Generate button for pulling ESP RST pin to low (e.g. reset)"""
+    return '''
+SW1 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW1[1] += NETS['RST']
+SW1[2] += NETS['GND']
+'''.format(**args)
+
+def generate_flash_button(args):
+    """Generate button for pulling pulling ESP GPIO0 high (e.g. flash mode when booting)"""
+    return '''
+SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW2[1] += U1['GPIO0']
+SW2[2] += NETS['GND']
+'''.format(**args)
+
+def generate_power_led(args):
+    """Generate led connected to ESP GPI0 that is on after boot"""
+    return '''
+LED = Part('Device', 'LED', footprint='{led_footprint}')
+LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
+U1['GPIO0'] & LED_R & LED & NETS['{mcurail}']
+'''.format(**args)
 
 def generate_ftdi_header(args):
     """Generate header for connecting FTDI programmer"""
