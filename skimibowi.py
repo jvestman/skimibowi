@@ -63,17 +63,20 @@ class MCU(QtWidgets.QWizardPage):
         self.resetLine = QtWidgets.QCheckBox("Reset line")
         self.flashButton = QtWidgets.QCheckBox("Flash button")
         self.ftdi_header = QtWidgets.QCheckBox("FTDI header")
+        self.led = QtWidgets.QCheckBox("Power-on led on GPIO0")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.comboBox)
         layout.addWidget(self.resetButton)
         layout.addWidget(self.resetLine)
         layout.addWidget(self.flashButton)
         layout.addWidget(self.ftdi_header)
+        layout.addWidget(self.led)
         self.registerField("mcu", self.comboBox, "currentText")
         self.registerField("reset", self.resetLine)
         self.registerField("Reset button", self.resetButton)
         self.registerField("Flash button", self.flashButton)
         self.registerField("FTDI header", self.ftdi_header)
+        self.registerField("led", self.led)
         self.setLayout(layout)
 
 class PowerManagementPage(QtWidgets.QWizardPage):
@@ -220,6 +223,15 @@ class FinalPage(QtWidgets.QWizardPage):
             'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
         }
 
+        led_footprints = {
+            'THT': 'LED_THT:LED_D3.0mm',
+            'SMD 0402': 'LED_SMD:LED_0402_1005Metric',
+            'SMD 0603': 'LED_SMD:LED_0603_1608Metric',
+            'SMD 0805': 'LED_SMD:LED_0805_2012Metric',
+            'SMD 1206': 'LED_SMD:LED_1206_3216Metric',
+            'SMD 1210': 'LED_SMD:LED_1210_3225Metric'
+        }
+
         usb_connector_footprints = {
             'USB B': 'USB_B_OST_USB-B1HSxx_Horizontal',
             'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
@@ -235,6 +247,7 @@ class FinalPage(QtWidgets.QWizardPage):
             'powersource': self.field('powersource'),
             'powersource_footprint': battery_footprints[self.field('powersource')],
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
+            'led_footprint': led_footprints[self.field('resistor_footprint')],
             'regulator': regulators[self.field('regulator')]
             }
 

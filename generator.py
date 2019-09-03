@@ -64,6 +64,13 @@ SW2[1] += U1['GPIO0']
 SW2[2] += NETS['GND']
 '''
 
+    if wizard.field("led"):
+        code += '''
+LED = Part('Device', 'LED', footprint='{led_footprint}')
+LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
+U1['GPIO0'] & LED_R & LED & NETS['{mcurail}']
+'''.format(**args)
+
     if wizard.field('DS18B20') or wizard.field('DS18B20U'):
         code += '''
 NETS['DQ'] = Net('DQ')
