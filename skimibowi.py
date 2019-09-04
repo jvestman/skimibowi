@@ -127,13 +127,23 @@ class GeneralPage(QtWidgets.QWizardPage):
         self.componentType.addItem("SMD 1206")
         self.componentType.addItem("SMD 1210")
         self.registerField('resistor_footprint', self.componentType, 'currentText')
+        self.board_footprint_label = QtWidgets.QLabel()
+        self.board_footprint = QIComboBox(self)
+        self.board_footprint.addItem("None")
+        self.board_footprint.addItem("Arduino Uno R3")
+        self.board_footprint.addItem("Arduino Nano")
+        self.board_footprint.addItem("Wemos D1 Mini")
+        self.board_footprint.addItem("Adafruit Feather")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label1)
         layout.addWidget(self.componentType)
+        layout.addWidget(self.board_footprint_label)
+        layout.addWidget(self.board_footprint)
         self.setLayout(layout)
 
     def initializePage(self):
         self.label1.setText("Capasitor, resistor and diode form factor")
+        self.board_footprint_label.setText("Board outline footprint")
         
 class PeripheralsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
