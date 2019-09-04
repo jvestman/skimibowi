@@ -56,31 +56,13 @@ BATTERY[2] += NETS['GND']
         code += generate_power_led(args)
 
     if wizard.field('DS18B20') or wizard.field('DS18B20U'):
-        code += '''
-NETS['DQ'] = Net('DQ')
-
-U3R1 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
-U3R1[1] += NETS['{mcurail}']
-U3R1[2] += NETS['DQ']
-'''.format(**args)
+        code += generate_onewire_bus(args)
 
     if wizard.field('DS18B20'):
-        code += '''
-U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
-U2['VDD'] += NETS['{mcurail}']
-U2['GND'] += NETS['GND']
-U2['DQ'] += NETS['DQ']
-U1['GPIO2'] += NETS['DQ']
-'''.format(**args)
+        code += generate_18b20(args)
 
     if wizard.field('DS18B20U'):
-        code += '''
-U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
-U3['VDD'] += NETS['{mcurail}']
-U3['GND'] += NETS['GND']
-U3['DQ'] += NETS['DQ']
-U1['GPIO2'] += NETS['DQ']
-'''.format(**args)
+        code += generate_18b20u(args)
 
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
@@ -124,6 +106,36 @@ def generate_power_led(args):
 LED = Part('Device', 'LED', footprint='{led_footprint}')
 LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
 U1['GPIO0'] & LED_R & LED & NETS['{mcurail}']
+'''.format(**args)
+
+def generate_onewire_bus(args):
+    """Generate DQ net for onewire bus"""
+    return '''
+NETS['DQ'] = Net('DQ')
+
+U3R1 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
+U3R1[1] += NETS['{mcurail}']
+U3R1[2] += NETS['DQ']
+'''.format(**args)
+
+def generate_18b20u(args):
+    """Generate 18B20U part and connect it to onewire bus"""
+    return '''
+U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
+U3['VDD'] += NETS['{mcurail}']
+U3['GND'] += NETS['GND']
+U3['DQ'] += NETS['DQ']
+U1['GPIO2'] += NETS['DQ']
+'''.format(**args)
+
+def generate_18b20(args):
+    """Generate 18b20 part and cconnect it to onewire bus"""
+    return '''
+U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
+U2['VDD'] += NETS['{mcurail}']
+U2['GND'] += NETS['GND']
+U2['DQ'] += NETS['DQ']
+U1['GPIO2'] += NETS['DQ']
 '''.format(**args)
 
 def generate_ftdi_header(args):
