@@ -189,3 +189,23 @@ REGULATOR['VI'] += NETS['+VBatt']
 REGULATOR['VO'] += NETS['{output}']
 REGULATOR['GND'] += NETS['GND']
 '''.format(**(args['regulator']))
+
+def generate_battery_management(args):
+    """Generate battery management IC"""
+    return '''
+BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
+BATTERYMANAGER['IN'] += NETS['+VBus']
+BATTERYMANAGER['SEL'] += NETS['+VBus']
+BATTERYMANAGER['PROG2'] += NETS['+VBus']
+BATTERYMANAGER['TE'] += NETS['+VBus']
+BATTERYMANAGER['CE'] += NETS['+VBus']
+
+BATTERYMANAGER['BG'] += NC
+
+BATTERYMANAGER['VSS'] += NETS['GND']
+
+BATTERYMANAGER['VBAT'] += NETS['+VBatt']
+BATTERYMANAGER['Vbat_SENSE'] += NETS['+VBatt']
+
+
+'''.format(**args)

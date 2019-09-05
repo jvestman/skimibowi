@@ -4,6 +4,7 @@ from io import StringIO
 import unittest
 from unittest.mock import Mock
 from generator import generate
+from generator import generate_battery_management
 from generator import generate_ftdi_header
 from generator import generate_ftdi230
 
@@ -137,6 +138,15 @@ FTDI_HEADER[3] += NETS['VDD']
 FTDI_HEADER[4] += U1['TX']
 FTDI_HEADER[5] += U1['RX']
 FTDI_HEADER[6] += NC
+'''
+            )
+
+    def test_battery_management(self):
+        """Test FTDI header generation"""
+        self.assertEqual(
+            generate_battery_management({}),
+            '''
+BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
 '''
             )
 
