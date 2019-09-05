@@ -32,7 +32,7 @@ class Skimibowi(QtWidgets.QWizard):
         self.addPage(MCU(self))
         self.addPage(PowerManagementPage(self))
         self.addPage(PeripheralsPage(self))
-        self.addPage(GeneralPage(self))
+        self.addPage(FootprintsPage(self))
         self.addPage(FinalPage(self))
         self.setWindowTitle("Skidl Microcontroller Board  Wizard")
         self.label = QtWidgets.QLabel("")
@@ -114,10 +114,10 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
 
-class GeneralPage(QtWidgets.QWizardPage):
+class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
-        super(GeneralPage, self).__init__(parent)
-        self.setTitle("Passive footprints")
+        super(FootprintsPage, self).__init__(parent)
+        self.setTitle("Footprints")
         self.resistor_footprint_label = QtWidgets.QLabel()
         self.resistor_footprint = QIComboBox(self)
         self.resistor_footprint.addItem("THT")
