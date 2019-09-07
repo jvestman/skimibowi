@@ -8,8 +8,6 @@ def generate(args, wizard):
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-U1 = Part('RF_Module', '{mcu}', footprint='{mcu_footprint}')
-
 NETS = {{}}
 NETS['+VLipo'] = Net('+VLipo')
 NETS['+VBatt'] = Net('+VBatt')
@@ -18,6 +16,11 @@ NETS['+3V'] = Net('+3V')
 NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
+'''.format(**args)
+
+    if args['mcu'] in ['ESP-12E', 'ESP-07']:
+        code += '''
+U1 = Part('RF_Module', '{mcu}', footprint='{mcu_footprint}')
 
 U1['VCC'] += NETS['{mcurail}']
 U1['GND'] += NETS['GND']
