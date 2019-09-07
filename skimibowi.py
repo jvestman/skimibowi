@@ -102,6 +102,11 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.regulator.addItem("LP2985-33")
         self.regulator.addItem("LP2985-50")
         self.layout.addWidget(self.regulator)
+        self.layout.addWidget(QtWidgets.QLabel('Battery management'))
+        self.battery_management = QIComboBox(self)
+        self.battery_management.addItem('No battery management ic')
+        self.battery_management.addItem('MCP73871-2AA')
+        self.layout.addWidget(self.battery_management)
         self.layout.addWidget(QtWidgets.QLabel("MCU power rail"))
         self.mcurail = QIComboBox(self)
         self.mcurail.addItem("+VBatt")
@@ -113,6 +118,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
+        self.registerField("battery_management", self.battery_management, "currentText")
 
 class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
@@ -127,6 +133,11 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.resistor_footprint.addItem("SMD 1206")
         self.resistor_footprint.addItem("SMD 1210")
         self.registerField('resistor_footprint', self.resistor_footprint, 'currentText')
+        self.button_footprint_label = QtWidgets.QLabel()
+        self.button_footprint_label.setText("Tactile button footprint")
+        self.button_footprint = QIComboBox(self)
+        self.button_footprint.addItem("b3u-1000")
+        self.registerField('button_footprint', self.button_footprint, 'currentText')
         self.board_footprint_label = QtWidgets.QLabel()
         self.board_footprint = QIComboBox(self)
         self.board_footprint.addItem("None")
@@ -137,6 +148,8 @@ class FootprintsPage(QtWidgets.QWizardPage):
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.resistor_footprint_label)
         layout.addWidget(self.resistor_footprint)
+        layout.addWidget(self.button_footprint_label)
+        layout.addWidget(self.button_footprint)
         layout.addWidget(self.board_footprint_label)
         layout.addWidget(self.board_footprint)
         self.setLayout(layout)
@@ -160,7 +173,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.adc_label = QtWidgets.QLabel()
         self.adc_label.setText("ADC pin")
         self.adc_voltage_divider = QtWidgets.QComboBox()
-        self.adc_voltage_divider.addItems(['1.0V','3.0V', '3V3', '4.5V', '5V', '6V', '9V', '12V', '24V'])
+        self.adc_voltage_divider.addItems(['1.0V', '3.0V', '3V3', '4.5V', '5V', '6V', '9V', '12V', '24V'])
         self.onewire_label = QtWidgets.QLabel()
         self.onewire_label.setText("Onewire")
         self.peripherals["DS18B20"] = QtWidgets.QCheckBox("DS18B20")
@@ -233,6 +246,15 @@ class FinalPage(QtWidgets.QWizardPage):
             'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
         }
 
+        capacitor_footprints = {
+            'THT': '',
+            'SMD 0402': 'Capacitor_SMD:C_0402_1005Metric',
+            'SMD 0603': 'Capacitor_SMD:C_0603_1608Metric',
+            'SMD 0805': 'Capacitor_SMD:C_0805_2012Metric',
+            'SMD 1206': 'Capacitor_SMD:C_1206_3216Metric',
+            'SMD 1210': 'Capacitor_SMD:C_1210_3225Metric'
+        }
+
         led_footprints = {
             'THT': 'LED_THT:LED_D3.0mm',
             'SMD 0402': 'LED_SMD:LED_0402_1005Metric',
@@ -257,6 +279,7 @@ class FinalPage(QtWidgets.QWizardPage):
             'powersource': self.field('powersource'),
             'powersource_footprint': battery_footprints[self.field('powersource')],
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
+            'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
             'led_footprint': led_footprints[self.field('resistor_footprint')],
             'regulator': regulators[self.field('regulator')]
             }
