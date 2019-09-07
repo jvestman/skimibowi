@@ -118,6 +118,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
+        self.registerField("battery_management", self.battery_management, "currentText")
 
 class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
@@ -245,6 +246,15 @@ class FinalPage(QtWidgets.QWizardPage):
             'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
         }
 
+        capacitor_footprints = {
+            'THT': '',
+            'SMD 0402': 'Capacitor_SMD:C_0402_1005Metric',
+            'SMD 0603': 'Capacitor_SMD:C_0603_1608Metric',
+            'SMD 0805': 'Capacitor_SMD:C_0805_2012Metric',
+            'SMD 1206': 'Capacitor_SMD:C_1206_3216Metric',
+            'SMD 1210': 'Capacitor_SMD:C_1210_3225Metric'
+        }
+
         led_footprints = {
             'THT': 'LED_THT:LED_D3.0mm',
             'SMD 0402': 'LED_SMD:LED_0402_1005Metric',
@@ -269,6 +279,7 @@ class FinalPage(QtWidgets.QWizardPage):
             'powersource': self.field('powersource'),
             'powersource_footprint': battery_footprints[self.field('powersource')],
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
+            'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
             'led_footprint': led_footprints[self.field('resistor_footprint')],
             'regulator': regulators[self.field('regulator')]
             }
