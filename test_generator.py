@@ -26,15 +26,16 @@ class TestGenerator(unittest.TestCase):
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
-
 NETS = {}
+NETS['+VLipo'] = Net('+VLipo')
 NETS['+VBatt'] = Net('+VBatt')
 NETS['+VBus'] = Net('+VBus')
 NETS['+3V'] = Net('+3V')
 NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
+
+U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
 U1['VCC'] += NETS['+VBatt']
 U1['GND'] += NETS['GND']
@@ -63,15 +64,16 @@ generate_netlist()
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
-
 NETS = {}
+NETS['+VLipo'] = Net('+VLipo')
 NETS['+VBatt'] = Net('+VBatt')
 NETS['+VBus'] = Net('+VBus')
 NETS['+3V'] = Net('+3V')
 NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
+
+U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
 U1['VCC'] += NETS['+VBatt']
 U1['GND'] += NETS['GND']
@@ -143,10 +145,50 @@ FTDI_HEADER[6] += NC
 
     def test_battery_management(self):
         """Test FTDI header generation"""
+        self.maxDiff = 3000
         self.assertEqual(
-            generate_battery_management({}),
+            generate_battery_management(
+                {'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',
+                 'capacitor_footprint': 'Capacitor_SMD:C_1206_3216Metric',
+                 'led_footprint': 'LED_SMD:LED_1206_3216Metric'}),
             '''
 BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
+BATTERYMANAGER['IN'] += NETS['+VBus']
+BATTERYMANAGER['SEL'] += NETS['+VBus']
+BATTERYMANAGER['PROG2'] += NETS['+VBus']
+BATTERYMANAGER['TE'] += NETS['+VBus']
+BATTERYMANAGER['CE'] += NETS['+VBus']
+
+BATTERYMANAGER['VSS'] += NETS['GND']
+
+BATTERYMANAGER['OUT'] += NETS['+VBatt']
+
+BATTERYMANAGER['VBAT'] += NETS['+VLipo']
+BATTERYMANAGER['Vbat_SENSE'] += NETS['+VLipo']
+
+RPROG1 = Part('Device', 'R', value='2k', footprint='Resistor_SMD:R_1206_3216Metric')
+NETS['GND'] & RPROG1 & BATTERYMANAGER['PROG1']
+RPROG2 = Part('Device', 'R', value='100k', footprint='Resistor_SMD:R_1206_3216Metric')
+NETS['GND'] & RPROG2 & BATTERYMANAGER['PROG3']
+
+BM_LED = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
+BM_LED_R = Part('Device', 'R', value='1k', footprint='Resistor_SMD:R_1206_3216Metric')
+BATTERYMANAGER['STAT1'] & BM_LED_R & BM_LED & NETS['+VBus']
+
+BM_LED2 = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
+BM_LED_R2 = Part('Device', 'R', value='1k', footprint='Resistor_SMD:R_1206_3216Metric')
+BATTERYMANAGER['STAT2'] & BM_LED_R2 & BM_LED2 & NETS['+VBus']
+
+BM_C = Part('Device', 'C', value='10uF', footprint='Capacitor_SMD:C_1206_3216Metric')
+NETS['+VLipo'] & BM_C & NETS['GND']
+
+BM_VPCC_R1 = Part('Device', 'R', value='100k', footprint='Resistor_SMD:R_1206_3216Metric')
+BM_VPCC_R2 = Part('Device', 'R', value='270k', footprint='Resistor_SMD:R_1206_3216Metric')
+NETS['GND'] & BM_VPCC_R1 & BM_VPCC_R2 & NETS['+VBus']
+BATTERYMANAGER['VPCC'] += BM_VPCC_R2[1]
+
+BM_THERM_R = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+BATTERYMANAGER['THERM'] & BM_THERM_R & NETS['GND']
 '''
             )
 
@@ -227,15 +269,16 @@ Q1['C'] += FTDI230['RTS']
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
-
 NETS = {}
+NETS['+VLipo'] = Net('+VLipo')
 NETS['+VBatt'] = Net('+VBatt')
 NETS['+VBus'] = Net('+VBus')
 NETS['+3V'] = Net('+3V')
 NETS['+3V3'] = Net('+3V3')
 NETS['+5V'] = Net('+5V')
 NETS['GND'] = Net('GND')
+
+U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
 U1['VCC'] += NETS['+VBatt']
 U1['GND'] += NETS['GND']
