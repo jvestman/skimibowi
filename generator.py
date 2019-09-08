@@ -22,18 +22,10 @@ NETS['GND'] = Net('GND')
         code += generate_esp(args)
 
     if args['powersource'] not in ['No battery', 'JST PH S2B']:
-        code += '''
-BATTERY = Part('Device', 'Battery', footprint='{powersource_footprint}')
-BATTERY['+'] += NETS['+VBatt']
-BATTERY['-'] += NETS['GND']
-'''.format(**args)
+        code += generate_battery(args)
 
     if args['powersource'] == 'JST PH S2B':
-        code += '''
-BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footprint}')
-BATTERY[1] += NETS['+VLipo']
-BATTERY[2] += NETS['GND']
-'''.format(**args)
+        code += generate_power_connector(args)
 
     if wizard.field('battery_management') == 'MCP73871-2AA':
         code += generate_battery_management(args)
@@ -117,6 +109,22 @@ def generate_power_led(args):
 LED = Part('Device', 'LED', footprint='{led_footprint}')
 LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
 U1['GPIO0'] & LED_R & LED & NETS['{mcurail}']
+'''.format(**args)
+
+def generate_battery(args):
+    """Generate Battery Holder"""
+    return '''
+BATTERY = Part('Device', 'Battery', footprint='{powersource_footprint}')
+BATTERY['+'] += NETS['+VBatt']
+BATTERY['-'] += NETS['GND']
+'''.format(**args)
+
+def generate_power_connector(args):
+    """Generate power connector"""
+    return '''
+BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footprint}')
+BATTERY[1] += NETS['+VLipo']
+BATTERY[2] += NETS['GND']
 '''.format(**args)
 
 def generate_onewire_bus(args):
