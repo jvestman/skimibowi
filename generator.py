@@ -19,16 +19,7 @@ NETS['GND'] = Net('GND')
 '''.format(**args)
 
     if args['mcu'] in ['ESP-12E', 'ESP-07']:
-        code += '''
-U1 = Part('RF_Module', '{mcu}', footprint='{mcu_footprint}')
-
-U1['VCC'] += NETS['{mcurail}']
-U1['GND'] += NETS['GND']
-U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
-U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
-NETS['{mcurail}'] & U1R1 & U1['EN']
-NETS['GND'] & U1R2 & U1['GPIO15']
-'''.format(**args)
+        code += generate_esp(args)
 
     if args['powersource'] not in ['No battery', 'JST PH S2B']:
         code += '''
@@ -82,6 +73,19 @@ generate_netlist()
 '''
 
     return code
+
+def generate_esp(args):
+    """Generate ESP-module code to circuit"""
+    return '''
+U1 = Part('RF_Module', '{mcu}', footprint='{mcu_footprint}')
+
+U1['VCC'] += NETS['{mcurail}']
+U1['GND'] += NETS['GND']
+U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
+NETS['{mcurail}'] & U1R1 & U1['EN']
+NETS['GND'] & U1R2 & U1['GPIO15']
+'''.format(**args)
 
 def generate_reset_line(args):
     """Generate reset line from ESP GPIO16 to RST pin"""
