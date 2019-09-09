@@ -164,13 +164,19 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         super(PeripheralsPage, self).__init__(parent)
         self.setTitle("Peripherals")
         self.peripherals = {}
-        self.serial_label = QtWidgets.QLabel()
-        self.serial_label.setText("Serial")
-        self.usb_serial = QIComboBox(self)
-        self.usb_serial.addItem("No USB")
-        self.usb_serial.addItem("FTDI & USB mini connector")
-        self.usb_serial.addItem("FTDI & USB micro connector")
-        self.registerField("usb_serial", self.usb_serial, "currentText")
+        self.usb_uart_label = QtWidgets.QLabel()
+        self.usb_uart_label.setText("USB Uart")
+        self.usb_uart = QIComboBox(self)
+        self.usb_uart.addItem("No USB")
+        self.usb_uart.addItem("FT231")
+        self.registerField("usb_uart", self.usb_uart, "currentText")
+        self.usb_connector_label = QtWidgets.QLabel()
+        self.usb_connector_label.setText("USB Connector")
+        self.usb_connector = QIComboBox(self)
+        self.usb_connector.addItem("USB B")
+        self.usb_connector.addItem("USB B mini")
+        self.usb_connector.addItem("USB B micro")
+        self.registerField("usb_connector", self.usb_connector, "currentText")
         self.adc_label = QtWidgets.QLabel()
         self.adc_label.setText("ADC pin")
         self.adc_voltage_divider = QtWidgets.QComboBox()
@@ -187,8 +193,10 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.i2c_label.setText("I2C")
         self.peripherals["ina219"] = QtWidgets.QCheckBox("INA219")
         layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.serial_label)
-        layout.addWidget(self.usb_serial)
+        layout.addWidget(self.usb_uart_label)
+        layout.addWidget(self.usb_uart)
+        layout.addWidget(self.usb_connector_label)
+        layout.addWidget(self.usb_connector)
         layout.addWidget(self.adc_label)
         layout.addWidget(self.adc_voltage_divider)
         layout.addWidget(self.onewire_label)
@@ -283,7 +291,8 @@ class FinalPage(QtWidgets.QWizardPage):
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
             'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
             'led_footprint': led_footprints[self.field('resistor_footprint')],
-            'regulator': regulators[self.field('regulator')]
+            'regulator': regulators[self.field('regulator')],
+            'usb_connector_footprint': usb_connector_footprints[self.field('usb_connector')]
             }
 
         code = generate(variables, self)
