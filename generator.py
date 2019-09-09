@@ -71,7 +71,10 @@ BATTERY[2] += NETS['GND']
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
 
-    if wizard.field('usb_serial') == 'FTDI & USB micro connector':
+    if wizard.field('usb_connector') != 'No USB Connector':
+        code += generate_usb_connector(args)
+
+    if wizard.field('usb_uart') == 'FT231':
         code += generate_ftdi230(args)
 
     code += '''
@@ -159,15 +162,12 @@ def generate_ftdi230(args):
     """Generate FTDI uart circuitry"""
     return '''
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
-USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Molex-105017-0001')
-FTDI230['VCC'] += NETS['VDD']
+FTDI230['VCC'] += NETS['{mcurail}']
 FTDI230['GND'] += NETS['GND']
 FTDI230['TXD'] += U1['RX']
 FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
-USBMICRO['VBUS'] += NETS['+VBus']
-USBMICRO['GND'] += NETS['GND']
 
 Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
@@ -182,6 +182,14 @@ Q2['E'] += U1['RST']
 Q1['C'] += Q2['C']
 Q2['C'] += FTDI230['DTR']
 Q1['C'] += FTDI230['RTS']
+'''.format(**args)
+
+def generate_usb_connector(args):
+    """Generate USB connector"""
+    return '''
+USBMICRO = Part('Connector', 'USB_B_Micro', footprint='{usb_connector_footprint}')
+USBMICRO['VBUS'] += NETS['+VBus']
+USBMICRO['GND'] += NETS['GND']
 '''.format(**args)
 
 def generate_regulator(args):
