@@ -173,6 +173,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.usb_connector_label = QtWidgets.QLabel()
         self.usb_connector_label.setText("USB Connector")
         self.usb_connector = QIComboBox(self)
+        self.usb_connector.addItem("No USB connector")
         self.usb_connector.addItem("USB B")
         self.usb_connector.addItem("USB B Mini")
         self.usb_connector.addItem("USB B Micro")
@@ -275,6 +276,7 @@ class FinalPage(QtWidgets.QWizardPage):
         }
 
         usb_connector_footprints = {
+            'No USB connector': '',
             'USB B': 'USB_B_OST_USB-B1HSxx_Horizontal',
             'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
             'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal'

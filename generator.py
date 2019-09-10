@@ -57,7 +57,7 @@ NETS['GND'] = Net('GND')
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
 
-    if wizard.field('usb_connector') != 'No USB Connector':
+    if wizard.field('usb_connector') != 'No USB connector':
         code += generate_usb_connector(args)
 
     if wizard.field('usb_uart') == 'FT231':
