@@ -57,6 +57,9 @@ NETS['GND'] = Net('GND')
     if wizard.field('onewire_connector') != "No connector":
         code += generate_onewire_connector(args)
 
+    if wizard.field('ina219'):
+        code += generate_ina219(args)
+
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
 
@@ -170,6 +173,25 @@ ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='{onewire_connect
 ONEWIRECONN[1] += NETS['{mcurail}']
 ONEWIRECONN[2] += NETS['DQ']
 ONEWIRECONN[3] += NETS['GND']
+'''.format(**args)
+
+def generate_ina219(args):
+    """Generate INA219 that measures voltage and current at battery + terminal"""
+    return '''
+INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_P1.27mm')
+INA219['VS'] += NETS['{mcurail}']
+INA219['GND'] += NETS['GND']
+
+INA219['SDA'] += U1['GPIO4']
+INA219['SCL'] += U1['GPIO5']
+
+INA219_R_SHUNT = Part('Device', 'R', value='1Ohm', footprint='{resistor_footprint}')
+INA219['IN+'] += INA219_R_SHUNT[1]
+INA219['IN-'] += INA219_R_SHUNT[2]
+
+# Set INA219 to powerline
+# INA219['IN+'] += NETS['+VBatt']
+# INA219['IN-'] += NETS['+VBatt'] 
 '''.format(**args)
 
 def generate_ftdi_header(args):

@@ -135,6 +135,21 @@ ONEWIRECONN[1] += NETS['+VBatt']
 ONEWIRECONN[2] += NETS['DQ']
 ONEWIRECONN[3] += NETS['GND']
 
+INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_P1.27mm')
+INA219['VS'] += NETS['+VBatt']
+INA219['GND'] += NETS['GND']
+
+INA219['SDA'] += U1['GPIO4']
+INA219['SCL'] += U1['GPIO5']
+
+INA219_R_SHUNT = Part('Device', 'R', value='1Ohm', footprint='Resistor_SMD:R_1206_3216Metric')
+INA219['IN+'] += INA219_R_SHUNT[1]
+INA219['IN-'] += INA219_R_SHUNT[2]
+
+# Set INA219 to powerline
+# INA219['IN+'] += NETS['+VBatt']
+# INA219['IN-'] += NETS['+VBatt'] 
+
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += NETS['GND']
 FTDI_HEADER[2] += NC

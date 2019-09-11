@@ -200,6 +200,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.i2c_label = QtWidgets.QLabel()
         self.i2c_label.setText("I2C")
         self.peripherals["ina219"] = QtWidgets.QCheckBox("INA219")
+        self.registerField("ina219", self.peripherals["ina219"])
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.usb_uart_label)
         layout.addWidget(self.usb_uart)
@@ -292,7 +293,7 @@ class FinalPage(QtWidgets.QWizardPage):
         }
 
         onewire_connector_footprints = {
-            'No connector': '',
+            'No Onewire connector': '',
             '1x3 Pin Header': 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
             'Screw terminal': 'TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-3_1x03_P2.54mm_Horizontal'
         }
