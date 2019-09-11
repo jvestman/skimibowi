@@ -45,7 +45,7 @@ NETS['GND'] = Net('GND')
     if wizard.field("led"):
         code += generate_power_led(args)
 
-    if wizard.field('DS18B20') or wizard.field('DS18B20U'):
+    if wizard.field('DS18B20') or wizard.field('DS18B20U') or wizard.field('onewire_connector'):
         code += generate_onewire_bus(args)
 
     if wizard.field('DS18B20'):
@@ -53,6 +53,9 @@ NETS['GND'] = Net('GND')
 
     if wizard.field('DS18B20U'):
         code += generate_18b20u(args)
+
+    if wizard.field('onewire_connector') != "No connector":
+        code += generate_onewire_connector(args)
 
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
@@ -158,6 +161,15 @@ U2['VDD'] += NETS['{mcurail}']
 U2['GND'] += NETS['GND']
 U2['DQ'] += NETS['DQ']
 U1['GPIO2'] += NETS['DQ']
+'''.format(**args)
+
+def generate_onewire_connector(args):
+    """Generate connector for external onewire devices"""
+    return '''
+ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='{onewire_connector_footprint}')
+ONEWIRECONN[1] += NETS['{mcurail}']
+ONEWIRECONN[2] += NETS['DQ']
+ONEWIRECONN[3] += NETS['GND']
 '''.format(**args)
 
 def generate_ftdi_header(args):

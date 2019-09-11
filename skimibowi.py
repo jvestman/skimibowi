@@ -188,6 +188,13 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.registerField("DS18B20", self.peripherals["DS18B20"])
         self.peripherals["DS18B20U"] = QtWidgets.QCheckBox("DS18B20U")
         self.registerField("DS18B20U", self.peripherals["DS18B20U"])
+        self.onewire_connector_label = QtWidgets.QLabel()
+        self.onewire_connector_label.setText("Onewire connector")
+        self.onewire_connector = QtWidgets.QComboBox()
+        self.onewire_connector.addItem("No Onewire connector")
+        self.onewire_connector.addItem("1x3 Pin Header")
+        self.onewire_connector.addItem("Screw terminal")
+        self.registerField("onewire_connector", self.onewire_connector, "currentText")
         self.spi_label = QtWidgets.QLabel()
         self.spi_label.setText("SPI")
         self.i2c_label = QtWidgets.QLabel()
@@ -203,6 +210,8 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.onewire_label)
         layout.addWidget(self.peripherals["DS18B20"])
         layout.addWidget(self.peripherals["DS18B20U"])
+        layout.addWidget(self.onewire_connector_label)
+        layout.addWidget(self.onewire_connector)
         layout.addWidget(self.spi_label)
         layout.addWidget(self.i2c_label)
         layout.addWidget(self.peripherals["ina219"])
@@ -282,6 +291,12 @@ class FinalPage(QtWidgets.QWizardPage):
             'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal'
         }
 
+        onewire_connector_footprints = {
+            'No connector': '',
+            '1x3 Pin Header': 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
+            'Screw terminal': 'TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-3_1x03_P2.54mm_Horizontal'
+        }
+
         f = open(self.field('filename'), "w")
 
         variables = {
@@ -294,7 +309,8 @@ class FinalPage(QtWidgets.QWizardPage):
             'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
             'led_footprint': led_footprints[self.field('resistor_footprint')],
             'regulator': regulators[self.field('regulator')],
-            'usb_connector_footprint': usb_connector_footprints[self.field('usb_connector')]
+            'usb_connector_footprint': usb_connector_footprints[self.field('usb_connector')],
+            'onewire_connector_footprint': onewire_connector_footprints[self.field('onewire_connector')]
             }
 
         code = generate(variables, self)
