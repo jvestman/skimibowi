@@ -115,11 +115,17 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.mcurail.addItem("+3V3")
         self.mcurail.addItem("+5V")
         self.layout.addWidget(self.mcurail)
+        self.fuse = QtWidgets.QCheckBox("Add fuse holder to batteryline")
+        self.layout.addWidget(self.fuse)
+        self.switch = QtWidgets.QCheckBox("Add power switch")
+        self.layout.addWidget(self.switch)
         self.setLayout(self.layout)
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
         self.registerField("battery_management", self.battery_management, "currentText")
+        self.registerField("fuse", self.fuse)
+        self.registerField("switch", self.switch)
 
 class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):

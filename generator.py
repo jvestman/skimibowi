@@ -27,6 +27,12 @@ NETS['GND'] = Net('GND')
     if args['powersource'] == 'JST PH S2B':
         code += generate_power_connector(args)
 
+    if wizard.field('fuse'):
+        code += generate_fuse(args)
+
+    if wizard.field('switch'):
+        code += generate_power_switch(args)
+
     if wizard.field('battery_management') == 'MCP73871-2AA':
         code += generate_battery_management(args)
 
@@ -54,7 +60,7 @@ NETS['GND'] = Net('GND')
     if wizard.field('DS18B20U'):
         code += generate_18b20u(args)
 
-    if wizard.field('onewire_connector') != "No connector":
+    if wizard.field('onewire_connector') != "No Onewire connector":
         code += generate_onewire_connector(args)
 
     if wizard.field('ina219'):
@@ -62,6 +68,9 @@ NETS['GND'] = Net('GND')
 
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
+
+    if wizard.field('powersource') is not 'No battery':
+        code += connect_power_network(wizard)
 
     if wizard.field('usb_connector') != 'No USB connector':
         code += generate_usb_connector(args)
@@ -128,6 +137,18 @@ BATTERY['+'] += NETS['+VBatt']
 BATTERY['-'] += NETS['GND']
 '''.format(**args)
 
+def generate_power_switch(args):
+    """Generate power switch"""
+    return '''
+SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight')
+'''.format(**args)
+
+def generate_fuse(args):
+    """Generate power switch"""
+    return '''
+FUSE = Part('Device', 'Fuse', footprint='Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open')
+'''.format(**args)
+
 def generate_power_connector(args):
     """Generate power connector"""
     return '''
@@ -135,6 +156,28 @@ BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footpri
 BATTERY[1] += NETS['+VLipo']
 BATTERY[2] += NETS['GND']
 '''.format(**args)
+
+def connect_power_network(wizard):
+    """Connect components that connect mcu/regulator throuh optional power switch, fuse and ina219 to battery"""
+    if wizard.field('regulator') not in ['No regulator', True, False]:
+        components = ['REGULATOR[\'VI\']']
+    else:
+        components = ['NETS[\'+VBatt\']']
+    
+    elements = {
+        'ina219': 'INA219_R_SHUNT',
+        'switch': 'SWITCH[1,2]',
+        'fuse': 'FUSE'
+    }
+
+    for e in elements:
+        if wizard.field(e):
+            components.append(elements[e])
+
+    components.append('BATTERY')
+
+    line = " & ".join(components)
+    return '\n' + line + '\n'
 
 def generate_onewire_bus(args):
     """Generate DQ net for onewire bus"""
@@ -182,16 +225,24 @@ INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_
 INA219['VS'] += NETS['{mcurail}']
 INA219['GND'] += NETS['GND']
 
+#Setup I2C bus
 INA219['SDA'] += U1['GPIO4']
 INA219['SCL'] += U1['GPIO5']
+SDA_PULLUP = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+SCL_PULLUP = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+U1['GPIO4'] & SDA_PULLUP & NETS['{mcurail}']
+U1['GPIO5'] & SCL_PULLUP & NETS['{mcurail}']
 
-INA219_R_SHUNT = Part('Device', 'R', value='1Ohm', footprint='{resistor_footprint}')
+#Setup shunt resistor that is used to measure current from voltage drop
+INA219_R_SHUNT = Part('Device', 'R', value='0.1', footprint='{resistor_footprint}')
 INA219['IN+'] += INA219_R_SHUNT[1]
 INA219['IN-'] += INA219_R_SHUNT[2]
 
-# Set INA219 to powerline
-# INA219['IN+'] += NETS['+VBatt']
-# INA219['IN-'] += NETS['+VBatt'] 
+#Set I2C address
+INA219_R_A0_PULLDOWN = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+INA219_R_A1_PULLDOWN = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+NETS['GND'] & INA219_R_A0_PULLDOWN & INA219['A0']
+NETS['GND'] & INA219_R_A1_PULLDOWN & INA219['A1']
 '''.format(**args)
 
 def generate_ftdi_header(args):
@@ -246,7 +297,7 @@ def generate_regulator(args):
 
     return '''
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
-REGULATOR['VI'] += NETS['+VBatt']
+#REGULATOR['VI'] += NETS['+VBatt']
 REGULATOR['VO'] += NETS['{output}']
 REGULATOR['GND'] += NETS['GND']
 '''.format(**(args['regulator']))

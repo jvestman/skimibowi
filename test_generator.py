@@ -52,6 +52,8 @@ ONEWIRECONN[1] += NETS['+VBatt']
 ONEWIRECONN[2] += NETS['DQ']
 ONEWIRECONN[3] += NETS['GND']
 
+NETS['+VBatt'] & BATTERY
+
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += NETS['+VBus']
 USBMICRO['GND'] += NETS['GND']
@@ -96,6 +98,10 @@ U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metri
 NETS['+VBatt'] & U1R1 & U1['EN']
 NETS['GND'] & U1R2 & U1['GPIO15']
 
+FUSE = Part('Device', 'Fuse', footprint='Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open')
+
+SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight')
+
 NETS['RST'] = Net('RST')
 U1['RST'] += NETS['RST']
 U1['GPIO16'] += NETS['RST']
@@ -139,16 +145,24 @@ INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_
 INA219['VS'] += NETS['+VBatt']
 INA219['GND'] += NETS['GND']
 
+#Setup I2C bus
 INA219['SDA'] += U1['GPIO4']
 INA219['SCL'] += U1['GPIO5']
+SDA_PULLUP = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+SCL_PULLUP = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+U1['GPIO4'] & SDA_PULLUP & NETS['+VBatt']
+U1['GPIO5'] & SCL_PULLUP & NETS['+VBatt']
 
-INA219_R_SHUNT = Part('Device', 'R', value='1Ohm', footprint='Resistor_SMD:R_1206_3216Metric')
+#Setup shunt resistor that is used to measure current from voltage drop
+INA219_R_SHUNT = Part('Device', 'R', value='0.1', footprint='Resistor_SMD:R_1206_3216Metric')
 INA219['IN+'] += INA219_R_SHUNT[1]
 INA219['IN-'] += INA219_R_SHUNT[2]
 
-# Set INA219 to powerline
-# INA219['IN+'] += NETS['+VBatt']
-# INA219['IN-'] += NETS['+VBatt'] 
+#Set I2C address
+INA219_R_A0_PULLDOWN = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+INA219_R_A1_PULLDOWN = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+NETS['GND'] & INA219_R_A0_PULLDOWN & INA219['A0']
+NETS['GND'] & INA219_R_A1_PULLDOWN & INA219['A1']
 
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += NETS['GND']
@@ -157,6 +171,8 @@ FTDI_HEADER[3] += NETS['+VBatt']
 FTDI_HEADER[4] += U1['TX']
 FTDI_HEADER[5] += U1['RX']
 FTDI_HEADER[6] += NC
+
+NETS['+VBatt'] & INA219_R_SHUNT & SWITCH[1,2] & FUSE & BATTERY
 
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += NETS['+VBus']
@@ -337,6 +353,8 @@ ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHea
 ONEWIRECONN[1] += NETS['+VBatt']
 ONEWIRECONN[2] += NETS['DQ']
 ONEWIRECONN[3] += NETS['GND']
+
+NETS['+VBatt'] & BATTERY
 
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += NETS['+VBus']
