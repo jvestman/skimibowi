@@ -152,6 +152,7 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.board_footprint.addItem("Arduino Nano")
         self.board_footprint.addItem("Wemos D1 Mini")
         self.board_footprint.addItem("Adafruit Feather")
+        self.registerField('board_footprint', self.board_footprint, 'currentText')
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.resistor_footprint_label)
         layout.addWidget(self.resistor_footprint)

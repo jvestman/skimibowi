@@ -78,6 +78,9 @@ NETS['GND'] = Net('GND')
     if wizard.field('usb_uart') == 'FT231':
         code += generate_ftdi230(args)
 
+    if wizard.field('board_footprint') == 'Arduino Uno R3':
+        code += generate_arduino_uno_r3_board_footprint(args)
+
     code += '''
 generate_netlist()
 '''
@@ -343,3 +346,17 @@ BATTERYMANAGER['VPCC'] += BM_VPCC_R2[1]
 BM_THERM_R = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 BATTERYMANAGER['THERM'] & BM_THERM_R & NETS['GND']
 '''.format(**args)
+
+def generate_arduino_uno_r3_board_footprint(args):
+    """Generate Arduino Uno R3 board layout footprint"""
+    return '''
+BOARD = Part('MCU_Module', 'Arduino_Uno_R3', footprint='Module:Arduino_UNO_R3_WithMountingHoles')
+BOARD['RESET'] += U1['RST']
+BOARD['+5V'] += NETS['+5V']
+BOARD['3V3'] += NETS['+3V3']
+BOARD['GND'] += NETS['GND']
+BOARD['Vin'] += NETS['+VBus']
+
+BOARD['TX'] += U1['TX']
+BOARD['RX'] += U1['RX']
+'''.format(args)
