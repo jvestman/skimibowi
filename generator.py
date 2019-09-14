@@ -116,7 +116,7 @@ SW1[2] += NETS['GND']
 '''.format(**args)
 
 def generate_flash_button(args):
-    """Generate button for pulling pulling ESP GPIO0 high (e.g. flash mode when booting)"""
+    """Generate button for pulling pulling ESP GPIO0 low (e.g. flash mode when booting)"""
     return '''
 SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
 SW2[1] += U1['GPIO0']
