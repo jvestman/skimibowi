@@ -305,8 +305,6 @@ class FinalPage(QtWidgets.QWizardPage):
             'Screw terminal': 'TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-3_1x03_P2.54mm_Horizontal'
         }
 
-        f = open(self.field('filename'), "w")
-
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
@@ -323,8 +321,8 @@ class FinalPage(QtWidgets.QWizardPage):
 
         code = generate(variables, self)
 
-        f.write(code)
-        f.close()
+        with open(self.field('filename'), 'w') as file:
+            file.write(code)
 
 
 if __name__ == '__main__':
