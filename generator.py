@@ -256,8 +256,8 @@ FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHea
 FTDI_HEADER[1] += NETS['GND']
 FTDI_HEADER[2] += NC
 FTDI_HEADER[3] += NETS['{mcurail}']
-FTDI_HEADER[4] += U1['TX']
-FTDI_HEADER[5] += U1['RX']
+FTDI_HEADER[4] += U1['RX']
+FTDI_HEADER[5] += U1['TX']
 FTDI_HEADER[6] += NC
 '''.format(**args)
 
