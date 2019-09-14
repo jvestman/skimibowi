@@ -69,7 +69,7 @@ NETS['GND'] = Net('GND')
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
 
-    if wizard.field('powersource') is not 'No battery':
+    if wizard.field('powersource') != 'No battery':
         code += connect_power_network(wizard)
 
     if wizard.field('usb_connector') != 'No USB connector':
@@ -166,16 +166,16 @@ def connect_power_network(wizard):
         components = ['REGULATOR[\'VI\']']
     else:
         components = ['NETS[\'+VBatt\']']
-    
+
     elements = {
         'ina219': 'INA219_R_SHUNT',
         'switch': 'SWITCH[1,2]',
         'fuse': 'FUSE'
     }
 
-    for e in elements:
-        if wizard.field(e):
-            components.append(elements[e])
+    for element in elements:
+        if wizard.field(element):
+            components.append(elements[element])
 
     components.append('BATTERY')
 
