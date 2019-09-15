@@ -11,6 +11,9 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['mcu'] in ['ESP-12E', 'ESP-07']:
         code += generate_esp(args)
 
+    if args['mcu'] == 'ATmega328P':
+        code += generate_atmega328p(args)
+
     if args['powersource'] not in ['No battery', 'JST PH S2B']:
         code += generate_battery(args)
 
@@ -88,6 +91,31 @@ U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
 Net.fetch('{mcurail}') & U1R1 & U1['EN']
 Net.fetch('GND') & U1R2 & U1['GPIO15']
+'''.format(**args)
+
+def generate_atmega328p(args):
+    """Generate ATmega328P subsystem to circuit"""
+    return '''
+U1 = Part('MCU_Microchip_ATmega', 'ATmega328-PU', footprint='Package_DIP:DIP-28_W7.62mm')
+
+#Power networks
+U1['VCC'] += Net.fetch('+5V')
+U1['AVCC'] += Net.fetch('+5V')
+U1['GND'] += Net.fetch('GND')
+
+# Crystal
+ATMEGA_XTAL = Part('Device','Crystal', footprint='Crystal:Crystal_SMD_HC49-SD')
+U1['XTAL1'] += ATMEGA_XTAL[1]
+U1['XTAL2'] += ATMEGA_XTAL[2]
+
+ATMEGA_XTAL_R = Part('Device', 'R', value='1M', footprint='{resistor_footprint}')
+U1['XTAL1'] += ATMEGA_XTAL_R[1]
+U1['XTAL2'] += ATMEGA_XTAL_R[2]
+
+ATMEGA_XTAL_C1 = Part('Device', 'C', value='22uF', footprint='{capacitor_footprint}')
+ATMEGA_XTAL[1] & ATMEGA_XTAL_C1 & Net.fetch('GND')
+ATMEGA_XTAL_C2 = Part('Device', 'C', value='22uF', footprint='{capacitor_footprint}')
+ATMEGA_XTAL[2] & ATMEGA_XTAL_C2 & Net.fetch('GND')
 '''.format(**args)
 
 def generate_reset_line(args):

@@ -59,6 +59,7 @@ class MCU(QtWidgets.QWizardPage):
         self.comboBox.addItem("ESP-12E")
         self.comboBox.addItem("ESP-07")
         self.comboBox.addItem("Wemos D1 Mini")
+        self.comboBox.addItem("ATmega328P")
         self.comboBox.addItem("No MCU")
         self.resetButton = QtWidgets.QCheckBox("Reset button")
         self.resetLine = QtWidgets.QCheckBox("Reset line")
@@ -245,6 +246,7 @@ class FinalPage(QtWidgets.QWizardPage):
             'ESP-07': 'RF_Module:ESP-07',
             'ESP-12E': 'RF_Module:ESP-12E',
             'Wemos D1 Mini': 'RF_Module:WEMOS_D1_mini_light',
+            'ATmega328P': 'Package_DIP:DIP-28_W7.62mm',
             'No MCU': ''
         }
 
