@@ -28,34 +28,25 @@ class TestGenerator(unittest.TestCase):
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-NETS = {}
-NETS['+VLipo'] = Net('+VLipo')
-NETS['+VBatt'] = Net('+VBatt')
-NETS['+VBus'] = Net('+VBus')
-NETS['+3V'] = Net('+3V')
-NETS['+3V3'] = Net('+3V3')
-NETS['+5V'] = Net('+5V')
-NETS['GND'] = Net('GND')
-
 U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
-U1['VCC'] += NETS['+VBatt']
-U1['GND'] += NETS['GND']
+U1['VCC'] += Net.fetch('+VBatt')
+U1['GND'] += Net.fetch('GND')
 U1R1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['+VBatt'] & U1R1 & U1['EN']
-NETS['GND'] & U1R2 & U1['GPIO15']
+Net.fetch('+VBatt') & U1R1 & U1['EN']
+Net.fetch('GND') & U1R2 & U1['GPIO15']
 
 ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical')
-ONEWIRECONN[1] += NETS['+VBatt']
-ONEWIRECONN[2] += NETS['DQ']
-ONEWIRECONN[3] += NETS['GND']
+ONEWIRECONN[1] += Net.fetch('+VBatt')
+ONEWIRECONN[2] += Net.fetch('DQ')
+ONEWIRECONN[3] += Net.fetch('GND')
 
-NETS['+VBatt'] & BATTERY
+Net.fetch('+VBatt') & BATTERY
 
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
-USBMICRO['VBUS'] += NETS['+VBus']
-USBMICRO['GND'] += NETS['GND']
+USBMICRO['VBUS'] += Net.fetch('+VBus')
+USBMICRO['GND'] += Net.fetch('GND')
 
 generate_netlist()
 '''
@@ -78,78 +69,66 @@ generate_netlist()
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-NETS = {}
-NETS['+VLipo'] = Net('+VLipo')
-NETS['+VBatt'] = Net('+VBatt')
-NETS['+VBus'] = Net('+VBus')
-NETS['+3V'] = Net('+3V')
-NETS['+3V3'] = Net('+3V3')
-NETS['+5V'] = Net('+5V')
-NETS['GND'] = Net('GND')
-
 U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
-U1['VCC'] += NETS['+VBatt']
-U1['GND'] += NETS['GND']
+U1['VCC'] += Net.fetch('+VBatt')
+U1['GND'] += Net.fetch('GND')
 U1R1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['+VBatt'] & U1R1 & U1['EN']
-NETS['GND'] & U1R2 & U1['GPIO15']
+Net.fetch('+VBatt') & U1R1 & U1['EN']
+Net.fetch('GND') & U1R2 & U1['GPIO15']
 
 FUSE = Part('Device', 'Fuse', footprint='Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open')
 
 SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight')
 
-NETS['RST'] = Net('RST')
-U1['RST'] += NETS['RST']
-U1['GPIO16'] += NETS['RST']
+U1['RST'] += Net.fetch('RST')
+U1['GPIO16'] += Net.fetch('RST')
 
 SW1 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW1[1] += NETS['RST']
-SW1[2] += NETS['GND']
+SW1[1] += Net.fetch('RST')
+SW1[2] += Net.fetch('GND')
 
 SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
 SW2[1] += U1['GPIO0']
-SW2[2] += NETS['GND']
+SW2[2] += Net.fetch('GND')
 
 LED = Part('Device', 'LED', footprint='LED_1206_3216Metric')
 LED_R = Part('Device', 'R', value='1k', footprint='Resistor_SMD:R_1206_3216Metric')
-U1['GPIO0'] & LED_R & LED & NETS['+VBatt']
-
-NETS['DQ'] = Net('DQ')
+U1['GPIO0'] & LED_R & LED & Net.fetch('+VBatt')
 
 U3R1 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
-U3R1[1] += NETS['+VBatt']
-U3R1[2] += NETS['DQ']
+U3R1[1] += Net.fetch('+VBatt')
+U3R1[2] += Net.fetch('DQ')
 
 U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
-U2['VDD'] += NETS['+VBatt']
-U2['GND'] += NETS['GND']
-U2['DQ'] += NETS['DQ']
-U1['GPIO2'] += NETS['DQ']
+U2['VDD'] += Net.fetch('+VBatt')
+U2['GND'] += Net.fetch('GND')
+U2['DQ'] += Net.fetch('DQ')
+U1['GPIO2'] += Net.fetch('DQ')
 
 U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P0.65mm")
-U3['VDD'] += NETS['+VBatt']
-U3['GND'] += NETS['GND']
-U3['DQ'] += NETS['DQ']
-U1['GPIO2'] += NETS['DQ']
+U3['VDD'] += Net.fetch('+VBatt')
+U3['GND'] += Net.fetch('GND')
+U3['DQ'] += Net.fetch('DQ')
+U1['GPIO2'] += Net.fetch('DQ')
 
 ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical')
-ONEWIRECONN[1] += NETS['+VBatt']
-ONEWIRECONN[2] += NETS['DQ']
-ONEWIRECONN[3] += NETS['GND']
+ONEWIRECONN[1] += Net.fetch('+VBatt')
+ONEWIRECONN[2] += Net.fetch('DQ')
+ONEWIRECONN[3] += Net.fetch('GND')
 
 INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_P1.27mm')
-INA219['VS'] += NETS['+VBatt']
-INA219['GND'] += NETS['GND']
+INA219['VS'] += Net.fetch('+VBatt')
+INA219['GND'] += Net.fetch('GND')
 
 #Setup I2C bus
 INA219['SDA'] += U1['GPIO4']
 INA219['SCL'] += U1['GPIO5']
 SDA_PULLUP = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 SCL_PULLUP = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
-U1['GPIO4'] & SDA_PULLUP & NETS['+VBatt']
-U1['GPIO5'] & SCL_PULLUP & NETS['+VBatt']
+U1['GPIO4'] & SDA_PULLUP & Net.fetch('+VBatt')
+U1['GPIO5'] & SCL_PULLUP & Net.fetch('+VBatt')
 
 #Setup shunt resistor that is used to measure current from voltage drop
 INA219_R_SHUNT = Part('Device', 'R', value='0.1', footprint='Resistor_SMD:R_1206_3216Metric')
@@ -159,22 +138,22 @@ INA219['IN-'] += INA219_R_SHUNT[2]
 #Set I2C address
 INA219_R_A0_PULLDOWN = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 INA219_R_A1_PULLDOWN = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['GND'] & INA219_R_A0_PULLDOWN & INA219['A0']
-NETS['GND'] & INA219_R_A1_PULLDOWN & INA219['A1']
+Net.fetch('GND') & INA219_R_A0_PULLDOWN & INA219['A0']
+Net.fetch('GND') & INA219_R_A1_PULLDOWN & INA219['A1']
 
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
-FTDI_HEADER[1] += NETS['GND']
+FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC
-FTDI_HEADER[3] += NETS['+VBatt']
+FTDI_HEADER[3] += Net.fetch('+VBatt')
 FTDI_HEADER[4] += U1['RX']
 FTDI_HEADER[5] += U1['TX']
 FTDI_HEADER[6] += NC
 
-NETS['+VBatt'] & INA219_R_SHUNT & SWITCH[1,2] & FUSE & BATTERY
+Net.fetch('+VBatt') & INA219_R_SHUNT & SWITCH[1,2] & FUSE & BATTERY
 
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
-USBMICRO['VBUS'] += NETS['+VBus']
-USBMICRO['GND'] += NETS['GND']
+USBMICRO['VBUS'] += Net.fetch('+VBus')
+USBMICRO['GND'] += Net.fetch('GND')
 
 generate_netlist()
 '''
@@ -187,9 +166,9 @@ generate_netlist()
             generate_ftdi_header({'mcurail':'VDD'}),
             '''
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
-FTDI_HEADER[1] += NETS['GND']
+FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC
-FTDI_HEADER[3] += NETS['VDD']
+FTDI_HEADER[3] += Net.fetch('VDD')
 FTDI_HEADER[4] += U1['RX']
 FTDI_HEADER[5] += U1['TX']
 FTDI_HEADER[6] += NC
@@ -206,42 +185,42 @@ FTDI_HEADER[6] += NC
                  'led_footprint': 'LED_SMD:LED_1206_3216Metric'}),
             '''
 BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
-BATTERYMANAGER['IN'] += NETS['+VBus']
-BATTERYMANAGER['SEL'] += NETS['+VBus']
-BATTERYMANAGER['PROG2'] += NETS['+VBus']
-BATTERYMANAGER['TE'] += NETS['+VBus']
-BATTERYMANAGER['CE'] += NETS['+VBus']
+BATTERYMANAGER['IN'] += Net.fetch('+VBus')
+BATTERYMANAGER['SEL'] += Net.fetch('+VBus')
+BATTERYMANAGER['PROG2'] += Net.fetch('+VBus')
+BATTERYMANAGER['TE'] += Net.fetch('+VBus')
+BATTERYMANAGER['CE'] += Net.fetch('+VBus')
 
-BATTERYMANAGER['VSS'] += NETS['GND']
+BATTERYMANAGER['VSS'] += Net.fetch('GND')
 
-BATTERYMANAGER['OUT'] += NETS['+VBatt']
+BATTERYMANAGER['OUT'] += Net.fetch('+VBatt')
 
-BATTERYMANAGER['VBAT'] += NETS['+VLipo']
-BATTERYMANAGER['Vbat_SENSE'] += NETS['+VLipo']
+BATTERYMANAGER['VBAT'] += Net.fetch('+VLipo')
+BATTERYMANAGER['Vbat_SENSE'] += Net.fetch('+VLipo')
 
 RPROG1 = Part('Device', 'R', value='2k', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['GND'] & RPROG1 & BATTERYMANAGER['PROG1']
+Net.fetch('GND') & RPROG1 & BATTERYMANAGER['PROG1']
 RPROG2 = Part('Device', 'R', value='100k', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['GND'] & RPROG2 & BATTERYMANAGER['PROG3']
+Net.fetch('GND') & RPROG2 & BATTERYMANAGER['PROG3']
 
 BM_LED = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
 BM_LED_R = Part('Device', 'R', value='1k', footprint='Resistor_SMD:R_1206_3216Metric')
-BATTERYMANAGER['STAT1'] & BM_LED_R & BM_LED & NETS['+VBus']
+BATTERYMANAGER['STAT1'] & BM_LED_R & BM_LED & Net.fetch('+VBus')
 
 BM_LED2 = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
 BM_LED_R2 = Part('Device', 'R', value='1k', footprint='Resistor_SMD:R_1206_3216Metric')
-BATTERYMANAGER['STAT2'] & BM_LED_R2 & BM_LED2 & NETS['+VBus']
+BATTERYMANAGER['STAT2'] & BM_LED_R2 & BM_LED2 & Net.fetch('+VBus')
 
 BM_C = Part('Device', 'C', value='10uF', footprint='Capacitor_SMD:C_1206_3216Metric')
-NETS['+VLipo'] & BM_C & NETS['GND']
+Net.fetch('+VLipo') & BM_C & Net.fetch('GND')
 
 BM_VPCC_R1 = Part('Device', 'R', value='100k', footprint='Resistor_SMD:R_1206_3216Metric')
 BM_VPCC_R2 = Part('Device', 'R', value='270k', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['GND'] & BM_VPCC_R1 & BM_VPCC_R2 & NETS['+VBus']
+Net.fetch('GND') & BM_VPCC_R1 & BM_VPCC_R2 & Net.fetch('+VBus')
 BATTERYMANAGER['VPCC'] += BM_VPCC_R2[1]
 
 BM_THERM_R = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
-BATTERYMANAGER['THERM'] & BM_THERM_R & NETS['GND']
+BATTERYMANAGER['THERM'] & BM_THERM_R & Net.fetch('GND')
 '''
             )
 
@@ -253,8 +232,8 @@ BATTERYMANAGER['THERM'] & BM_THERM_R & NETS['GND']
                               'mcurail':'+VBus'}),
             '''
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
-FTDI230['VCC'] += NETS['+VBus']
-FTDI230['GND'] += NETS['GND']
+FTDI230['VCC'] += Net.fetch('+VBus')
+FTDI230['GND'] += Net.fetch('GND')
 FTDI230['TXD'] += U1['RX']
 FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
@@ -324,38 +303,29 @@ Q1['C'] += FTDI230['RTS']
 """Creates Kicad netlist file for a microcontroller board"""
 from skidl import Bus, Part, Net, generate_netlist
 
-NETS = {}
-NETS['+VLipo'] = Net('+VLipo')
-NETS['+VBatt'] = Net('+VBatt')
-NETS['+VBus'] = Net('+VBus')
-NETS['+3V'] = Net('+3V')
-NETS['+3V3'] = Net('+3V3')
-NETS['+5V'] = Net('+5V')
-NETS['GND'] = Net('GND')
-
 U1 = Part('RF_Module', 'ESP-12E', footprint='RF_Module:ESP-12E')
 
-U1['VCC'] += NETS['+VBatt']
-U1['GND'] += NETS['GND']
+U1['VCC'] += Net.fetch('+VBatt')
+U1['GND'] += Net.fetch('GND')
 U1R1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
-NETS['+VBatt'] & U1R1 & U1['EN']
-NETS['GND'] & U1R2 & U1['GPIO15']
+Net.fetch('+VBatt') & U1R1 & U1['EN']
+Net.fetch('GND') & U1R2 & U1['GPIO15']
 
 BATTERY = Part('Device', 'Battery', footprint='BatteryHolder_Keystone_2468_2xAAA')
-BATTERY['+'] += NETS['+VBatt']
-BATTERY['-'] += NETS['GND']
+BATTERY['+'] += Net.fetch('+VBatt')
+BATTERY['-'] += Net.fetch('GND')
 
 ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical')
-ONEWIRECONN[1] += NETS['+VBatt']
-ONEWIRECONN[2] += NETS['DQ']
-ONEWIRECONN[3] += NETS['GND']
+ONEWIRECONN[1] += Net.fetch('+VBatt')
+ONEWIRECONN[2] += Net.fetch('DQ')
+ONEWIRECONN[3] += Net.fetch('GND')
 
-NETS['+VBatt'] & BATTERY
+Net.fetch('+VBatt') & BATTERY
 
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
-USBMICRO['VBUS'] += NETS['+VBus']
-USBMICRO['GND'] += NETS['GND']
+USBMICRO['VBUS'] += Net.fetch('+VBus')
+USBMICRO['GND'] += Net.fetch('GND')
 
 generate_netlist()
 ''')
