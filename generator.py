@@ -14,6 +14,9 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['mcu'] == 'ATmega328P':
         code += generate_atmega328p(args)
 
+    if args['mcu'] == 'ATmega328P' and wizard.field('icsp'):
+        code += generate_icsp(args)
+
     if args['powersource'] not in ['No battery', 'JST PH S2B']:
         code += generate_battery(args)
 
@@ -44,7 +47,7 @@ from skidl import Bus, Part, Net, generate_netlist
     if wizard.field("led"):
         code += generate_power_led(args)
 
-    if wizard.field('DS18B20') or wizard.field('DS18B20U') or wizard.field('onewire_connector'):
+    if wizard.field('DS18B20') or wizard.field('DS18B20U') or wizard.field('onewire_connector') != 'No Onewire connector':
         code += generate_onewire_bus(args)
 
     if wizard.field('DS18B20'):
@@ -70,6 +73,8 @@ from skidl import Bus, Part, Net, generate_netlist
 
     if wizard.field('usb_uart') == 'FT231':
         code += generate_ftdi230(args)
+        if args['mcu'] in ['ESP-12E', 'ESP-07']:
+            code += generate_esp_uart_reset(args)
 
     if wizard.field('board_footprint') == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
@@ -116,6 +121,21 @@ ATMEGA_XTAL_C1 = Part('Device', 'C', value='22uF', footprint='{capacitor_footpri
 ATMEGA_XTAL[1] & ATMEGA_XTAL_C1 & Net.fetch('GND')
 ATMEGA_XTAL_C2 = Part('Device', 'C', value='22uF', footprint='{capacitor_footprint}')
 ATMEGA_XTAL[2] & ATMEGA_XTAL_C2 & Net.fetch('GND')
+
+# Serial communications
+U1['PD1'] += Net.fetch('tx')
+U1['PD0'] += Net.fetch('rx')
+'''.format(**args)
+
+def generate_icsp(args):
+    return '''
+ICSP_CONN = Part('Connector_Generic', 'Conn_02x03_Odd_Even', footprint='Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical')
+ICSP_CONN[1] += U1['PB4']
+ICSP_CONN[2] += Net.fetch('+5V')
+ICSP_CONN[3] += U1['PB5']
+ICSP_CONN[4] += U1['PB3']
+ICSP_CONN[5] += U1['RESET']
+ICSP_CONN[6] += Net.fetch('GND')
 '''.format(**args)
 
 def generate_reset_line(args):
@@ -271,8 +291,8 @@ FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHea
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC
 FTDI_HEADER[3] += Net.fetch('{mcurail}')
-FTDI_HEADER[4] += U1['RX']
-FTDI_HEADER[5] += U1['TX']
+FTDI_HEADER[4] += Net.fetch('rx')
+FTDI_HEADER[5] += Net.fetch('tx')
 FTDI_HEADER[6] += NC
 '''.format(**args)
 
@@ -282,11 +302,15 @@ def generate_ftdi230(args):
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('{mcurail}')
 FTDI230['GND'] += Net.fetch('GND')
-FTDI230['TXD'] += U1['RX']
-FTDI230['RXD'] += U1['TX']
+FTDI230['TXD'] += Net.fetch('rx')
+FTDI230['RXD'] += Net.fetch('tx')
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
+'''.format(**args)
 
+def generate_esp_uart_reset(args):
+    """Generate reset circuitry for ESP"""
+    return '''
 Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 QR1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')

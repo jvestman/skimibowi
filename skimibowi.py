@@ -66,6 +66,7 @@ class MCU(QtWidgets.QWizardPage):
         self.flashButton = QtWidgets.QCheckBox("Flash button")
         self.ftdi_header = QtWidgets.QCheckBox("FTDI header")
         self.led = QtWidgets.QCheckBox("Power-on led on GPIO0")
+        self.icsp = QtWidgets.QCheckBox("ICSP header")
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.comboBox)
         layout.addWidget(self.resetButton)
@@ -73,12 +74,14 @@ class MCU(QtWidgets.QWizardPage):
         layout.addWidget(self.flashButton)
         layout.addWidget(self.ftdi_header)
         layout.addWidget(self.led)
+        layout.addWidget(self.icsp)
         self.registerField("mcu", self.comboBox, "currentText")
         self.registerField("reset", self.resetLine)
         self.registerField("Reset button", self.resetButton)
         self.registerField("Flash button", self.flashButton)
         self.registerField("FTDI header", self.ftdi_header)
         self.registerField("led", self.led)
+        self.registerField("icsp", self.icsp)
         self.setLayout(layout)
 
 class PowerManagementPage(QtWidgets.QWizardPage):

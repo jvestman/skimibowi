@@ -7,6 +7,7 @@ from generator import generate
 from generator import generate_battery_management
 from generator import generate_ftdi_header
 from generator import generate_ftdi230
+from generator import generate_esp_uart_reset
 
 class TestGenerator(unittest.TestCase):
     """Tests for SKiDL generator functions"""
@@ -36,6 +37,10 @@ U1R1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metri
 U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
 Net.fetch('+VBatt') & U1R1 & U1['EN']
 Net.fetch('GND') & U1R2 & U1['GPIO15']
+
+U3R1 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
+U3R1[1] += Net.fetch('+VBatt')
+U3R1[2] += Net.fetch('DQ')
 
 ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical')
 ONEWIRECONN[1] += Net.fetch('+VBatt')
@@ -145,8 +150,8 @@ FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHea
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC
 FTDI_HEADER[3] += Net.fetch('+VBatt')
-FTDI_HEADER[4] += U1['RX']
-FTDI_HEADER[5] += U1['TX']
+FTDI_HEADER[4] += Net.fetch('rx')
+FTDI_HEADER[5] += Net.fetch('tx')
 FTDI_HEADER[6] += NC
 
 Net.fetch('+VBatt') & INA219_R_SHUNT & SWITCH[1,2] & FUSE & BATTERY
@@ -169,8 +174,8 @@ FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHea
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC
 FTDI_HEADER[3] += Net.fetch('VDD')
-FTDI_HEADER[4] += U1['RX']
-FTDI_HEADER[5] += U1['TX']
+FTDI_HEADER[4] += Net.fetch('rx')
+FTDI_HEADER[5] += Net.fetch('tx')
 FTDI_HEADER[6] += NC
 '''
             )
@@ -229,7 +234,8 @@ BATTERYMANAGER['THERM'] & BM_THERM_R & Net.fetch('GND')
         self.maxDiff = 10000
         self.assertEqual(
             generate_ftdi230({'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',
-                              'mcurail':'+VBus'}),
+                              'mcurail':'+VBus',
+                              'mcu':'ESP-12E'}),
             '''
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('+VBus')
@@ -239,6 +245,30 @@ FTDI230['RXD'] += U1['TX']
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
 
+Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
+QR1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+QR2 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
+Q1['B'] += QR1[1]
+QR1[2] += FTDI230['DTR']
+Q2['B'] += QR2[1]
+QR2[2] += FTDI230['RTS']
+Q1['E'] += U1['GPIO0']
+Q2['E'] += U1['RST']
+Q1['C'] += Q2['C']
+Q2['C'] += FTDI230['DTR']
+Q1['C'] += FTDI230['RTS']
+'''
+            )
+
+    def test_ftdi230(self):
+        """Test generation of ESP uart reset circuitry"""
+        self.maxDiff = 10000
+        self.assertEqual(
+            generate_esp_uart_reset({'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',
+                              'mcurail':'+VBus',
+                              'mcu':'ESP-12E'}),
+            '''
 Q1 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 QR1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
@@ -315,6 +345,10 @@ Net.fetch('GND') & U1R2 & U1['GPIO15']
 BATTERY = Part('Device', 'Battery', footprint='BatteryHolder_Keystone_2468_2xAAA')
 BATTERY['+'] += Net.fetch('+VBatt')
 BATTERY['-'] += Net.fetch('GND')
+
+U3R1 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metric')
+U3R1[1] += Net.fetch('+VBatt')
+U3R1[2] += Net.fetch('DQ')
 
 ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical')
 ONEWIRECONN[1] += Net.fetch('+VBatt')
