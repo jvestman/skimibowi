@@ -78,6 +78,8 @@ from skidl import Bus, Part, Net, generate_netlist
 
     if wizard.field('board_footprint') == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
+        if args['mcu'] == 'ATmega328P':
+            code += generate_atmega_arduino_board_connections(args)
 
     code += '''
 generate_netlist()
@@ -390,12 +392,39 @@ def generate_arduino_uno_r3_board_footprint(args):
     """Generate Arduino Uno R3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Uno_R3', footprint='Module:Arduino_UNO_R3_WithMountingHoles')
-BOARD['RESET'] += U1['RST']
+BOARD['RESET'] += U1['RESET']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('+VBus')
 
-BOARD['TX'] += U1['TX']
-BOARD['RX'] += U1['RX']
+BOARD['TX'] += Net.fetch('tx')
+BOARD['RX'] += Net.fetch('rx')
+'''.format(args)
+
+def generate_atmega_arduino_board_connections(args):
+    """Generate connections from ATmega mcu to Arduino headers"""
+    return '''
+BOARD['D0'] += U1['PD0']
+BOARD['D1'] += U1['PD1']
+BOARD['D2'] += U1['PD2']
+BOARD['D3'] += U1['PD3']
+BOARD['D4'] += U1['PD4']
+BOARD['D5'] += U1['PD5']
+BOARD['D6'] += U1['PD6']
+BOARD['D7'] += U1['PD7']
+
+BOARD['A0'] += U1['PC0']
+BOARD['A1'] += U1['PC1']
+BOARD['A2'] += U1['PC2']
+BOARD['A3'] += U1['PC3']
+BOARD['A4'] += U1['PC4']
+BOARD['A5'] += U1['PC5']
+
+BOARD['D8'] += U1['PB0']
+BOARD['D9'] += U1['PB1']
+BOARD['D10'] += U1['PB2']
+BOARD['D11'] += U1['PB3']
+BOARD['D12'] += U1['PB4']
+BOARD['D13'] += U1['PB5']
 '''.format(args)
