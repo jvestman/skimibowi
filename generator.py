@@ -65,11 +65,11 @@ from skidl import Bus, Part, Net, generate_netlist
     if wizard.field('FTDI header'):
         code += generate_ftdi_header(args)
 
-    if wizard.field('powersource') != 'No battery':
-        code += connect_power_network(wizard)
-
     if wizard.field('usb_connector') != 'No USB connector':
         code += generate_usb_connector(args)
+
+    if args['powersource'] != 'No battery' or wizard.field('usb_connector') != 'No USB connector':
+        code += connect_power_network(wizard, args)
 
     if wizard.field('usb_uart') == 'FT231':
         code += generate_ftdi230(args)
@@ -199,7 +199,7 @@ BATTERY[1] += Net.fetch('+VLipo')
 BATTERY[2] += Net.fetch('GND')
 '''.format(**args)
 
-def connect_power_network(wizard):
+def connect_power_network(wizard, args):
     """Connect components that connect mcu/regulator throuh optional power switch, fuse and ina219 to battery"""
     if wizard.field('regulator') not in ['No regulator', True, False]:
         components = ['REGULATOR[\'VI\']']
@@ -216,7 +216,10 @@ def connect_power_network(wizard):
         if wizard.field(element):
             components.append(elements[element])
 
-    components.append('BATTERY')
+    if args['powersource'] != 'No battery':
+        components.append('BATTERY')
+    elif wizard.field('regulator') not in ['No regulator', True, False]:
+        components.append('Net.fetch(\'+VBus\')')
 
     line = " & ".join(components)
     return '\n' + line + '\n'

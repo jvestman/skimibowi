@@ -47,11 +47,11 @@ ONEWIRECONN[1] += Net.fetch('+VBatt')
 ONEWIRECONN[2] += Net.fetch('DQ')
 ONEWIRECONN[3] += Net.fetch('GND')
 
-Net.fetch('+VBatt') & BATTERY
-
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')
+
+Net.fetch('+VBatt')
 
 generate_netlist()
 '''
@@ -154,11 +154,11 @@ FTDI_HEADER[4] += Net.fetch('rx')
 FTDI_HEADER[5] += Net.fetch('tx')
 FTDI_HEADER[6] += NC
 
-Net.fetch('+VBatt') & INA219_R_SHUNT & SWITCH[1,2] & FUSE & BATTERY
-
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')
+
+Net.fetch('+VBatt') & INA219_R_SHUNT & SWITCH[1,2] & FUSE
 
 generate_netlist()
 '''
@@ -355,11 +355,11 @@ ONEWIRECONN[1] += Net.fetch('+VBatt')
 ONEWIRECONN[2] += Net.fetch('DQ')
 ONEWIRECONN[3] += Net.fetch('GND')
 
-Net.fetch('+VBatt') & BATTERY
-
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')
+
+Net.fetch('+VBatt') & BATTERY
 
 generate_netlist()
 ''')
