@@ -81,6 +81,11 @@ from skidl import Bus, Part, Net, generate_netlist
         if args['mcu'] == 'ATmega328P':
             code += generate_atmega_arduino_board_connections(args)
 
+    if wizard.field('board_footprint') == 'Arduino Nano':
+        code += generate_arduino_nano_v3_board_footprint(args)
+        if args['mcu'] == 'ATmega328P':
+            code += generate_atmega_arduino_board_connections(args)
+
     code += '''
 generate_netlist()
 '''
@@ -404,6 +409,21 @@ BOARD['Vin'] += Net.fetch('+VBus')
 BOARD['TX'] += Net.fetch('tx')
 BOARD['RX'] += Net.fetch('rx')
 '''.format(args)
+
+def generate_arduino_nano_v3_board_footprint(args):
+    """Generate Arduino Nano V3 board layout footprint"""
+    return '''
+BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
+BOARD['RESET'] += U1['RESET']
+BOARD['+5V'] += Net.fetch('+5V')
+BOARD['3V3'] += Net.fetch('+3V3')
+BOARD['GND'] += Net.fetch('GND')
+BOARD['Vin'] += Net.fetch('+VBus')
+
+BOARD['TX'] += Net.fetch('tx')
+BOARD['RX'] += Net.fetch('rx')
+'''.format(args)
+
 
 def generate_atmega_arduino_board_connections(args):
     """Generate connections from ATmega mcu to Arduino headers"""
