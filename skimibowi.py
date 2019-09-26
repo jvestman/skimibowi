@@ -21,7 +21,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtWidgets
 from generator import generate
-from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints
+from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -102,10 +102,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.layout.addWidget(self.battery_management)
         self.layout.addWidget(QtWidgets.QLabel("MCU power rail"))
         self.mcurail = QIComboBox(self)
-        self.mcurail.addItem("+VBatt")
-        self.mcurail.addItem("+3V")
-        self.mcurail.addItem("+3V3")
-        self.mcurail.addItem("+5V")
+        self.mcurail.addItems(["+VBatt", "+3V", "+3V3", "+5V"])
         self.layout.addWidget(self.mcurail)
         self.fuse = QtWidgets.QCheckBox("Add fuse holder to batteryline")
         self.layout.addWidget(self.fuse)
@@ -167,10 +164,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.usb_connector_label = QtWidgets.QLabel()
         self.usb_connector_label.setText("USB Connector")
         self.usb_connector = QIComboBox(self)
-        self.usb_connector.addItem("No USB connector")
-        self.usb_connector.addItem("USB B")
-        self.usb_connector.addItem("USB B Mini")
-        self.usb_connector.addItem("USB B Micro")
+        self.usb_connector.addItems(usb_connector_footprints.keys())
         self.registerField("usb_connector", self.usb_connector, "currentText")
         self.adc_label = QtWidgets.QLabel()
         self.adc_label.setText("ADC pin")
