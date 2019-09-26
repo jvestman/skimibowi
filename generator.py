@@ -48,7 +48,7 @@ from skidl import Bus, Part, Net, generate_netlist
     if args.get('battery_management', False) == 'MCP73871-2AA':
         code += generate_battery_management(args)
 
-    if 'regulator' in args and args['regulator'] is not None:
+    if args.get('regulator', None) != None:
         code += generate_regulator(args)
 
     if args.get('reset', False):
