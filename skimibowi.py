@@ -21,6 +21,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtWidgets
 from generator import generate
+from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -56,11 +57,7 @@ class MCU(QtWidgets.QWizardPage):
         super(MCU, self).__init__(parent)
         self.setTitle("Microcontroller")
         self.comboBox = QIComboBox(self)
-        self.comboBox.addItem("ESP-12E")
-        self.comboBox.addItem("ESP-07")
-        self.comboBox.addItem("Wemos D1 Mini")
-        self.comboBox.addItem("ATmega328P")
-        self.comboBox.addItem("No MCU")
+        self.comboBox.addItems(footprints.keys())
         self.resetButton = QtWidgets.QCheckBox("Reset button")
         self.resetLine = QtWidgets.QCheckBox("Reset line")
         self.flashButton = QtWidgets.QCheckBox("Flash button")
@@ -90,24 +87,13 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.setTitle('Power Management')
         self.label1 = QtWidgets.QLabel('Battery')
         self.powersource = QIComboBox(self)
-        self.powersource.addItem("No battery")
-        self.powersource.addItem("2xAA - Keystone 2462")
-        self.powersource.addItem("3xAA - TruPower BH-331P")
-        self.powersource.addItem("2xAAA - Keystone 2468")
-        self.powersource.addItem("3xAAA - Keystone 2479")
-        self.powersource.addItem("18650 - Keystone 1042")
-        self.powersource.addItem("JST PH S2B")
+        self.powersource.addItems(battery_footprints.keys())
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.label1)
         self.layout.addWidget(self.powersource)
         self.layout.addWidget(QtWidgets.QLabel("Regulator"))
         self.regulator = QIComboBox(self)
-        self.regulator.addItem("No regulator")
-        self.regulator.addItem("LD1117S33TR")
-        self.regulator.addItem("LD1117S50TR")
-        self.regulator.addItem("LP2985-30")
-        self.regulator.addItem("LP2985-33")
-        self.regulator.addItem("LP2985-50")
+        self.regulator.addItems(regulators.keys())
         self.layout.addWidget(self.regulator)
         self.layout.addWidget(QtWidgets.QLabel('Battery management'))
         self.battery_management = QIComboBox(self)
@@ -139,12 +125,7 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.setTitle("Footprints")
         self.resistor_footprint_label = QtWidgets.QLabel()
         self.resistor_footprint = QIComboBox(self)
-        self.resistor_footprint.addItem("THT")
-        self.resistor_footprint.addItem("SMD 0402")
-        self.resistor_footprint.addItem("SMD 0603")
-        self.resistor_footprint.addItem("SMD 0805")
-        self.resistor_footprint.addItem("SMD 1206")
-        self.resistor_footprint.addItem("SMD 1210")
+        self.resistor_footprint.addItems(resistor_footprints.keys())
         self.registerField('resistor_footprint', self.resistor_footprint, 'currentText')
         self.button_footprint_label = QtWidgets.QLabel()
         self.button_footprint_label.setText("Tactile button footprint")
@@ -247,104 +228,7 @@ class FinalPage(QtWidgets.QWizardPage):
 
     def generate_skidl(self):
 
-        footprints = {
-            'ESP-07': 'RF_Module:ESP-07',
-            'ESP-12E': 'RF_Module:ESP-12E',
-            'Wemos D1 Mini': 'RF_Module:WEMOS_D1_mini_light',
-            'ATmega328P': 'Package_DIP:DIP-28_W7.62mm',
-            'No MCU': ''
-        }
-
-        battery_footprints = {
-            'No battery': '',
-            '2xAA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA',
-            '3xAA - TruPower BH-331P':'BatteryHolder_TruPower_BH-331P_3xAA',
-            '2xAAA - Keystone 2468': 'Battery:BatteryHolder_Keystone_2468_2xAAA',
-            '3xAAA - Keystone 2479': 'Battery:BatteryHolder_Keystone_2479_3xAAA',
-            '18650 - Keystone 1042': 'Battery:BatteryHolder_Keystone_1042_1x18650',
-            'JST PH S2B': 'JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal'
-        }
-
-        regulators = {
-            'No regulator': None,
-            'LD1117S33TR': { 'module': 'Regulator_Linear', 'part': 'LD1117S33TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+3V3'},
-            'LD1117S50TR': {'module': 'Regulator_Linear', 'part': 'LD1117S50TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+5V'},
-            'LP2985-30': {'module': 'Regulator_Linear', 'part': 'LP2985-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V'},
-            'LP2985-33': {'module': 'Regulator_Linear', 'part': 'LP2985-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3'},
-            'LP2985-50': {'module': 'Regulator_Linear', 'part': 'LP2985-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V'}
-        }
-
-        resistor_footprints = {
-            'THT': 'R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal',
-            'SMD 0402': 'Resistor_SMD:R_0402_1005Metric',
-            'SMD 0603': 'Resistor_SMD:R_0603_1608Metric',
-            'SMD 0805': 'Resistor_SMD:R_0805_2012Metric',
-            'SMD 1206': 'Resistor_SMD:R_1206_3216Metric',
-            'SMD 1210': 'Resistor_SMD:R_1210_3225Metric'
-        }
-
-        capacitor_footprints = {
-            'THT': '',
-            'SMD 0402': 'Capacitor_SMD:C_0402_1005Metric',
-            'SMD 0603': 'Capacitor_SMD:C_0603_1608Metric',
-            'SMD 0805': 'Capacitor_SMD:C_0805_2012Metric',
-            'SMD 1206': 'Capacitor_SMD:C_1206_3216Metric',
-            'SMD 1210': 'Capacitor_SMD:C_1210_3225Metric'
-        }
-
-        led_footprints = {
-            'THT': 'LED_THT:LED_D3.0mm',
-            'SMD 0402': 'LED_SMD:LED_0402_1005Metric',
-            'SMD 0603': 'LED_SMD:LED_0603_1608Metric',
-            'SMD 0805': 'LED_SMD:LED_0805_2012Metric',
-            'SMD 1206': 'LED_SMD:LED_1206_3216Metric',
-            'SMD 1210': 'LED_SMD:LED_1210_3225Metric'
-        }
-
-        usb_connector_footprints = {
-            'No USB connector': '',
-            'USB B': 'USB_B_OST_USB-B1HSxx_Horizontal',
-            'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
-            'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal'
-        }
-
-        onewire_connector_footprints = {
-            'No Onewire connector': '',
-            '1x3 Pin Header': 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
-            'Screw terminal': 'TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-3_1x03_P2.54mm_Horizontal'
-        }
-
-        variables = {
-            'mcu': self.field("mcu"),
-            'mcu_footprint': footprints[self.field("mcu")],
-            'icsp': self.field('icsp'),
-            'mcurail': self.field('mcurail'),
-            'powersource': self.field('powersource'),
-            'powersource_footprint': battery_footprints[self.field('powersource')],
-            'battery_management': self.field('battery_management'),
-            'fuse': self.field('fuse'),
-            'switch': self.field('switch'),
-            'reset': self.field('reset'),
-            'Reset button': self.field('Reset button'),
-            'Flash button': self.field('Flash button'),
-            'led': self.field('led'),
-            'FTDI header': self.field('FTDI header'),
-            'usb_connector': self.field('usb_connector'),
-            'ina219': self.field('ina219'),
-            'DS18B20': self.field('DS18B20'),
-            'DS18B20U': self.field('DS18B20U'),
-            'usb_uart': self.field('usb_uart'),
-            'board_footprint': self.field('board_footprint'),
-            'onewire_connector': self.field('onewire_connector'),
-            'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
-            'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
-            'led_footprint': led_footprints[self.field('resistor_footprint')],
-            'regulator': regulators[self.field('regulator')],
-            'usb_connector_footprint': usb_connector_footprints[self.field('usb_connector')],
-            'onewire_connector_footprint': onewire_connector_footprints[self.field('onewire_connector')]
-            }
-
-        code = generate(variables)
+        code = generate(fill_variables(self))
 
         with open(self.field('filename'), 'w') as file:
             file.write(code)
