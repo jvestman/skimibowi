@@ -317,9 +317,25 @@ class FinalPage(QtWidgets.QWizardPage):
         variables = {
             'mcu': self.field("mcu"),
             'mcu_footprint': footprints[self.field("mcu")],
+            'icsp': self.field('icsp'),
             'mcurail': self.field('mcurail'),
             'powersource': self.field('powersource'),
             'powersource_footprint': battery_footprints[self.field('powersource')],
+            'battery_management': self.field('battery_management'),
+            'fuse': self.field('fuse'),
+            'switch': self.field('switch'),
+            'reset': self.field('reset'),
+            'Reset button': self.field('Reset button'),
+            'Flash button': self.field('Flash button'),
+            'led': self.field('led'),
+            'FTDI header': self.field('FTDI header'),
+            'usb_connector': self.field('usb_connector'),
+            'ina219': self.field('ina219'),
+            'DS18B20': self.field('DS18B20'),
+            'DS18B20U': self.field('DS18B20U'),
+            'usb_uart': self.field('usb_uart'),
+            'board_footprint': self.field('board_footprint'),
+            'onewire_connector': self.field('onewire_connector'),
             'resistor_footprint': resistor_footprints[self.field('resistor_footprint')],
             'capacitor_footprint': capacitor_footprints[self.field('resistor_footprint')],
             'led_footprint': led_footprints[self.field('resistor_footprint')],
@@ -328,7 +344,7 @@ class FinalPage(QtWidgets.QWizardPage):
             'onewire_connector_footprint': onewire_connector_footprints[self.field('onewire_connector')]
             }
 
-        code = generate(variables, self)
+        code = generate(variables)
 
         with open(self.field('filename'), 'w') as file:
             file.write(code)
