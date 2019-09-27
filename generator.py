@@ -33,10 +33,10 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['mcu'] == 'ATmega328P' and args['icsp']:
         code += generate_icsp(args)
 
-    if args['powersource'] not in ['No battery', 'JST PH S2B']:
+    if args['powersource'] not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_battery(args)
 
-    if args['powersource'] == 'JST PH S2B':
+    if args['powersource'] in ['JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_power_connector(args)
 
     if args.get('fuse', False):
@@ -214,9 +214,14 @@ FUSE = Part('Device', 'Fuse', footprint='Fuseholder_Cylinder-5x20mm_Schurter_003
 
 def generate_power_connector(args):
     """Generate power connector"""
+    if args.get('Battery management', False) == 'No battery management ic':
+        args['battery_connector_pos'] = '+VLipo'
+    else:
+        args['battery_connector_pos'] = '+VBatt'
+
     return '''
 BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footprint}')
-BATTERY[1] += Net.fetch('+VLipo')
+BATTERY[1] += Net.fetch('{battery_connector_pos}')
 BATTERY[2] += Net.fetch('GND')
 '''.format(**args)
 
@@ -365,7 +370,6 @@ def generate_regulator(args):
 
     return '''
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
-#REGULATOR['VI'] += Net.fetch('+VBatt')
 REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
 '''.format(**(args['regulator']))

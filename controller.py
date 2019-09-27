@@ -29,7 +29,8 @@ battery_footprints = {
     '2xAAA - Keystone 2468': 'Battery:BatteryHolder_Keystone_2468_2xAAA',
     '3xAAA - Keystone 2479': 'Battery:BatteryHolder_Keystone_2479_3xAAA',
     '18650 - Keystone 1042': 'Battery:BatteryHolder_Keystone_1042_1x18650',
-    'JST PH S2B': 'JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal'
+    'JST PH S2B': 'JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal',
+    'Barrel Jack 2.0/5.5mm': 'Connector_BarrelJack:BarrelJack_CUI_PJ-063AH_Horizontal'
 }
 
 regulators = {
