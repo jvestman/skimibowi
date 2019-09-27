@@ -117,7 +117,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("battery_management", self.battery_management, "currentText")
         self.registerField("fuse", self.fuse)
         self.registerField("switch", self.switch)
-        self.registerField("autoselect", self.switch)
+        self.registerField("autoselect", self.autoselect)
 
 class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):

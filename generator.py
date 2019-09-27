@@ -257,7 +257,7 @@ def generate_autoselect(args):
     """Generate +5V/USB auto selector"""
     return '''
 AUTOSELECTOR = Part('Device', 'D', footprint='Diode_SMD:D_SMA')
-Net.fetch('+5V) & AUTOSELECTOR & Net.fetch('+VBus')
+Net.fetch('+5V') & AUTOSELECTOR & Net.fetch('+VBus')
 '''.format(*args)
 
 def generate_onewire_bus(args):
