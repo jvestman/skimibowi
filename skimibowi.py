@@ -108,6 +108,8 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.layout.addWidget(self.fuse)
         self.switch = QtWidgets.QCheckBox("Add power switch")
         self.layout.addWidget(self.switch)
+        self.autoselect = QtWidgets.QCheckBox("+5V/USB Auto Selector")
+        self.layout.addWidget(self.autoselect)
         self.setLayout(self.layout)
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
@@ -115,6 +117,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("battery_management", self.battery_management, "currentText")
         self.registerField("fuse", self.fuse)
         self.registerField("switch", self.switch)
+        self.registerField("autoselect", self.switch)
 
 class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):

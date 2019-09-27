@@ -110,5 +110,6 @@ def fill_variables(wizard):
         'led_footprint': led_footprints[wizard.field('resistor_footprint')],
         'regulator': regulators[wizard.field('regulator')],
         'usb_connector_footprint': usb_connector_footprints[wizard.field('usb_connector')],
-        'onewire_connector_footprint': onewire_connector_footprints[wizard.field('onewire_connector')]
+        'onewire_connector_footprint': onewire_connector_footprints[wizard.field('onewire_connector')],
+        'autoselect': wizard.field('autoselect')
         }

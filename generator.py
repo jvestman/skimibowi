@@ -51,6 +51,9 @@ from skidl import Bus, Part, Net, generate_netlist
     if args.get('regulator', None) != None:
         code += generate_regulator(args)
 
+    if args.get('autoselect', False):
+        code += generate_autoselect(args)
+
     if args.get('reset', False):
         code += generate_reset_line(args)
 
@@ -249,6 +252,13 @@ def connect_power_network(args):
 
     line = " & ".join(components)
     return '\n' + line + '\n'
+
+def generate_autoselect(args):
+    """Generate +5V/USB auto selector"""
+    return '''
+AUTOSELECTOR = Part('Device', 'D', footprint='Diode_SMD:D_SMA')
+Net.fetch('+5V) & AUTOSELECTOR & Net.fetch('+VBus')
+'''.format(*args)
 
 def generate_onewire_bus(args):
     """Generate DQ net for onewire bus"""
