@@ -154,6 +154,7 @@ U1['PD0'] += Net.fetch('rx')
 '''.format(**args)
 
 def generate_icsp(args):
+    """Generate In Circuit Serial Programmer header"""
     return '''
 ICSP_CONN = Part('Connector_Generic', 'Conn_02x03_Odd_Even', footprint='Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical')
 ICSP_CONN[1] += U1['PB4']
@@ -210,7 +211,7 @@ SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS2020
 '''.format(**args)
 
 def generate_fuse(args):
-    """Generate power switch"""
+    """Generate Fuse"""
     return '''
 FUSE = Part('Device', 'Fuse', footprint='{fuse_footprint}')
 '''.format(**args)
@@ -279,7 +280,7 @@ U1['GPIO2'] += Net.fetch('DQ')
 '''.format(**args)
 
 def generate_18b20(args):
-    """Generate 18b20 part and cconnect it to onewire bus"""
+    """Generate 18b20 part and connect it to onewire bus"""
     return '''
 U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_Inline")
 U2['VDD'] += Net.fetch('{mcurail}')
