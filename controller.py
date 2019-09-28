@@ -82,6 +82,12 @@ onewire_connector_footprints = {
     'Screw terminal': 'TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-3_1x03_P2.54mm_Horizontal'
 }
 
+fuse_footprints = {
+    'No fuse': None,
+    'Schurter 0031.8201 5x20mm holder': 'Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open',
+    'SMD 1812':'Fuse_1812_4532Metric'
+}
+
 def fill_variables(wizard):
     return {
         'mcu': wizard.field("mcu"),
@@ -92,6 +98,7 @@ def fill_variables(wizard):
         'powersource_footprint': battery_footprints[wizard.field('powersource')],
         'battery_management': wizard.field('battery_management'),
         'fuse': wizard.field('fuse'),
+        'fuse_footprint': fuse_footprints[wizard.field('fuse')],
         'switch': wizard.field('switch'),
         'reset': wizard.field('reset'),
         'Reset button': wizard.field('Reset button'),

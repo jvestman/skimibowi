@@ -39,7 +39,7 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['powersource'] in ['JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_power_connector(args)
 
-    if args.get('fuse', False):
+    if args.get('fuse', 'No fuse') != 'No fuse':
         code += generate_fuse(args)
 
     if args.get('switch', False):
@@ -212,7 +212,7 @@ SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS2020
 def generate_fuse(args):
     """Generate power switch"""
     return '''
-FUSE = Part('Device', 'Fuse', footprint='Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open')
+FUSE = Part('Device', 'Fuse', footprint='{fuse_footprint}')
 '''.format(**args)
 
 def generate_power_connector(args):
@@ -434,7 +434,7 @@ BOARD['RESET'] += U1['RESET']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
-BOARD['Vin'] += Net.fetch('+VBus')
+BOARD['Vin'] += Net.fetch('Vin')
 
 BOARD['TX'] += Net.fetch('tx')
 BOARD['RX'] += Net.fetch('rx')
@@ -448,7 +448,7 @@ BOARD['RESET'] += U1['RESET']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
-BOARD['Vin'] += Net.fetch('+VBus')
+BOARD['Vin'] += Net.fetch('Vin')
 
 BOARD['TX'] += Net.fetch('tx')
 BOARD['RX'] += Net.fetch('rx')

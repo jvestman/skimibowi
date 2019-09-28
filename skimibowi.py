@@ -21,7 +21,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtWidgets
 from generator import generate
-from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints
+from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -104,7 +104,9 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.mcurail = QIComboBox(self)
         self.mcurail.addItems(["+VBatt", "+3V", "+3V3", "+5V"])
         self.layout.addWidget(self.mcurail)
-        self.fuse = QtWidgets.QCheckBox("Add fuse holder to batteryline")
+        self.layout.addWidget(QtWidgets.QLabel("Fuse"))
+        self.fuse = QIComboBox(self)
+        self.fuse.addItems(fuse_footprints.keys())
         self.layout.addWidget(self.fuse)
         self.switch = QtWidgets.QCheckBox("Add power switch")
         self.layout.addWidget(self.switch)
@@ -115,7 +117,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
         self.registerField("battery_management", self.battery_management, "currentText")
-        self.registerField("fuse", self.fuse)
+        self.registerField("fuse", self.fuse, "currentText")
         self.registerField("switch", self.switch)
         self.registerField("autoselect", self.autoselect)
 
