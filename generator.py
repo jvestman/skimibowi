@@ -27,11 +27,10 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['mcu'] in ['ESP-12E', 'ESP-07']:
         code += generate_esp(args)
 
-    if args['mcu'] == 'ATmega328P':
+    if args['mcu'] in ['ATmega328P', "ATmega328P-AU", "ATmega328P-MU"]:
         code += generate_atmega328p(args)
-
-    if args['mcu'] == 'ATmega328P' and args['icsp']:
-        code += generate_icsp(args)
+        if args['icsp']:
+            code += generate_icsp(args)
 
     if args['powersource'] not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_battery(args)
@@ -97,12 +96,12 @@ from skidl import Bus, Part, Net, generate_netlist
 
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
-        if args['mcu'] == 'ATmega328P':
+        if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
             code += generate_atmega_arduino_board_connections(args)
 
     if args.get('board_footprint', False) == 'Arduino Nano':
         code += generate_arduino_nano_v3_board_footprint(args)
-        if args['mcu'] == 'ATmega328P':
+        if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
             code += generate_atmega_arduino_board_connections(args)
 
     code += '''
@@ -127,7 +126,7 @@ Net.fetch('GND') & U1R2 & U1['GPIO15']
 def generate_atmega328p(args):
     """Generate ATmega328P subsystem to circuit"""
     return '''
-U1 = Part('MCU_Microchip_ATmega', 'ATmega328-PU', footprint='Package_DIP:DIP-28_W7.62mm')
+U1 = Part('MCU_Microchip_ATmega', '{mcu}', footprint='{mcu_footprint}')
 
 #Power networks
 U1['VCC'] += Net.fetch('+5V')

@@ -19,6 +19,8 @@ footprints = {
     'ESP-12E': 'RF_Module:ESP-12E',
     'Wemos D1 Mini': 'RF_Module:WEMOS_D1_mini_light',
     'ATmega328P': 'Package_DIP:DIP-28_W7.62mm',
+    'ATmega328P-AU': 'Package_QFP:TQFP-32_7x7mm_P0.8mm',
+    'ATmega328P-MU': 'Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.1x3.1mm',
     'No MCU': ''
 }
 
@@ -89,6 +91,7 @@ fuse_footprints = {
 }
 
 def fill_variables(wizard):
+    """Fill circuit configuration based on selections made in wizard UI"""
     return {
         'mcu': wizard.field("mcu"),
         'mcu_footprint': footprints[wizard.field("mcu")],
