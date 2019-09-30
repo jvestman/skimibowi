@@ -27,7 +27,7 @@ from skidl import Bus, Part, Net, generate_netlist
     if args['mcu'] in ['ESP-12E', 'ESP-07']:
         code += generate_esp(args)
 
-    if args['mcu'] in ['ATmega328P', "ATmega328P-AU", "ATmega328P-MU"]:
+    if args['mcu'] in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
         code += generate_atmega328p(args)
         if args['icsp']:
             code += generate_icsp(args)
@@ -134,18 +134,14 @@ U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
 
 # Crystal
-ATMEGA_XTAL = Part('Device','Crystal', footprint='Crystal:Crystal_SMD_HC49-SD')
+ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
 U1['XTAL1'] += ATMEGA_XTAL[1]
-U1['XTAL2'] += ATMEGA_XTAL[2]
+U1['XTAL2'] += ATMEGA_XTAL[3]
+ATMEGA_XTAL[2] += Net.fetch('GND') 
 
 ATMEGA_XTAL_R = Part('Device', 'R', value='1M', footprint='{resistor_footprint}')
 U1['XTAL1'] += ATMEGA_XTAL_R[1]
 U1['XTAL2'] += ATMEGA_XTAL_R[2]
-
-ATMEGA_XTAL_C1 = Part('Device', 'C', value='22uF', footprint='{capacitor_footprint}')
-ATMEGA_XTAL[1] & ATMEGA_XTAL_C1 & Net.fetch('GND')
-ATMEGA_XTAL_C2 = Part('Device', 'C', value='22uF', footprint='{capacitor_footprint}')
-ATMEGA_XTAL[2] & ATMEGA_XTAL_C2 & Net.fetch('GND')
 
 # Serial communications
 U1['PD1'] += Net.fetch('tx')
