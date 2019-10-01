@@ -2,7 +2,6 @@
 import sys
 from io import StringIO
 import unittest
-from unittest.mock import Mock
 from generator import generate
 from generator import generate_battery_management
 from generator import generate_ftdi_header
