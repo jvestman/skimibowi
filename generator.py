@@ -47,7 +47,7 @@ from skidl import Bus, Part, Net, generate_netlist
     if args.get('battery_management', False) == 'MCP73871-2AA':
         code += generate_battery_management(args)
 
-    if args.get('regulator', None) != None:
+    if args.get('regulator_data', None) != None:
         code += generate_regulator(args)
 
     if args.get('autoselect', False):
@@ -226,7 +226,7 @@ BATTERY[2] += Net.fetch('GND')
 
 def connect_power_network(args):
     """Connect components that connect mcu/regulator throuh optional power switch, fuse and ina219 to battery"""
-    if args.get('regulator', False) != None:
+    if args.get('regulator_data', False) != None:
         components = ['REGULATOR[\'VI\']']
     else:
         components = ['Net.fetch(\'+VBatt\')']
@@ -243,7 +243,7 @@ def connect_power_network(args):
 
     if args['powersource'] != 'No battery':
         components.append('BATTERY')
-    elif args.get('regulator', False):
+    elif args.get('regulator_data', False):
         components.append('Net.fetch(\'+VBus\')')
 
     line = " & ".join(components)
@@ -378,7 +378,7 @@ def generate_regulator(args):
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
 REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
-'''.format(**(args['regulator']))
+'''.format(**(args['regulator_data']))
 
 def generate_battery_management(args):
     """Generate battery management IC"""

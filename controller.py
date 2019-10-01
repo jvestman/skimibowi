@@ -14,6 +14,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+"""Controller for Skimibowi. Acts between UI and code generator, maps component selections to footprints"""
+
+from yaml import load, dump, Loader
+from generator import generate
+
 footprints = {
     'ESP-07': 'RF_Module:ESP-07',
     'ESP-12E': 'RF_Module:ESP-12E',
@@ -37,7 +42,7 @@ battery_footprints = {
 
 regulators = {
     'No regulator': None,
-    'LD1117S33TR': { 'module': 'Regulator_Linear', 'part': 'LD1117S33TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+3V3'},
+    'LD1117S33TR': {'module': 'Regulator_Linear', 'part': 'LD1117S33TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+3V3'},
     'LD1117S50TR': {'module': 'Regulator_Linear', 'part': 'LD1117S50TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+5V'},
     'LP2985-30': {'module': 'Regulator_Linear', 'part': 'LP2985-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V'},
     'LP2985-33': {'module': 'Regulator_Linear', 'part': 'LP2985-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3'},
@@ -115,11 +120,38 @@ def fill_variables(wizard):
         'usb_uart': wizard.field('usb_uart'),
         'board_footprint': wizard.field('board_footprint'),
         'onewire_connector': wizard.field('onewire_connector'),
-        'resistor_footprint': resistor_footprints[wizard.field('resistor_footprint')],
-        'capacitor_footprint': capacitor_footprints[wizard.field('resistor_footprint')],
-        'led_footprint': led_footprints[wizard.field('resistor_footprint')],
-        'regulator': regulators[wizard.field('regulator')],
+        'common_footprint': wizard.field('common_footprint'),
+        'resistor_footprint': resistor_footprints[wizard.field('common_footprint')],
+        'capacitor_footprint': capacitor_footprints[wizard.field('common_footprint')],
+        'led_footprint': led_footprints[wizard.field('common_footprint')],
+        'regulator': wizard.field('regulator'),
+        'regulator_data': regulators[wizard.field('regulator')],
         'usb_connector_footprint': usb_connector_footprints[wizard.field('usb_connector')],
         'onewire_connector_footprint': onewire_connector_footprints[wizard.field('onewire_connector')],
         'autoselect': wizard.field('autoselect')
         }
+
+def generate_skidl(wizard):
+    """Generate SKiDL code based on chosen wizard options and save those settings to settings.yml
+    where they are read when the wizard started next time"""
+    with open("settings.yml", 'w') as settings:
+        settings.write(dump(fill_variables(wizard)))
+
+    code = generate(fill_variables(wizard))
+
+    with open(wizard.field('filename'), 'w') as file:
+        file.write(code)
+
+def load_settings(wizard):
+    """Load chosen wizard settings from the previous time SKiDL code was generated with wizard"""
+    with open("settings.yml", 'r') as settings_file:
+        settings = load(settings_file, Loader=Loader)
+
+        if settings:
+            for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
+                          'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
+                          'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
+                          'regulator', 'onewire_connector', 'autoselect']:
+                if field in settings:
+                    wizard.setField(field, settings[field])
+            

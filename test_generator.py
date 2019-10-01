@@ -18,7 +18,7 @@ class TestGenerator(unittest.TestCase):
                       'mcu_footprint':'RF_Module:ESP-12E',
                       'mcurail':'+VBatt',
                       'powersource':'No battery',
-                      'regulator': None,
+                      'regulator_data': None,
                       'resistor_footprint': 'Resistor_SMD:R_1206_3216Metric',
                       'led_footprint': 'LED_1206_3216Metric',
                       'usb_connector_footprint':'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
@@ -73,7 +73,7 @@ generate_netlist()
                       'Flash button': True,
                       'led': True,
                       'powersource':'No battery',
-                      'regulator': None,
+                      'regulator_data': None,
                       'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',
                       'led_footprint': 'LED_1206_3216Metric',
                       'usb_connector_footprint':'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
@@ -196,7 +196,7 @@ FTDI_HEADER[6] += NC
                 {'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',
                  'capacitor_footprint': 'Capacitor_SMD:C_1206_3216Metric',
                  'led_footprint': 'LED_SMD:LED_1206_3216Metric',
-                 'regulator': None}),
+                 'regulator_data': None}),
             '''
 BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
 BATTERYMANAGER['IN'] += Net.fetch('+VBus')
@@ -320,7 +320,7 @@ Q1['C'] += FTDI230['RTS']
                        'Reset button': True,
                        'Flash button': True,
                        'led': True,
-                       'regulator': None,
+                       'regulator_data': None,
                        'usb_connector_footprint':'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
                        'onewire_connector_footprint': 'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical'}))
 
@@ -339,7 +339,7 @@ Q1['C'] += FTDI230['RTS']
             generate({'mcu':'ESP-12E',
                       'mcu_footprint':'RF_Module:ESP-12E',
                       'mcurail':'+VBatt',
-                      'regulator': None,
+                      'regulator_data': None,
                       'powersource': '2xAAA - Keystone 2468',
                       'powersource_footprint':'BatteryHolder_Keystone_2468_2xAAA',
                       'resistor_footprint':'Resistor_SMD:R_1206_3216Metric',

@@ -20,8 +20,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtWidgets
-from generator import generate
-from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints
+from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -125,10 +124,10 @@ class FootprintsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(FootprintsPage, self).__init__(parent)
         self.setTitle("Footprints")
-        self.resistor_footprint_label = QtWidgets.QLabel()
-        self.resistor_footprint = QIComboBox(self)
-        self.resistor_footprint.addItems(resistor_footprints.keys())
-        self.registerField('resistor_footprint', self.resistor_footprint, 'currentText')
+        self.common_footprint_label = QtWidgets.QLabel()
+        self.common_footprint = QIComboBox(self)
+        self.common_footprint.addItems(resistor_footprints.keys())
+        self.registerField('common_footprint', self.common_footprint, 'currentText')
         self.button_footprint_label = QtWidgets.QLabel()
         self.button_footprint_label.setText("Tactile button footprint")
         self.button_footprint = QIComboBox(self)
@@ -143,8 +142,8 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.board_footprint.addItem("Adafruit Feather")
         self.registerField('board_footprint', self.board_footprint, 'currentText')
         layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.resistor_footprint_label)
-        layout.addWidget(self.resistor_footprint)
+        layout.addWidget(self.common_footprint_label)
+        layout.addWidget(self.common_footprint)
         layout.addWidget(self.button_footprint_label)
         layout.addWidget(self.button_footprint)
         layout.addWidget(self.board_footprint_label)
@@ -152,7 +151,7 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.setLayout(layout)
 
     def initializePage(self):
-        self.resistor_footprint_label.setText("Capasitor, resistor and diode form factor")
+        self.common_footprint_label.setText("Capasitor, resistor and diode form factor")
         self.board_footprint_label.setText("Board outline footprint")
         
 class PeripheralsPage(QtWidgets.QWizardPage):
@@ -184,9 +183,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.onewire_connector_label = QtWidgets.QLabel()
         self.onewire_connector_label.setText("Onewire connector")
         self.onewire_connector = QtWidgets.QComboBox()
-        self.onewire_connector.addItem("No Onewire connector")
-        self.onewire_connector.addItem("1x3 Pin Header")
-        self.onewire_connector.addItem("Screw terminal")
+        self.onewire_connector.addItems(onewire_connector_footprints.keys())
         self.registerField("onewire_connector", self.onewire_connector, "currentText")
         self.spi_label = QtWidgets.QLabel()
         self.spi_label.setText("SPI")
@@ -222,20 +219,16 @@ class FinalPage(QtWidgets.QWizardPage):
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.filename)
         layout.addWidget(self.generate)
-        self.generate.clicked.connect(self.generate_skidl)
+        self.generate.clicked.connect(self.generate_handler)
         self.setLayout(layout)
 
-    def generate_skidl(self):
-
-        code = generate(fill_variables(self))
-
-        with open(self.field('filename'), 'w') as file:
-            file.write(code)
-
+    def generate_handler(self):
+        generate_skidl(self)
 
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     wizard = Skimibowi()
     wizard.show()
+    load_settings(wizard)
     sys.exit(app.exec_())
