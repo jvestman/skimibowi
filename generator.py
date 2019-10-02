@@ -341,8 +341,11 @@ FTDI230['VCC'] += Net.fetch('{mcurail}')
 FTDI230['GND'] += Net.fetch('GND')
 FTDI230['TXD'] += Net.fetch('rx')
 FTDI230['RXD'] += Net.fetch('tx')
+FTDI230['3V3OUT'] += Net.fetch('+3V3')
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
+C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
+Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
 '''.format(**args)
 
 def generate_esp_uart_reset(args):
