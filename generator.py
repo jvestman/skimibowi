@@ -434,9 +434,6 @@ BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
-
-BOARD['TX'] += Net.fetch('tx')
-BOARD['RX'] += Net.fetch('rx')
 '''.format(args)
 
 def generate_arduino_nano_v3_board_footprint(args):
@@ -448,17 +445,14 @@ BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
-
-BOARD['TX'] += Net.fetch('tx')
-BOARD['RX'] += Net.fetch('rx')
 '''.format(args)
 
 
 def generate_atmega_arduino_board_connections(args):
     """Generate connections from ATmega mcu to Arduino headers"""
     return '''
-BOARD['D0'] += U1['PD0']
-BOARD['D1'] += U1['PD1']
+BOARD['RX'] += Net.fetch('rx')
+BOARD['TX'] += Net.fetch('tx')
 BOARD['D2'] += U1['PD2']
 BOARD['D3'] += U1['PD3']
 BOARD['D4'] += U1['PD4']
