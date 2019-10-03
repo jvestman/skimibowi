@@ -146,6 +146,10 @@ U1['XTAL2'] += ATMEGA_XTAL_R[2]
 # Serial communications
 U1['PD1'] += Net.fetch('tx')
 U1['PD0'] += Net.fetch('rx')
+
+#I2C
+U1['PC4'] += Net.fetch('SDA')
+U1['PC5'] += Net.fetch('SCL')
 '''.format(**args)
 
 def generate_icsp(args):
@@ -434,6 +438,9 @@ BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
+
+BOARD['SDA'] += Net.fetch('SDA')
+BOARD['SCL'] += Net.fetch('SCL')
 '''.format(args)
 
 def generate_arduino_nano_v3_board_footprint(args):
@@ -445,6 +452,9 @@ BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
+
+BOARD['SDA'] += Net.fetch('SDA')
+BOARD['SCL'] += Net.fetch('SCL')
 '''.format(args)
 
 
@@ -473,4 +483,6 @@ BOARD['D10'] += U1['PB2']
 BOARD['D11'] += U1['PB3']
 BOARD['D12'] += U1['PB4']
 BOARD['D13'] += U1['PB5']
+
+BOARD['AREF'] += U1['AREF']
 '''.format(args)
