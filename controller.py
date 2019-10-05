@@ -142,9 +142,9 @@ def generate_skidl(wizard):
     with open(wizard.field('filename'), 'w') as file:
         file.write(code)
 
-def load_settings(wizard):
+def load_settings(wizard, settings_filename="settings.yml"):
     """Load chosen wizard settings from the previous time SKiDL code was generated with wizard"""
-    with open("settings.yml", 'r') as settings_file:
+    with open(settings_filename, 'r') as settings_file:
         settings = load(settings_file, Loader=Loader)
 
         if settings:
@@ -154,4 +154,10 @@ def load_settings(wizard):
                           'regulator', 'onewire_connector', 'autoselect']:
                 if field in settings:
                     wizard.setField(field, settings[field])
-            
+
+def generate_from_settings(filename, settings_filename="settings.yml"):
+    with open(settings_filename, 'r') as settings_file:
+        settings = load(settings_file, Loader=Loader)
+        code = generate(settings)
+        with open(filename, 'w') as file:
+            file.write(code)

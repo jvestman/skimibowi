@@ -20,7 +20,8 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtProperty
 from PyQt5 import QtWidgets
-from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl
+import argparse
+from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl, generate_from_settings
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -227,8 +228,16 @@ class FinalPage(QtWidgets.QWizardPage):
 
 if __name__ == '__main__':
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    wizard = Skimibowi()
-    wizard.show()
-    load_settings(wizard)
-    sys.exit(app.exec_())
+    parser = argparse.ArgumentParser(description='Skimibowi - SKiDL Microcontroller Board Wizard')
+    parser.add_argument('--no-window', metavar='FILE', help='Do not show ui, but generate SKiDL from settings.yml')
+    parser.add_argument('-f', metavar='settings.yml', help='Settings.yml filename')
+    args = parser.parse_args()
+    print(args)
+    if args.no_window:
+        generate_from_settings(args.no_window, args.f)
+    else:
+        app = QtWidgets.QApplication(sys.argv)
+        wizard = Skimibowi()
+        wizard.show()
+        load_settings(wizard, args.f)
+        sys.exit(app.exec_())
