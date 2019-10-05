@@ -232,12 +232,12 @@ if __name__ == '__main__':
     parser.add_argument('--no-window', metavar='FILE', help='Do not show ui, but generate SKiDL from settings.yml')
     parser.add_argument('-f', metavar='settings.yml', help='Settings.yml filename')
     args = parser.parse_args()
-
+    settings_file = args.f or 'settings.yml'
     if args.no_window:
-        generate_from_settings(args.no_window, args.f)
+        generate_from_settings(args.no_window, settings_file)
     else:
         app = QtWidgets.QApplication(sys.argv)
         wizard = Skimibowi()
         wizard.show()
-        load_settings(wizard, args.f)
+        load_settings(wizard, settings_file)
         sys.exit(app.exec_())
