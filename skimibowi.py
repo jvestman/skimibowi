@@ -232,7 +232,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-window', metavar='FILE', help='Do not show ui, but generate SKiDL from settings.yml')
     parser.add_argument('-f', metavar='settings.yml', help='Settings.yml filename')
     args = parser.parse_args()
-    print(args)
+
     if args.no_window:
         generate_from_settings(args.no_window, args.f)
     else:
