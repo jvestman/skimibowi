@@ -32,6 +32,9 @@ from skidl import Bus, Part, Net, generate_netlist
         if args['icsp']:
             code += generate_icsp(args)
 
+    if args['mcu'] in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU' ]:
+        code += generate_attiny85(args)
+
     if args['powersource'] not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_battery(args)
 
@@ -152,6 +155,16 @@ U1['PC4'] += Net.fetch('SDA')
 U1['PC5'] += Net.fetch('SCL')
 '''.format(**args)
 
+def generate_attiny85(args):
+    """Genereate ATtiny85"""
+    return '''
+U1 = Part('MCU_Microchip_ATtiny', '{mcu}', footprint='{mcu_footprint}')
+
+#Power networks
+U1['VCC'] += Net.fetch('{mcurail}')
+U1['GND'] += Net.fetch('GND')
+'''.format(**args)
+
 def generate_icsp(args):
     """Generate In Circuit Serial Programmer header"""
     return '''
@@ -238,7 +251,7 @@ def connect_power_network(args):
     elements = {
         'ina219': 'INA219_R_SHUNT',
         'switch': 'SWITCH[1,2]',
-        'fuse': 'FUSE'
+        'fuse_footprint': 'FUSE'
     }
 
     for element in elements:

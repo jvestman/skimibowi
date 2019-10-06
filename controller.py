@@ -23,6 +23,9 @@ footprints = {
     'ESP-07': 'RF_Module:ESP-07',
     'ESP-12E': 'RF_Module:ESP-12E',
     'Wemos D1 Mini': 'RF_Module:WEMOS_D1_mini_light',
+    'ATtiny85-20PU': 'Package_DIP:DIP-8_W7.62mm',
+    'ATtiny85-20SU': 'Package_SO:SOIJ-8_5.3x5.3mm_P1.27mm',
+    'ATtiny85-20MU': 'Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.6x2.6mm',
     'ATmega328P-PU': 'Package_DIP:DIP-28_W7.62mm',
     'ATmega328P-AU': 'Package_QFP:TQFP-32_7x7mm_P0.8mm',
     'ATmega328P-MU': 'Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.1x3.1mm',
@@ -79,8 +82,8 @@ led_footprints = {
 usb_connector_footprints = {
     'No USB connector': '',
     'USB B': 'USB_B_OST_USB-B1HSxx_Horizontal',
-    'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal',
-    'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal'
+    'USB B Mini': 'USB_Mini-B_Lumberg_2486_01_Horizontal',
+    'USB B Micro': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal'
 }
 
 onewire_connector_footprints = {
