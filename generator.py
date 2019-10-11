@@ -386,10 +386,10 @@ Q1['C'] += FTDI230['RTS']
 def generate_usb_connector(args):
     """Generate USB connector"""
     return '''
-USBMICRO = Part('Connector', 'USB_B_Micro', footprint='{usb_connector_footprint}')
+USBMICRO = Part('Connector', '{part}', footprint='{footprint}')
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')
-'''.format(**args)
+'''.format(**(args['usb_connector_footprint']))
 
 def generate_regulator(args):
     """Generate regulator that regulates battery voltage to corresponding voltage rail"""
