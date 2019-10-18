@@ -97,6 +97,9 @@ from skidl import Bus, Part, Net, generate_netlist
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
+    if args.get('usb_uart', False) == 'CP2102N-A01-GQFN24':
+        code += generate_cp2102(args)
+
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
         if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
@@ -361,8 +364,25 @@ FTDI230['RXD'] += Net.fetch('tx')
 FTDI230['3V3OUT'] += Net.fetch('+3V3')
 FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
+FTDI230['DTR'] += Net.fetch('DTR')
+FTDI230['RTS'] += Net.fetch('RTS')
 C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
 Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
+'''.format(**args)
+
+def generate_cp2102(args):
+    """Generate CP2102 usb uart circuitry"""
+    return '''
+CP2102 = Part('Interface_USB', 'CP2102N-A01-GQFN24', footprint="Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm")
+CP2102['VDD'] += Net.fetch('{mcurail}')
+CP2102['GND'] += Net.fetch('GND')
+CP2102['VBUS'] += Net.fetch('+VBUS')
+CP2102['D+'] += USBMICRO['D+']
+CP2102['D-'] += USBMICRO['D-']
+CP2102['TXD'] += Net.fetch('rx')
+CP2102['RXD'] += Net.fetch('tx')
+CP2102['DTR'] += Net.fetch('DTR')
+CP2102['RTS'] += Net.fetch('RTS')
 '''.format(**args)
 
 def generate_esp_uart_reset(args):
@@ -373,14 +393,14 @@ Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 QR1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 QR2 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 Q1['B'] += QR1[1]
-QR1[2] += FTDI230['DTR']
+QR1[2] += Net.fetch('DTR')
 Q2['B'] += QR2[1]
-QR2[2] += FTDI230['RTS']
+QR2[2] += Net.fetch('RTS')
 Q1['E'] += U1['GPIO0']
 Q2['E'] += U1['RST']
 Q1['C'] += Q2['C']
-Q2['C'] += FTDI230['DTR']
-Q1['C'] += FTDI230['RTS']
+Q2['C'] += Net.fetch('DTR')
+Q1['C'] += Net.fetch('RTS')
 '''.format(**args)
 
 def generate_usb_connector(args):

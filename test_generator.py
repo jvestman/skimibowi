@@ -259,14 +259,14 @@ Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 QR1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 QR2 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 Q1['B'] += QR1[1]
-QR1[2] += FTDI230['DTR']
+QR1[2] += Net.fetch('DTR')
 Q2['B'] += QR2[1]
-QR2[2] += FTDI230['RTS']
+QR2[2] += Net.fetch('RTS')
 Q1['E'] += U1['GPIO0']
 Q2['E'] += U1['RST']
 Q1['C'] += Q2['C']
-Q2['C'] += FTDI230['DTR']
-Q1['C'] += FTDI230['RTS']
+Q2['C'] += Net.fetch('DTR')
+Q1['C'] += Net.fetch('RTS')
 '''
             )
 
@@ -283,14 +283,14 @@ Q2 = Part('Transistor_BJT', 'PZT2222A', footprint='Package_TO_SOT_SMD:SOT-223')
 QR1 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 QR2 = Part('Device', 'R', value='10k', footprint='Resistor_SMD:R_1206_3216Metric')
 Q1['B'] += QR1[1]
-QR1[2] += FTDI230['DTR']
+QR1[2] += Net.fetch('DTR')
 Q2['B'] += QR2[1]
-QR2[2] += FTDI230['RTS']
+QR2[2] += Net.fetch('RTS')
 Q1['E'] += U1['GPIO0']
 Q2['E'] += U1['RST']
 Q1['C'] += Q2['C']
-Q2['C'] += FTDI230['DTR']
-Q1['C'] += FTDI230['RTS']
+Q2['C'] += Net.fetch('DTR')
+Q1['C'] += Net.fetch('RTS')
 '''
             )
 
