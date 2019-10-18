@@ -147,16 +147,19 @@ def generate_skidl(wizard):
 
 def load_settings(wizard, settings_filename="settings.yml"):
     """Load chosen wizard settings from the previous time SKiDL code was generated with wizard"""
-    with open(settings_filename, 'r') as settings_file:
-        settings = load(settings_file, Loader=Loader)
+    try:
+        with open(settings_filename, 'r') as settings_file:
+            settings = load(settings_file, Loader=Loader)
 
-        if settings:
-            for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
-                          'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
-                          'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
-                          'regulator', 'onewire_connector', 'autoselect']:
-                if field in settings:
-                    wizard.setField(field, settings[field])
+            if settings:
+                for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
+                            'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
+                            'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
+                            'regulator', 'onewire_connector', 'autoselect']:
+                    if field in settings:
+                        wizard.setField(field, settings[field])
+    except:
+        None
 
 def generate_from_settings(filename, settings_filename="settings.yml"):
     with open(settings_filename, 'r') as settings_file:
