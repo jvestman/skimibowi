@@ -165,6 +165,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.usb_uart = QIComboBox(self)
         self.usb_uart.addItem("No USB")
         self.usb_uart.addItem("FT231")
+        self.usb_uart.addItem("CP2102N-A01-GQFN24")
         self.registerField("usb_uart", self.usb_uart, "currentText")
         self.usb_connector_label = QtWidgets.QLabel()
         self.usb_connector_label.setText("USB Connector")
@@ -233,6 +234,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', metavar='settings.yml', help='Settings.yml filename')
     args = parser.parse_args()
     settings_file = args.f or 'settings.yml'
+
     if args.no_window:
         generate_from_settings(args.no_window, settings_file)
     else:
