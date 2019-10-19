@@ -1,0 +1,31 @@
+DS18B20: false
+DS18B20U: false
+FTDI header: false
+Flash button: false
+Reset button: false
+autoselect: false
+battery_management: No battery management ic
+board_footprint: None
+capacitor_footprint: ''
+common_footprint: THT
+fuse: No fuse
+fuse_footprint: null
+icsp: false
+ina219: false
+led: false
+led_footprint: LED_THT:LED_D3.0mm
+mcu: No MCU
+mcu_footprint: ''
+mcurail: +VBatt
+onewire_connector: No Onewire connector
+onewire_connector_footprint: ''
+powersource: No battery
+powersource_footprint: ''
+regulator: No regulator
+regulator_data: null
+reset: false
+resistor_footprint: R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal
+switch: false
+usb_connector: No USB connector
+usb_connector_footprint: ''
+usb_uart: No USB
