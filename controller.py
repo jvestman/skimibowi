@@ -49,7 +49,10 @@ regulators = {
     'LD1117S50TR': {'module': 'Regulator_Linear', 'part': 'LD1117S50TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+5V'},
     'LP2985-30': {'module': 'Regulator_Linear', 'part': 'LP2985-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V'},
     'LP2985-33': {'module': 'Regulator_Linear', 'part': 'LP2985-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3'},
-    'LP2985-50': {'module': 'Regulator_Linear', 'part': 'LP2985-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V'}
+    'LP2985-50': {'module': 'Regulator_Linear', 'part': 'LP2985-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V'},
+    'AP2112K-3.0': {'module': 'Regulator_Linear', 'part': 'AP2112K-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V', 'enable_pin': True},
+    'AP2112K-3.3': {'module': 'Regulator_Linear', 'part': 'AP2112K-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3', 'enable_pin': True},
+    'AP2112K-5.0': {'module': 'Regulator_Linear', 'part': 'AP2112K-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V', 'enable_pin': True}
 }
 
 resistor_footprints = {
@@ -125,6 +128,7 @@ def fill_variables(wizard):
         'board_footprint': wizard.field('board_footprint'),
         'onewire_connector': wizard.field('onewire_connector'),
         'common_footprint': wizard.field('common_footprint'),
+        'transistor_footprint': wizard.field('transistor_footprint'),
         'resistor_footprint': resistor_footprints[wizard.field('common_footprint')],
         'capacitor_footprint': capacitor_footprints[wizard.field('common_footprint')],
         'led_footprint': led_footprints[wizard.field('common_footprint')],
@@ -155,7 +159,7 @@ def load_settings(wizard, settings_filename="settings.yml"):
             if settings:
                 for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
                             'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
-                            'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
+                            'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'transistor_footprint', 'board_footprint',
                             'regulator', 'onewire_connector', 'autoselect']:
                     if field in settings:
                         wizard.setField(field, settings[field])
