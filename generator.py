@@ -100,6 +100,9 @@ from skidl import Bus, Part, Net, generate_netlist
     if args.get('usb_uart', False) == 'CP2102N-A01-GQFN24':
         code += generate_cp2102(args)
 
+    if args.get('hc12', False) == True:
+        code += generate_hc12(args)
+
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
         if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
@@ -523,4 +526,11 @@ BOARD['D12'] += U1['PB4']
 BOARD['D13'] += U1['PB5']
 
 BOARD['AREF'] += U1['AREF']
+'''.format(args)
+
+def generate_hc12(args):
+    """Generate footprint for HC-12 RF-module"""
+
+    return '''
+HC12 = Part('Skimibowi2', 'HC-12', footprint="Skimibowi:HC-12")
 '''.format(args)
