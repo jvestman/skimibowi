@@ -26,6 +26,8 @@ from skidl import Bus, Part, Net, generate_netlist
 
     if args['mcu'] in ['ESP-12E', 'ESP-07']:
         code += generate_esp(args)
+        if (args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False):
+            code += generate_esp_serial(args)
 
     if args['mcu'] in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
         code += generate_atmega328p(args)
@@ -140,6 +142,14 @@ U1R1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
 U1R2 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
 Net.fetch('{mcurail}') & U1R1 & U1['EN']
 Net.fetch('GND') & U1R2 & U1['GPIO15']
+'''.format(**args)
+
+def generate_esp_serial(args):
+    """Generate ESP serial networks"""
+
+    return '''
+U1['TX'] += Net.fetch('tx')
+U1['RX'] += Net.fetch('rx')
 '''.format(**args)
 
 def generate_atmega328p(args):

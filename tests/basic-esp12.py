@@ -11,6 +11,9 @@ U1R2 = Part('Device', 'R', value='4k7', footprint='Resistor_SMD:R_1206_3216Metri
 Net.fetch('+VBatt') & U1R1 & U1['EN']
 Net.fetch('GND') & U1R2 & U1['GPIO15']
 
+U1['TX'] += Net.fetch('tx')
+U1['RX'] += Net.fetch('rx')
+
 FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += NC

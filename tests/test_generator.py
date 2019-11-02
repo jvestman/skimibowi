@@ -37,5 +37,12 @@ class TestGenerator(unittest.TestCase):
         generate_from_settings("tests/tmp/esp12-reset-flash.py", "tests/esp12-reset-flash.yml")
         self.assertEqualsFile("tests/tmp/esp12-reset-flash.py", "tests/esp12-reset-flash.py")
 
+    def test_esp12_ftdi_header(self):
+        """Test ESP FTDI header generation"""
+
+        generate_from_settings("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.yml")
+        self.assertEqualsFile("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.py")
+
+
 if __name__ == '__main__':
     unittest.main()
