@@ -105,6 +105,11 @@ from skidl import Bus, Part, Net, lib_search_paths, KICAD, generate_netlist
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
+    if args.get('hc12', False) == True:
+        code += generate_hc12(args)
+        if args['mcu'] in ['ESP-12E', 'ESP-07']:
+            code += generate_esp_software_serial(args)
+
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint(args)
         if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
@@ -572,5 +577,24 @@ def generate_adafruit_feather(args):
     """Generate Adafruit Feather board footprint"""
     return '''
 lib_search_paths[KICAD].append('.')
-BOARD = Part('Skimibowi', 'ADAFRUIT_FEATHER', footprint='skimibowi:ADAFRUIT_FEATHER')
+BOARD = Part('Skimibowi', 'Adafruit_Feather', footprint='skimibowi:Adafruit_Feather')
 '''.format(args)
+
+def generate_hc12(args):
+    """Generate footprint for HC-12 RF-module"""
+
+    return '''
+HC12 = Part('Skimibowi', 'HC-12', footprint="Skimibowi:HC-12")
+HC12['VCC'] += Net.fetch('{mcurail}')
+HC12['GND'] += Net.fetch('GND')
+HC12['RXD'] += Net.fetch('TXD2')
+HC12['TXD'] += Net.fetch('RXD2')
+'''.format(**args)
+
+def generate_esp_software_serial(args):
+    """Generate ESP software serial networks"""
+
+    return '''
+U1['GPIO13'] += Net.fetch('RXD2')
+U1['GPIO15'] += Net.fetch('TXD2')
+'''.format(**args)

@@ -33,6 +33,7 @@ class Skimibowi(QtWidgets.QWizard):
         self.addPage(MCU(self))
         self.addPage(PowerManagementPage(self))
         self.addPage(PeripheralsPage(self))
+        self.addPage(SerialSettingsPage(self))
         self.addPage(FootprintsPage(self))
         self.addPage(FinalPage(self))
         self.setWindowTitle("Skidl Microcontroller Board  Wizard")
@@ -219,6 +220,18 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.i2c_label)
         layout.addWidget(self.peripherals["ina219"])
         self.setLayout(layout)
+
+class SerialSettingsPage(QtWidgets.QWizardPage):
+    def __init__(self, parent=None):
+        super(SerialSettingsPage, self).__init__(parent)
+        self.setTitle("Serial devices")
+        self.layout = QtWidgets.QVBoxLayout()
+        self.setLayout(self.layout)
+        self.layout.addWidget(QtWidgets.QLabel('HC-12'))
+        self.hc12 = QtWidgets.QCheckBox("HC-12")
+        self.layout.addWidget(self.hc12)
+        self.registerField('hc12', self.hc12)
+        
 
 class FinalPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
