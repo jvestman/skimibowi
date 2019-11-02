@@ -367,13 +367,13 @@ def generate_ftdi_header(args):
     """Generate header for connecting FTDI programmer"""
 
     return '''
-FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
+FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Skimibowi:FTDI_Header')
 FTDI_HEADER[1] += Net.fetch('GND')
-FTDI_HEADER[2] += NC
+FTDI_HEADER[2] += Net.fetch('CTS')
 FTDI_HEADER[3] += Net.fetch('{mcurail}')
 FTDI_HEADER[4] += Net.fetch('rx')
 FTDI_HEADER[5] += Net.fetch('tx')
-FTDI_HEADER[6] += NC
+FTDI_HEADER[6] += Net.fetch('RTS')
 '''.format(**args)
 
 def generate_ftdi230(args):

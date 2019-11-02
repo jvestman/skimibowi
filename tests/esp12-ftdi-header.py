@@ -25,12 +25,12 @@ SW2 = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
 SW2[1] += U1['GPIO0']
 SW2[2] += Net.fetch('GND')
 
-FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical')
+FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Skimibowi:FTDI_Header')
 FTDI_HEADER[1] += Net.fetch('GND')
-FTDI_HEADER[2] += NC
+FTDI_HEADER[2] += Net.fetch('CTS')
 FTDI_HEADER[3] += Net.fetch('+VBatt')
 FTDI_HEADER[4] += Net.fetch('rx')
 FTDI_HEADER[5] += Net.fetch('tx')
-FTDI_HEADER[6] += NC
+FTDI_HEADER[6] += Net.fetch('RTS')
 
 generate_netlist()
