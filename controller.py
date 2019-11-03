@@ -159,15 +159,17 @@ def load_settings(wizard, settings_filename="settings.yml"):
 
             if settings:
                 for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
-                            'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
-                            'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
-                            'regulator', 'onewire_connector', 'autoselect', 'hc12']:
+                              'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
+                              'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
+                              'regulator', 'onewire_connector', 'autoselect', 'hc12']:
                     if field in settings:
                         wizard.setField(field, settings[field])
     except:
-        None
+        pass
 
 def generate_from_settings(filename, settings_filename="settings.yml"):
+    """Generate SKiDL program from settings file"""
+
     with open(settings_filename, 'r') as settings_file:
         settings = load(settings_file, Loader=Loader)
         code = generate(settings)

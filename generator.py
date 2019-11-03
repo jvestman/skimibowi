@@ -51,11 +51,11 @@ from skidl import Bus, Part, Net, generate_netlist
 
     if args.get('battery_management', False) == 'MCP73871-2AA':
         code += generate_battery_management(args)
-    
+
     if args.get('battery_management', False) == 'MCP73831':
         code += generate_mcp73831(args)
 
-    if args.get('regulator_data', None) != None:
+    if args.get('regulator_data', None):
         code += generate_regulator(args)
 
     if args.get('autoselect', False):
@@ -107,7 +107,7 @@ from skidl import Bus, Part, Net, generate_netlist
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
-    if args.get('hc12', False) == True:
+    if args.get('hc12', False):
         code += generate_hc12(args)
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_software_serial(args)
@@ -269,7 +269,7 @@ BATTERY[2] += Net.fetch('GND')
 
 def connect_power_network(args):
     """Connect components that connect mcu/regulator throuh optional power switch, fuse and ina219 to battery"""
-    if args.get('regulator_data', False) != None:
+    if args.get('regulator_data', False):
         components = ['REGULATOR[\'VI\']']
     else:
         components = ['Net.fetch(\'+VBatt\')']
@@ -412,7 +412,7 @@ def generate_esp_uart_reset(args):
     """Generate reset circuitry for ESP"""
 
     transistors = {
-        'THT':{ 'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
+        'THT': {'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
         'SOT-223': {'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
         'SOT-23': {'part':'BC817', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
     }
