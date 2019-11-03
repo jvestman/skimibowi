@@ -16,12 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtProperty
-from PyQt5 import QtWidgets
 import argparse
-from controller import fill_variables, footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl, generate_from_settings
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+from controller import footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl, generate_from_settings
 
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
@@ -46,14 +44,16 @@ class Skimibowi(QtWidgets.QWizard):
     def id_changed(self):
         """Update wizard pages list in the left side pane of the Wizard"""
         titles = ""
-        for id in self.pageIds():
-            pagename = self.page(id).title()
-            if id == self.currentId():
+        for page_id in self.pageIds():
+            pagename = self.page(page_id).title()
+            if page_id == self.currentId():
                 pagename = '<b>' + pagename + '</b>'
             titles += '<p>' + pagename + '</p>'
         self.label.setText(titles)
 
 class MCU(QtWidgets.QWizardPage):
+    """Wizard page for configuring the MCU being used"""
+
     def __init__(self, parent=None):
         super(MCU, self).__init__(parent)
         self.setTitle("Microcontroller")
@@ -83,6 +83,8 @@ class MCU(QtWidgets.QWizardPage):
         self.setLayout(layout)
 
 class PowerManagementPage(QtWidgets.QWizardPage):
+    """Wizard page for configuring board power management devices and networks"""
+
     def __init__(self, parent=None):
         super(PowerManagementPage, self).__init__(parent)
         self.setTitle('Power Management')
@@ -124,6 +126,8 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("autoselect", self.autoselect)
 
 class FootprintsPage(QtWidgets.QWizardPage):
+    """Wizard page for configuring default footprints for classes of devices and board footprint"""
+
     def __init__(self, parent=None):
         super(FootprintsPage, self).__init__(parent)
         self.setTitle("Footprints")
@@ -131,7 +135,7 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.common_footprint = QIComboBox(self)
         self.common_footprint.addItems(resistor_footprints.keys())
         self.registerField('common_footprint', self.common_footprint, 'currentText')
-        
+
         self.transistor_footprint_label = QtWidgets.QLabel()
         self.transistor_footprint_label.setText("Transistor footprint")
         self.transistor_footprint = QIComboBox(self)
@@ -165,7 +169,7 @@ class FootprintsPage(QtWidgets.QWizardPage):
     def initializePage(self):
         self.common_footprint_label.setText("Capasitor, resistor and diode form factor")
         self.board_footprint_label.setText("Board outline footprint")
-        
+
 class PeripheralsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(PeripheralsPage, self).__init__(parent)
@@ -222,6 +226,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.setLayout(layout)
 
 class SerialSettingsPage(QtWidgets.QWizardPage):
+    """Wizard page for configuring serial bus connected peripherals"""
     def __init__(self, parent=None):
         super(SerialSettingsPage, self).__init__(parent)
         self.setTitle("Serial devices")
@@ -231,9 +236,10 @@ class SerialSettingsPage(QtWidgets.QWizardPage):
         self.hc12 = QtWidgets.QCheckBox("HC-12")
         self.layout.addWidget(self.hc12)
         self.registerField('hc12', self.hc12)
-        
+
 
 class FinalPage(QtWidgets.QWizardPage):
+    """Wizard page for generating SKiDL source code"""
     def __init__(self, parent=None):
         super(FinalPage, self).__init__(parent)
         self.setTitle("Generate netlist")
