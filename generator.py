@@ -515,6 +515,10 @@ BM_LED2 = Part('Device', 'LED', footprint='{led_footprint}')
 BM_LED_R2 = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
 BATTERYMANAGER['STAT2'] & BM_LED_R2 & BM_LED2 & Net.fetch('+VBus')
 
+BM_LED3 = Part('Device', 'LED', footprint='{led_footprint}')
+BM_LED_R3 = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
+BATTERYMANAGER['PG'] & BM_LED_R3 & BM_LED3 & Net.fetch('+VBus')
+
 BM_C = Part('Device', 'C', value='10uF', footprint='{capacitor_footprint}')
 Net.fetch('+VLipo') & BM_C & Net.fetch('GND')
 
