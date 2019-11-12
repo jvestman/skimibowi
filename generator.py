@@ -102,6 +102,12 @@ from skidl import Bus, Part, Net, generate_netlist
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
+    if args.get('usb_uart', False) == 'FT232RL':
+        code += generate_ftdi232RL(args)
+        if args['mcu'] in ['ESP-12E', 'ESP-07']:
+            code += generate_esp_uart_reset(args)
+
+
     if args.get('usb_uart', False) == 'CP2102N-A01-GQFN24':
         code += generate_cp2102(args)
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
@@ -392,6 +398,25 @@ FTDI230['RTS'] += Net.fetch('RTS')
 C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
 Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
 '''.format(**args)
+
+def generate_ftdi232RL(args):
+    """Generate FTDI uart circuitry"""
+    return '''
+FTDI230 = Part('Interface_USB', 'FT232RL', footprint="Package_SO:SSOP-28_5.3x10.2mm_P0.65mm")
+FTDI230['VCC'] += Net.fetch('{mcurail}')
+FTDI230['VCCIO'] += Net.fetch('{mcurail}')
+FTDI230['GND'] += Net.fetch('GND')
+FTDI230['TXD'] += Net.fetch('rx')
+FTDI230['RXD'] += Net.fetch('tx')
+FTDI230['3V3OUT'] += Net.fetch('+3V3')
+FTDI230['USBD-'] += USBMICRO['D-']
+FTDI230['USBD+'] += USBMICRO['D+']
+FTDI230['DTR'] += Net.fetch('DTR')
+FTDI230['TEST'] += Net.fetch('GND')
+C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
+Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
+'''.format(**args)
+
 
 def generate_cp2102(args):
     """Generate CP2102 usb uart circuitry"""
