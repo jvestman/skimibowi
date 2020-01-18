@@ -26,6 +26,7 @@ def generate(args):
 from skidl import Bus, Part, Net, generate_netlist, subcircuit
 
 def R(value):
+    """Creates default resistor footprint"""
     return Part('Device', 'R', value=value, footprint='{resistor_footprint}')
 
 '''.format(**args)
