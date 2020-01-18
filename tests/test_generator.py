@@ -25,6 +25,12 @@ class TestGenerator(unittest.TestCase):
         generate_from_settings("tests/tmp/empty.py", "tests/empty.yml")
         self.assertEqualsFile("tests/tmp/empty.py", "tests/empty.py")
 
+    def test_esp12(self):
+        """Test basic ESP12"""
+
+        generate_from_settings("tests/tmp/esp12.py", "tests/esp12.yml")
+        self.assertEqualsFile("tests/tmp/esp12.py", "tests/esp12.py")
+
     def test_basic_esp12(self):
         """Test basic ESP12 breakout with FTDI -header"""
 
@@ -42,12 +48,6 @@ class TestGenerator(unittest.TestCase):
 
         generate_from_settings("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.yml")
         self.assertEqualsFile("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.py")
-
-    def test_arduino_nano(self):
-        """Test Arduino Nano generation"""
-
-        generate_from_settings("tests/tmp/arduino-nano.py", "tests/arduino-nano.yml")
-        self.assertEqualsFile("tests/tmp/arduino-nano.py", "tests/arduino-nano.py")
 
 if __name__ == '__main__':
     unittest.main()

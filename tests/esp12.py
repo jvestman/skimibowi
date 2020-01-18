@@ -18,9 +18,6 @@ def generate_esp():
     U1['EN'] += R('10k') & Net.fetch('+VBatt')
     U1['GPIO15'] += R('4k7') & Net.fetch('GND')
 
-    U1['RST'] += Net.fetch('RST')
-    U1['GPIO16'] += Net.fetch('RST')
-
     @subcircuit
     def generate_power_led():
         """Generate led connected to ESP GPI0 that is on after boot"""
@@ -29,32 +26,7 @@ def generate_esp():
 
     generate_power_led()
 
-    # Generate button for pulling ESP RST pin to low (e.g. reset)
-
-    sw_reset = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-    sw_reset[1] += Net.fetch('RST')
-    sw_reset[2] += Net.fetch('GND')
-
-    # Generate button for pulling pulling ESP GPIO0 low (e.g. flash mode when booting)
-
-    sw_flash = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-    sw_flash[1] += U1['GPIO0']
-    sw_flash[2] += Net.fetch('GND')
-
-    # Generate ESP serial networks
-
-    U1['TX'] += Net.fetch('tx')
-    U1['RX'] += Net.fetch('rx')
-
 generate_esp()
 
-
-FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Skimibowi:FTDI_Header')
-FTDI_HEADER[1] += Net.fetch('GND')
-FTDI_HEADER[2] += Net.fetch('CTS')
-FTDI_HEADER[3] += Net.fetch('+VBatt')
-FTDI_HEADER[4] += Net.fetch('rx')
-FTDI_HEADER[5] += Net.fetch('tx')
-FTDI_HEADER[6] += Net.fetch('RTS')
 
 generate_netlist()

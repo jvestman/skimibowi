@@ -1,8 +1,8 @@
 DS18B20: false
 DS18B20U: false
 FTDI header: false
-Flash button: true
-Reset button: true
+Flash button: false
+Reset button: false
 autoselect: false
 battery_management: No battery management ic
 board_footprint: None
@@ -10,6 +10,7 @@ capacitor_footprint: Capacitor_SMD:C_1206_3216Metric
 common_footprint: SMD 1206
 fuse: No fuse
 fuse_footprint: null
+hc12: false
 icsp: false
 ina219: false
 led: false
@@ -23,9 +24,10 @@ powersource: No battery
 powersource_footprint: ''
 regulator: No regulator
 regulator_data: null
-reset: true
+reset: false
 resistor_footprint: Resistor_SMD:R_1206_3216Metric
 switch: false
+transistor_footprint: THT
 usb_connector: No USB connector
-usb_connector_footprint: ''
+usb_connector_footprint: null
 usb_uart: No USB
