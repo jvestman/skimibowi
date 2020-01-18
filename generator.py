@@ -14,9 +14,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from arduino_generator import *
-
 """Generates microcontroller board descriptions in SKiDL"""
+
+from arduino_generator import *
 
 requirements = set()
 
@@ -35,7 +35,7 @@ def generate(args):
         if args['icsp']:
             code += generate_icsp()
 
-    if args['mcu'] in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU' ]:
+    if args['mcu'] in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
         code += generate_attiny85(args)
 
     if args['powersource'] not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
@@ -92,7 +92,7 @@ def generate(args):
             code += generate_esp_uart_reset(args)
 
     if args.get('usb_uart', False) == 'FT232RL':
-        code += generate_ftdi232RL(args)
+        code += generate_ftdi232rl(args)
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
@@ -134,7 +134,8 @@ from skidl import Part, Net, generate_netlist, subcircuit
 
 ''' + reqcode + code
 
-def generate_subcircuit(function,args):
+def generate_subcircuit(function, args):
+    """Generate SKiDL @subcircuit which body will be the return value of argument function"""
     newline = '\n'
     indent_str = '\n    '
     empty_line = '    \n'
@@ -148,7 +149,7 @@ def {function.__name__}():
 
 """
 
-def generate_subcircuit_without_call(function,args):
+def generate_subcircuit_without_call(function, args):
     newline = '\n'
     indent_str = '\n'+ '    '
     return f"""
@@ -160,8 +161,8 @@ def {function.__name__}():
 def generate_ifdef(define, function, args):
     if define in args:
         return generate_subcircuit(function, args)
-    else:
-        return ''
+
+    return ''
 
 def generate_inline(function, args):
     return f"""# {function.__doc__}
@@ -169,6 +170,7 @@ def generate_inline(function, args):
 """
 
 def generate_r(args):
+    """Generate default resistor footprint"""
     return f"""
 def R(value):
     \"\"\"Creates default resistor footprint\"\"\"
@@ -178,7 +180,7 @@ def R(value):
 def generate_esp(args):
     """Generate ESP-module code to circuit"""
     reset = generate_reset_line(args) if args.get('reset', False) else ''
-    led = generate_ifdef('led',generate_power_led, args)
+    led = generate_ifdef('led', generate_power_led, args)
     reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
     flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
     esp_serial = generate_inline(generate_esp_serial, args) if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)) else ''
@@ -191,7 +193,7 @@ U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
 U1['EN'] & R('10k') & Net.fetch('{mcurail}')
 U1['GPIO15'] & R('4k7') & Net.fetch('GND')
-'''.format(**args) + ''.join(filter(None,[reset, led, reset_button, flash_button, esp_serial])) + '\n'
+'''.format(**args) + ''.join(filter(None, [reset, led, reset_button, flash_button, esp_serial])) + '\n'
 
 def generate_esp_serial(args):
     """Generate ESP serial networks"""
@@ -393,7 +395,7 @@ C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
 Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
 '''.format(**args)
 
-def generate_ftdi232RL(args):
+def generate_ftdi232rl(args):
     """Generate FTDI uart circuitry"""
     return '''
 FTDI230 = Part('Interface_USB', 'FT232RL', footprint="Package_SO:SSOP-28_5.3x10.2mm_P0.65mm")
@@ -472,8 +474,7 @@ REGULATOR['GND'] += Net.fetch('GND')
 REGULATOR['EN'] += REGULATOR['VIN']
     '''.format(**(args['regulator_data']))
 
-    else:
-        return '''
+    return '''
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
 REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
