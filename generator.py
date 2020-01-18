@@ -75,9 +75,6 @@ def R(value):
     if args.get('Flash button', False):
         code += generate_flash_button(args)
 
-#    if args.get("led", False):
-#        code += generate_power_led(args)
-
     if args.get('DS18B20', False) or args.get('DS18B20U', False) or args.get('onewire_connector', False) != 'No Onewire connector':
         code += generate_onewire_bus(args)
 
