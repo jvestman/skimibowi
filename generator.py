@@ -179,8 +179,8 @@ U1 = Part('RF_Module', '{mcu}', footprint='{mcu_footprint}')
 
 U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
-Net.fetch('{mcurail}') & R('10k') & U1['EN']
-Net.fetch('GND') & R('4k7') & U1['GPIO15']
+U1['EN'] += R('10k') & Net.fetch('{mcurail}')
+U1['GPIO15'] += R('4k7') & Net.fetch('GND')
 
 {reset}
 {led}
@@ -221,7 +221,7 @@ def generate_power_led(args):
     """Generate led connected to ESP GPI0 that is on after boot"""
     return '''
 LED = Part('Device', 'LED', footprint='{led_footprint}')
-U1['GPIO0'] & R('1k') & LED & Net.fetch('{mcurail}')
+U1['GPIO0'] += R('1k') & LED & Net.fetch('{mcurail}')
 '''.format(**args)
 
 def generate_battery(args):
