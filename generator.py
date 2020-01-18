@@ -145,10 +145,11 @@ generate_netlist()
 def generate_subcircuit(function,args, indent=0):
     newline = '\n'
     indent_str = '\n'+((indent+1) * '    ')
+    empty_line = '    \n'
     return (indent * '    ') + f"""@subcircuit
 def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
-    {function(args).strip().replace(newline, indent_str)}
+    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}
 
 {function.__name__}()
 
