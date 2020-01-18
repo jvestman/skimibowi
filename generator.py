@@ -220,8 +220,8 @@ SW2[2] += Net.fetch('GND')
 def generate_power_led(args):
     """Generate led connected to ESP GPI0 that is on after boot"""
     return '''
-LED = Part('Device', 'LED', footprint='{led_footprint}')
-U1['GPIO0'] += R('1k') & LED & Net.fetch('{mcurail}')
+led = Part('Device', 'LED', footprint='{led_footprint}')
+U1['GPIO0'] += R('1k') & led & Net.fetch('{mcurail}')
 '''.format(**args)
 
 def generate_battery(args):
