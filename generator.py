@@ -134,11 +134,11 @@ from skidl import Part, Net, generate_netlist, subcircuit
 
 ''' + reqcode + code
 
-def generate_subcircuit(function,args, indent=0):
+def generate_subcircuit(function,args):
     newline = '\n'
-    indent_str = '\n'+((indent+1) * '    ')
+    indent_str = '\n    '
     empty_line = '    \n'
-    return (indent * '    ') + f"""
+    return f"""
 @subcircuit
 def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
@@ -148,18 +148,18 @@ def {function.__name__}():
 
 """
 
-def generate_subcircuit_without_call(function,args, indent=0):
+def generate_subcircuit_without_call(function,args):
     newline = '\n'
-    indent_str = '\n'+((indent+1) * '    ')
-    return (indent * '    ') + f"""
+    indent_str = '\n'+ '    '
+    return f"""
 @subcircuit
 def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
     {function(args).lstrip().replace(newline, indent_str)}"""
 
-def generate_ifdef(define, function, args, indent=0):
+def generate_ifdef(define, function, args):
     if define in args:
-        return generate_subcircuit(function, args,indent)
+        return generate_subcircuit(function, args)
     else:
         return ''
 
@@ -178,7 +178,7 @@ def R(value):
 def generate_esp(args):
     """Generate ESP-module code to circuit"""
     reset = generate_reset_line(args) if args.get('reset', False) else ''
-    led = generate_ifdef('led',generate_power_led, args, indent=0)
+    led = generate_ifdef('led',generate_power_led, args)
     reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
     flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
     esp_serial = generate_inline(generate_esp_serial, args) if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)) else ''
@@ -360,7 +360,7 @@ INA219['IN+'] += INA219_R_SHUNT[1]
 INA219['IN-'] += INA219_R_SHUNT[2]
 
 #Set I2C address
-{generate_subcircuit(generate_ina219_i2c_address, args, indent=0)}
+{generate_subcircuit(generate_ina219_i2c_address, args)}
 """
 
 def generate_ftdi_header(args):
