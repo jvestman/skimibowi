@@ -166,6 +166,18 @@ def generate_ifdef(define, function, args, indent=0):
     else:
         return ''
 
+def generate_inline(function, args):
+    return f"""# {function.__doc__}
+{function(args)}
+"""
+
+def generate_r():
+    return '''
+def R(value):
+    """Creates default resistor footprint"""
+    return Part('Device', 'R', value=value, footprint='{resistor_footprint}')
+'''
+
 def generate_esp(args):
     """Generate ESP-module code to circuit"""
     args['reset'] = generate_reset_line(args) if args.get('reset', False) else ''
