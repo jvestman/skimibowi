@@ -23,6 +23,7 @@ footprints = {
     'ESP-07': 'RF_Module:ESP-07',
     'ESP-12E': 'RF_Module:ESP-12E',
     'Wemos D1 Mini': 'RF_Module:WEMOS_D1_mini_light',
+    'ESP8266EX': 'Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm',
     'ATtiny85-20PU': 'Package_DIP:DIP-8_W7.62mm',
     'ATtiny85-20SU': 'Package_SO:SOIJ-8_5.3x5.3mm_P1.27mm',
     'ATtiny85-20MU': 'Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.6x2.6mm',
