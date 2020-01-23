@@ -104,6 +104,11 @@ def generate(args):
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_uart_reset(args)
 
+    if args.get('usb_uart', False) == 'CP2104':
+            code += generate_subcircuit(generate_cp2104, args)
+            if args['mcu'] in ['ESP-12E', 'ESP-07']:
+                code += generate_subcircuit(generate_esp_uart_reset, args)
+
     if args.get('hc12', False):
         code += generate_hc12(args)
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
@@ -519,6 +524,31 @@ CP2102['RXD'] += Net.fetch('tx')
 CP2102['DTR'] += Net.fetch('DTR')
 CP2102['RTS'] += Net.fetch('RTS')
 '''.format(**args)
+
+def generate_cp2104(args):
+    """Generate CP2104 usb uart circuitry"""
+    return '''
+cp2104 = Part('Interface_USB', 'CP2104', footprint="Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm")
+cp2104['VDD'] += Net.fetch('{mcurail}')
+cp2104['GND'] += Net.fetch('GND')
+cp2104['VBUS'] += Net.fetch('+VBUS')
+cp2104['D+'] += USBMICRO['D+']
+cp2104['D-'] += USBMICRO['D-']
+cp2104['TXD'] & R('470') & Net.fetch('rx')
+cp2104['RXD'] & R('470') & Net.fetch('tx')
+cp2104['DTR'] += Net.fetch('DTR')
+cp2104['RTS'] += Net.fetch('RTS')
+
+cp2104['VPP'] & C('4.7uF') & Net.fetch('GND')
+cp2104['VBUS'] & C('1uF') & Net.fetch('GND')
+cp2104['VDD'] & C('4.7uF') & Net.fetch('GND')
+cp2104['VDD'] & C('100nF') & Net.fetch('GND')
+
+cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
+
+
+'''.format(**args)
+
 
 def generate_esp_uart_reset(args):
     """Generate reset circuitry for ESP"""
