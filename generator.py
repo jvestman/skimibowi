@@ -105,9 +105,9 @@ def generate(args):
             code += generate_esp_uart_reset(args)
 
     if args.get('usb_uart', False) == 'CP2104':
-            code += generate_subcircuit(generate_cp2104, args)
-            if args['mcu'] in ['ESP-12E', 'ESP-07']:
-                code += generate_subcircuit(generate_esp_uart_reset, args)
+        code += generate_subcircuit(generate_cp2104, args)
+        if args['mcu'] in ['ESP-12E', 'ESP-07']:
+            code += generate_subcircuit(generate_esp_uart_reset, args)
 
     if args.get('hc12', False):
         code += generate_hc12(args)
@@ -144,27 +144,32 @@ from skidl import Part, Net, generate_netlist, subcircuit
 
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""
-    newline = '\n'
-    indent_str = '\n    '
-    empty_line = '    \n'
-    return f"""
-@subcircuit
-def {function.__name__}():
-    \"\"\"{function.__doc__}\"\"\"
-    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}
+    return f"""{generate_subcircuit_without_call(function, args)}
 
 {function.__name__}()
 
 """
 
 def generate_subcircuit_without_call(function, args):
+    """Generate function with subcircuit decorator"""
     newline = '\n'
     indent_str = '\n'+ '    '
+    empty_line = '    \n'
+    function_name = function.__name__.replace('generate_', '')
+    if args.get('generate_labels'):
+        requirements.add(generate_subcircuit_label)
+        return f"""
+@subcircuit
+def {function.__name__}():
+    \"\"\"{function.__doc__}\"\"\"
+    subcircuit_label('{function_name}')
+    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}"""
+
     return f"""
 @subcircuit
 def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
-    {function(args).lstrip().replace(newline, indent_str)}"""
+    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}"""
 
 def generate_ifdef(define, function, args):
     if define in args:
@@ -199,6 +204,14 @@ def generate_l(args):
 def L(value):
     \"\"\"Creates default resistor footprint\"\"\"
     return Part('Device', 'L', value=value, footprint='{args['resistor_footprint']}')
+"""
+
+def generate_subcircuit_label(args):
+    """Generate subcircuit label footprint"""
+    return f"""
+def subcircuit_label(name):
+    \"\"\"Creates subcircuit label footprint\"\"\"
+    Part('./library/Skimibowi.lib', '_', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """
 
 def generate_esp(args):
@@ -289,7 +302,7 @@ w25q32['DO'] += Net.fetch('SDO/SD0')
 w25q32['IO3'] += Net.fetch('SWP/SD3')
 w25q32['VCC'] += Net.fetch('{mcurail}')
 w25q32['GND'] += Net.fetch('GND')
-''' 
+'''
 
 def generate_esp_serial(args):
     """Generate ESP serial networks"""
@@ -546,6 +559,7 @@ cp2104['VDD'] & C('100nF') & Net.fetch('GND')
 
 cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
 
+cp2104['~SUSPEND'] += Net.fetch('+VBUS')
 
 '''.format(**args)
 

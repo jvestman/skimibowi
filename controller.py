@@ -138,7 +138,8 @@ def fill_variables(wizard):
         'usb_connector_footprint': usb_connector_footprints[wizard.field('usb_connector')],
         'onewire_connector_footprint': onewire_connector_footprints[wizard.field('onewire_connector')],
         'autoselect': wizard.field('autoselect'),
-        'hc12': wizard.field('hc12')
+        'hc12': wizard.field('hc12'),
+        'generate_labels': wizard.field('generate_labels')
         }
 
 def generate_skidl(wizard):
@@ -162,7 +163,7 @@ def load_settings(wizard, settings_filename="settings.yml"):
                 for field in ['mcu', 'mcurail', 'icsp', 'powersource', 'battery_management', 'fuse',
                               'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
                               'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
-                              'regulator', 'onewire_connector', 'autoselect', 'hc12']:
+                              'regulator', 'onewire_connector', 'autoselect', 'hc12', 'generate_labels']:
                     if field in settings:
                         wizard.setField(field, settings[field])
     except:
