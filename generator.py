@@ -16,9 +16,8 @@
 
 """Generates microcontroller board descriptions in SKiDL"""
 
+from generator_functions import *
 from arduino_generator import *
-
-requirements = set()
 
 def generate(args):
     """Generates microcontroller board descriptions in SKiDL """
@@ -142,46 +141,6 @@ from skidl import Part, Net, generate_netlist, subcircuit
 
 ''' + reqcode + code
 
-def generate_subcircuit(function, args):
-    """Generate SKiDL @subcircuit which body will be the return value of argument function"""
-    return f"""{generate_subcircuit_without_call(function, args)}
-
-{function.__name__}()
-
-"""
-
-def generate_subcircuit_without_call(function, args):
-    """Generate function with subcircuit decorator"""
-    newline = '\n'
-    indent_str = '\n'+ '    '
-    empty_line = '    \n'
-    function_name = function.__name__.replace('generate_', '')
-    if args.get('generate_labels'):
-        requirements.add(generate_subcircuit_label)
-        return f"""
-@subcircuit
-def {function.__name__}():
-    \"\"\"{function.__doc__}\"\"\"
-    subcircuit_label('{function_name}')
-    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}"""
-
-    return f"""
-@subcircuit
-def {function.__name__}():
-    \"\"\"{function.__doc__}\"\"\"
-    {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}"""
-
-def generate_ifdef(define, function, args):
-    if define in args:
-        return generate_subcircuit(function, args)
-
-    return ''
-
-def generate_inline(function, args):
-    return f"""# {function.__doc__}
-{function(args)}
-"""
-
 def generate_r(args):
     """Generate default resistor footprint"""
     return f"""
@@ -204,14 +163,6 @@ def generate_l(args):
 def L(value):
     \"\"\"Creates default resistor footprint\"\"\"
     return Part('Device', 'L', value=value, footprint='{args['resistor_footprint']}')
-"""
-
-def generate_subcircuit_label(args):
-    """Generate subcircuit label footprint"""
-    return f"""
-def subcircuit_label(name):
-    \"\"\"Creates subcircuit label footprint\"\"\"
-    Part('./library/Skimibowi.lib', '_', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """
 
 def generate_esp(args):
