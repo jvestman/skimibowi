@@ -17,6 +17,7 @@
 """Generates microcontroller board descriptions in SKiDL"""
 
 from generator_functions import *
+from passives_generator import *
 from arduino_generator import *
 
 def generate(args):
@@ -141,29 +142,6 @@ from skidl import Part, Net, generate_netlist, subcircuit
 
 ''' + reqcode + code
 
-def generate_r(args):
-    """Generate default resistor footprint"""
-    return f"""
-def R(value):
-    \"\"\"Creates default resistor footprint\"\"\"
-    return Part('Device', 'R', value=value, footprint='{args['resistor_footprint']}')
-"""
-
-def generate_c(args):
-    """Generate default capacitor footprint"""
-    return f"""
-def C(value):
-    \"\"\"Creates default capacitor footprint\"\"\"
-    return Part('Device', 'C', value=value, footprint='{args['capacitor_footprint']}')
-"""
-
-def generate_l(args):
-    """Generate default inductor footprint"""
-    return f"""
-def L(value):
-    \"\"\"Creates default resistor footprint\"\"\"
-    return Part('Device', 'L', value=value, footprint='{args['resistor_footprint']}')
-"""
 
 def generate_esp(args):
     """Generate ESP-module code to circuit"""
