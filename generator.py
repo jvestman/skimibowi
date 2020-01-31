@@ -18,7 +18,7 @@
 
 from generator_functions import *
 from passives_generator import generate_r, generate_c
-from esp_generator import generate_esp, generate_esp8266ex
+from esp_generator import generate_esp, generate_esp8266ex, generate_esp_uart_reset
 from arduino_generator import *
 
 def generate(args):
@@ -354,6 +354,7 @@ def generate_cp2104(args):
     """Generate CP2104 usb uart circuitry"""
 
     requirements.add(generate_r)
+    requirements.add(generate_c)
 
     return '''
 cp2104 = Part('Interface_USB', 'CP2104', footprint="Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm")
@@ -377,35 +378,6 @@ cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
 cp2104['~SUSPEND'] += Net.fetch('+VBUS')
 
 '''.format(**args)
-
-
-def generate_esp_uart_reset(args):
-    """Generate reset circuitry for ESP"""
-
-    requirements.add(generate_r)
-    transistors = {
-        'THT': {'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
-        'SOT-223': {'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
-        'SOT-23': {'part':'BC817', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
-    }
-
-    format_strings = args
-    format_strings['transistor'] = "Part('Transistor_BJT', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
-    return '''
-Q1 = {transistor}
-Q2 = {transistor}
-QR1 = R('10k')
-QR2 = R('10k')
-Q1['B'] += QR1[1]
-QR1[2] += Net.fetch('DTR')
-Q2['B'] += QR2[1]
-QR2[2] += Net.fetch('RTS')
-Q1['E'] += U1['GPIO0']
-Q2['E'] += U1['RST']
-Q1['C'] += Q2['C']
-Q2['C'] += Net.fetch('DTR')
-Q1['C'] += Net.fetch('RTS')
-'''.format(**format_strings)
 
 def generate_usb_connector(args):
     """Generate USB connector"""
@@ -485,7 +457,8 @@ BATTERYMANAGER['THERM'] & R('10k') & Net.fetch('GND')
 def generate_mcp73831(args):
     """Generate MCP73831 battery management IC"""
 
-    requirements.add(generate_r, generate_c)
+    requirements.add(generate_r)
+    requirements.add(generate_c)
 
     return '''
 BATTERYMANAGER = Part('Battery_Management', 'MCP73831-2-OT', footprint='Package_TO_SOT_SMD:SOT-23-5')

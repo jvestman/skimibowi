@@ -146,3 +146,31 @@ def generate_power_led(args):
 led = Part('Device', 'LED', footprint='{led_footprint}')
 U1['GPIO0'] & (R('1k') & led & Net.fetch('{mcurail}'))
 '''.format(**args)
+
+def generate_esp_uart_reset(args):
+    """Generate reset circuitry for ESP"""
+
+    requirements.add(generate_r)
+    transistors = {
+        'THT': {'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
+        'SOT-223': {'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
+        'SOT-23': {'part':'BC817', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
+    }
+
+    format_strings = args
+    format_strings['transistor'] = "Part('Transistor_BJT', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
+    return '''
+Q1 = {transistor}
+Q2 = {transistor}
+QR1 = R('10k')
+QR2 = R('10k')
+Q1['B'] += QR1[1]
+QR1[2] += Net.fetch('DTR')
+Q2['B'] += QR2[1]
+QR2[2] += Net.fetch('RTS')
+Q1['E'] += U1['GPIO0']
+Q2['E'] += U1['RST']
+Q1['C'] += Q2['C']
+Q2['C'] += Net.fetch('DTR')
+Q1['C'] += Net.fetch('RTS')
+'''.format(**format_strings)
