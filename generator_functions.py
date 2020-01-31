@@ -65,5 +65,5 @@ def generate_subcircuit_label(args):
     return f"""
 def subcircuit_label(name):
     \"\"\"Creates subcircuit label footprint\"\"\"
-    Part('./library/Skimibowi.lib', '_', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
+    Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """

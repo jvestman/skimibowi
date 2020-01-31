@@ -17,6 +17,7 @@
 """Generates microcontroller board descriptions in SKiDL"""
 
 from generator_functions import *
+from passives_generator import generate_r, generate_c
 from esp_generator import generate_esp, generate_esp8266ex
 from arduino_generator import *
 
@@ -211,10 +212,11 @@ Net.fetch('+5V') & AUTOSELECTOR & Net.fetch('+VBus')
 
 def generate_onewire_bus(args):
     """Generate DQ net for onewire bus"""
+
+    requirements.add(generate_r)
+
     return '''
-U3R1 = Part('Device', 'R', value='4k7', footprint='{resistor_footprint}')
-U3R1[1] += Net.fetch('{mcurail}')
-U3R1[2] += Net.fetch('DQ')
+Net.fetch('{mcurail}') & R('4k7') & Net.fetch('DQ')
 '''.format(**args)
 
 def generate_18b20u(args):
@@ -248,6 +250,9 @@ ONEWIRECONN[3] += Net.fetch('GND')
 
 def generate_ina219_i2c_address(args):
     """Generate resistors for setting up INA219 I2C bus address"""
+
+    requirements.add(generate_r)
+
     return """
 Net.fetch('GND') & R('10k') & INA219['A0']
 Net.fetch('GND') & R('10k') & INA219['A1']
@@ -255,6 +260,9 @@ Net.fetch('GND') & R('10k') & INA219['A1']
 
 def generate_ina219(args):
     """Generate INA219 that measures voltage and current at battery + terminal"""
+
+    requirements.add(generate_r)
+
     return F"""
 global INA219_R_SHUNT
 INA219 = Part('Analog_ADC', 'INA219AxD', footprint='Package_SO:SOIC-8_3.9x4.9mm_P1.27mm')
@@ -291,6 +299,9 @@ FTDI_HEADER[6] += Net.fetch('RTS')
 
 def generate_ftdi230(args):
     """Generate FTDI uart circuitry"""
+
+    requirements.add(generate_c)
+
     return '''
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('{mcurail}')
@@ -302,8 +313,7 @@ FTDI230['USBDM'] += USBMICRO['D-']
 FTDI230['USBDP'] += USBMICRO['D+']
 FTDI230['DTR'] += Net.fetch('DTR')
 FTDI230['RTS'] += Net.fetch('RTS')
-C_3V3 = Part('Device', 'C', value='100nF', footprint='{capacitor_footprint}')
-Net.fetch('GND') & C_3V3 & FTDI230['3V3OUT']
+Net.fetch('GND') & C('100nF') & FTDI230['3V3OUT']
 '''.format(**args)
 
 def generate_ftdi232rl(args):
@@ -342,6 +352,9 @@ CP2102['RTS'] += Net.fetch('RTS')
 
 def generate_cp2104(args):
     """Generate CP2104 usb uart circuitry"""
+
+    requirements.add(generate_r)
+
     return '''
 cp2104 = Part('Interface_USB', 'CP2104', footprint="Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm")
 cp2104['VDD'] += Net.fetch('{mcurail}')
@@ -369,6 +382,7 @@ cp2104['~SUSPEND'] += Net.fetch('+VBUS')
 def generate_esp_uart_reset(args):
     """Generate reset circuitry for ESP"""
 
+    requirements.add(generate_r)
     transistors = {
         'THT': {'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
         'SOT-223': {'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
@@ -380,8 +394,8 @@ def generate_esp_uart_reset(args):
     return '''
 Q1 = {transistor}
 Q2 = {transistor}
-QR1 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
-QR2 = Part('Device', 'R', value='10k', footprint='{resistor_footprint}')
+QR1 = R('10k')
+QR2 = R('10k')
 Q1['B'] += QR1[1]
 QR1[2] += Net.fetch('DTR')
 Q2['B'] += QR2[1]
@@ -435,6 +449,9 @@ BATTERYMANAGER['PG'] & led_pull_up()
 
 def mcp73871(args):
     """MCP73871-2AA battery management IC"""
+
+    requirements.add(generate_r)
+
     return f"""
 {generate_subcircuit_without_call(led_pull_up, args)}
 
@@ -454,8 +471,7 @@ Net.fetch('GND') & R('100k') & BATTERYMANAGER['PROG3']
 
 {generate_subcircuit(mcp73871_leds, args)}
 
-BM_C = Part('Device', 'C', value='10uF', footprint='{args['capacitor_footprint']}')
-Net.fetch('+VLipo') & BM_C & Net.fetch('GND')
+Net.fetch('+VLipo') & C('10uF') & Net.fetch('GND')
 
 BM_VPCC_R1 = R('100k')
 BM_VPCC_R2 = R('270k')
@@ -469,19 +485,17 @@ BATTERYMANAGER['THERM'] & R('10k') & Net.fetch('GND')
 def generate_mcp73831(args):
     """Generate MCP73831 battery management IC"""
 
+    requirements.add(generate_r, generate_c)
+
     return '''
 BATTERYMANAGER = Part('Battery_Management', 'MCP73831-2-OT', footprint='Package_TO_SOT_SMD:SOT-23-5')
 
 BM_LED = Part('Device', 'LED', footprint='{led_footprint}')
-BM_LED_R = Part('Device', 'R', value='1k', footprint='{resistor_footprint}')
-BATTERYMANAGER['STAT'] & BM_LED_R & BM_LED & Net.fetch('+VBus')
+BATTERYMANAGER['STAT'] & R('1k') & BM_LED & Net.fetch('+VBus')
 
 BATTERYMANAGER['VSS'] += Net.fetch('GND')
-RPROG = Part('Device', 'R', value='2k', footprint='{resistor_footprint}')
-Net.fetch('GND') & RPROG & BATTERYMANAGER['PROG']
-
-BM_C = Part('Device', 'C', value='10uF', footprint='{capacitor_footprint}')
-Net.fetch('+VLipo') & BM_C & Net.fetch('GND')
+Net.fetch('GND') & R('2k') & BATTERYMANAGER['PROG']
+Net.fetch('+VLipo') & C('10uF') & Net.fetch('GND')
 '''.format(**args)
 
 def generate_adafruit_feather(args):
