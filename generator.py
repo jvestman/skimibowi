@@ -16,11 +16,12 @@
 
 """Generates microcontroller board descriptions in SKiDL"""
 
-from generator_functions import *
-from passives_generator import generate_r, generate_c
+from generator_functions import requirements, generate_subcircuit
+from passives_generator import generate_r
 from esp_generator import generate_esp, generate_esp8266ex, generate_esp_uart_reset
 from arduino_generator import *
-from usb_uart_generator import *
+from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
+from battery_manager_generator import generate_mcp73831, mcp73871
 
 def generate(args):
     """Generates microcontroller board descriptions in SKiDL """
@@ -314,78 +315,10 @@ REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
 '''.format(**(args['regulator_data']))
 
-
-def led_pull_up(args):
-    """Led pulled up to +VBus"""
-    return f"""
-BM_LED = Part('Device', 'LED', footprint='{args['led_footprint']}')
-return R('1k') & BM_LED & Net.fetch('+VBus')
-"""
-
-def mcp73871_leds(args):
-    """MCP73871 Status leds"""
-    return f"""
-BATTERYMANAGER['STAT1'] & led_pull_up()
-BATTERYMANAGER['STAT2'] & led_pull_up()
-BATTERYMANAGER['PG'] & led_pull_up()
-"""
-
-def mcp73871(args):
-    """MCP73871-2AA battery management IC"""
-
-    requirements.add(generate_r)
-
-    return f"""
-{generate_subcircuit_without_call(led_pull_up, args)}
-
-BATTERYMANAGER = Part('Battery_Management', 'MCP73871-2AA', footprint='Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm')
-BATTERYMANAGER['IN'] += Net.fetch('+VBus')
-BATTERYMANAGER['SEL'] += Net.fetch('+VBus')
-BATTERYMANAGER['PROG2'] += Net.fetch('+VBus')
-BATTERYMANAGER['TE'] += Net.fetch('+VBus')
-BATTERYMANAGER['CE'] += Net.fetch('+VBus')
-BATTERYMANAGER['VSS'] += Net.fetch('GND')
-BATTERYMANAGER['OUT'] += Net.fetch('+VBatt')
-BATTERYMANAGER['VBAT'] += Net.fetch('+VLipo')
-BATTERYMANAGER['Vbat_SENSE'] += Net.fetch('+VLipo')
-
-Net.fetch('GND') & R('2k') & BATTERYMANAGER['PROG1']
-Net.fetch('GND') & R('100k') & BATTERYMANAGER['PROG3']
-
-{generate_subcircuit(mcp73871_leds, args)}
-
-Net.fetch('+VLipo') & C('10uF') & Net.fetch('GND')
-
-BM_VPCC_R1 = R('100k')
-BM_VPCC_R2 = R('270k')
-Net.fetch('GND') & BM_VPCC_R1 & BM_VPCC_R2 & Net.fetch('+VBus')
-BATTERYMANAGER['VPCC'] += BM_VPCC_R2[1]
-
-BATTERYMANAGER['THERM'] & R('10k') & Net.fetch('GND')
-
-"""
-
-def generate_mcp73831(args):
-    """Generate MCP73831 battery management IC"""
-
-    requirements.add(generate_r)
-    requirements.add(generate_c)
-
-    return '''
-BATTERYMANAGER = Part('Battery_Management', 'MCP73831-2-OT', footprint='Package_TO_SOT_SMD:SOT-23-5')
-
-BM_LED = Part('Device', 'LED', footprint='{led_footprint}')
-BATTERYMANAGER['STAT'] & R('1k') & BM_LED & Net.fetch('+VBus')
-
-BATTERYMANAGER['VSS'] += Net.fetch('GND')
-Net.fetch('GND') & R('2k') & BATTERYMANAGER['PROG']
-Net.fetch('+VLipo') & C('10uF') & Net.fetch('GND')
-'''.format(**args)
-
 def generate_adafruit_feather(args):
     """Generate Adafruit Feather board footprint"""
     return '''
-BOARD = Part('Skimibowi', 'Adafruit_Feather', footprint='skimibowi:Adafruit_Feather')
+BOARD = Part('./library/Skimibowi.lib', 'Adafruit_Feather', footprint='Skimibowi:feather')
 '''.format(args)
 
 def generate_hc12(args):

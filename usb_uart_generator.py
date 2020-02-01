@@ -80,7 +80,12 @@ def generate_cp2104(args):
 
     return '''
 cp2104 = Part('Interface_USB', 'CP2104', footprint="Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm")
+cp2104['VIO'] += Net.fetch('{mcurail}')
 cp2104['VDD'] += Net.fetch('{mcurail}')
+cp2104['REGIN'] += Net.fetch('{mcurail}')
+
+Net.fetch('GND') & C('10uF') & (cp2104['VIO'] | cp2104['VDD'] | cp2104['REGIN']) 
+
 cp2104['GND'] += Net.fetch('GND')
 cp2104['VBUS'] += Net.fetch('+VBUS')
 cp2104['D+'] += Net.fetch('USBD+')
@@ -90,11 +95,10 @@ cp2104['RXD'] & R('470') & Net.fetch('tx')
 cp2104['DTR'] += Net.fetch('DTR')
 cp2104['RTS'] += Net.fetch('RTS')
 
+# Support ROM programming
 cp2104['VPP'] & C('4.7uF') & Net.fetch('GND')
-cp2104['VBUS'] & C('1uF') & Net.fetch('GND')
-cp2104['VDD'] & C('4.7uF') & Net.fetch('GND')
-cp2104['VDD'] & C('100nF') & Net.fetch('GND')
 
+# Optional, improves stability
 cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
 
 '''.format(**args)
