@@ -162,15 +162,10 @@ def generate_esp_uart_reset(args):
     return '''
 Q1 = {transistor}
 Q2 = {transistor}
-QR1 = R('10k')
-QR2 = R('10k')
-Q1['B'] += QR1[1]
-QR1[2] += Net.fetch('DTR')
-Q2['B'] += QR2[1]
-QR2[2] += Net.fetch('RTS')
-Q1['E'] += U1['GPIO0']
-Q2['E'] += U1['RST']
-Q1['C'] += Q2['C']
-Q2['C'] += Net.fetch('DTR')
-Q1['C'] += Net.fetch('RTS')
+Net.fetch('DTR') & R('10k') & Q1['B']
+Net.fetch('RTS') & R('10k') & Q2['B']
+Net.fetch('DTR') & Q2['E']
+Net.fetch('RTS') & Q1['E']
+Q1['C'] & Net.fetch('RST')
+Q2['C'] & Net.fetch('GPIO0')
 '''.format(**format_strings)
