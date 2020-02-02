@@ -60,7 +60,7 @@ def generate(args):
         code += generate_subcircuit(mcp73871, args)
 
     if args.get('battery_management', False) == 'MCP73831':
-        code += generate_mcp73831(args)
+        code += generate_subcircuit(generate_mcp73831, args)
 
     if args.get('regulator_data', None):
         code += generate_regulator(args)
