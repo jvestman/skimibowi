@@ -318,7 +318,7 @@ REGULATOR['GND'] += Net.fetch('GND')
 def generate_adafruit_feather(args):
     """Generate Adafruit Feather board footprint"""
     return '''
-BOARD = Part('./library/Skimibowi.lib', 'Adafruit_Feather', footprint='Skimibowi:feather')
+BOARD = Part('./library/feather.lib', 'Adafruit_Feather', footprint='Skimibowi:feather')
 '''.format(args)
 
 def generate_hc12(args):
