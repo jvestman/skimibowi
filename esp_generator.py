@@ -152,13 +152,13 @@ def generate_esp_uart_reset(args):
 
     requirements.add(generate_r)
     transistors = {
-        'THT': {'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
-        'SOT-223': {'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
-        'SOT-23': {'part':'BC817', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
+        'THT': {'library': 'Transistor_BJT', 'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
+        'SOT-223': {'library': 'Transistor_BJT', 'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
+        'SOT-23': {'library': 'Device', 'part':'Q_NPN_BEC', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
     }
 
     format_strings = args
-    format_strings['transistor'] = "Part('Transistor_BJT', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
+    format_strings['transistor'] = "Part('{library}', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
     return '''
 Q1 = {transistor}
 Q2 = {transistor}
