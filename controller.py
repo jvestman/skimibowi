@@ -88,7 +88,7 @@ usb_connector_footprints = {
     'USB B': {'part': 'USB_B', 'footprint': 'USB_B_OST_USB-B1HSxx_Horizontal'},
     'USB B Mini': {'part': 'USB_B_Mini', 'footprint': 'USB_Mini-B_Lumberg_2486_01_Horizontal'},
     'USB B Micro': {'part': 'USB_B_Micro', 'footprint': 'USB_Micro-B_Amphenol_10103594-0001LF_Horizontal'},
-    'USB A PCB Trace': {'part': 'USB_A', 'footprint': 'skimibowi:usb'},
+    'USB A PCB Trace': {'part': 'USB_A', 'footprint': 'Skimibowi:usb'},
 }
 
 onewire_connector_footprints = {
