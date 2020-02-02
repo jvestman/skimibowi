@@ -185,6 +185,6 @@ the following netlist is generated:
 
 ```
 
-that can then be imported to Pcbnew for designing PCB.
+..that can then be imported to Pcbnew:
 
 ![Screenshot](wiki/pcbnew.png)
