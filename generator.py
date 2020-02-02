@@ -30,24 +30,24 @@ def generate(args):
 
     code = ""
 
-    if args['mcu'] in ['ESP-12E', 'ESP-07']:
+    if args.get('mcu') in ['ESP-12E', 'ESP-07']:
         code += generate_subcircuit(generate_esp, args)
 
-    if args['mcu'] in ['ESP8266EX']:
+    if args.get('mcu') in ['ESP8266EX']:
         code += generate_subcircuit(generate_esp8266ex, args)
 
-    if args['mcu'] in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
+    if args.get('mcu') in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
         code += generate_atmega328p(args)
         if args['icsp']:
             code += generate_icsp()
 
-    if args['mcu'] in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
+    if args.get('mcu') in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
         code += generate_attiny85(args)
 
-    if args['powersource'] not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
+    if args.get('powersource', 'No battery') not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_battery(args)
 
-    if args['powersource'] in ['JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
+    if args.get('powersource') in ['JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_power_connector(args)
 
     if args.get('fuse', 'No fuse') != 'No fuse':
@@ -68,7 +68,7 @@ def generate(args):
     if args.get('autoselect', False):
         code += generate_autoselect(args)
 
-    if args.get('DS18B20', False) or args.get('DS18B20U', False) or args.get('onewire_connector', False) != 'No Onewire connector':
+    if args.get('DS18B20', False) or args.get('DS18B20U', False) or args.get('onewire_connector', 'No Onewire connector') != 'No Onewire connector':
         code += generate_onewire_bus(args)
 
     if args.get('DS18B20', False):
@@ -77,7 +77,7 @@ def generate(args):
     if args.get('DS18B20U', False):
         code += generate_18b20u(args)
 
-    if args.get('onewire_connector', False) != "No Onewire connector":
+    if args.get('onewire_connector', "No Onewire connector") != "No Onewire connector":
         code += generate_onewire_connector(args)
 
     if args.get('ina219', False):
@@ -86,10 +86,10 @@ def generate(args):
     if args.get('FTDI header', False):
         code += generate_ftdi_header(args)
 
-    if args.get('usb_connector', False) != 'No USB connector':
+    if args.get('usb_connector', 'No USB connector') != 'No USB connector':
         code += generate_usb_connector(args)
 
-    if args.get('powersource', False) != 'No battery' or args.get('usb_connector', False) != 'No USB connector':
+    if args.get('powersource', 'No battery') != 'No battery' or args.get('usb_connector', 'No USB connector') != 'No USB connector':
         code += connect_power_network(args)
 
     if args.get('usb_uart', False) == 'FT231':

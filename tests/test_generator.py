@@ -19,6 +19,12 @@ class TestGenerator(unittest.TestCase):
         self.maxDiff = 10000
         self.assertEqual(generated, target)
 
+    def test_empty_settings(self):
+        """Test empty board"""
+
+        generate_from_settings("tests/tmp/zero.py", "tests/zero.yml")
+        self.assertEqualsFile("tests/tmp/zero.py", "tests/zero.py")
+
     def test_empty_board(self):
         """Test empty board"""
 
