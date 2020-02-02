@@ -184,3 +184,7 @@ the following netlist is generated:
 )
 
 ```
+
+that can then be imported to Pcbnew for designing PCB.
+
+![Screenshot](wiki/pcbnew.png)
