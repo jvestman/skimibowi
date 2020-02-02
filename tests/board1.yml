@@ -1,0 +1,41 @@
+DS18B20: false
+DS18B20U: false
+FTDI header: false
+Flash button: false
+Reset button: true
+autoselect: false
+battery_management: MCP73831
+board_footprint: Adafruit Feather
+capacitor_footprint: Capacitor_SMD:C_1206_3216Metric
+common_footprint: SMD 1206
+fuse: No fuse
+fuse_footprint: null
+generate_labels: true
+hc12: false
+icsp: false
+ina219: false
+led: true
+led_footprint: LED_SMD:LED_1206_3216Metric
+mcu: ESP-12E
+mcu_footprint: RF_Module:ESP-12E
+mcurail: +3V3
+onewire_connector: No Onewire connector
+onewire_connector_footprint: ''
+powersource: JST PH S2B
+powersource_footprint: JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal
+regulator: AP2112K-3.3
+regulator_data:
+  enable_pin: true
+  footprint: Package_TO_SOT_SMD:SOT-23-5
+  module: Regulator_Linear
+  output: +3V3
+  part: AP2112K-3.3
+reset: false
+resistor_footprint: Resistor_SMD:R_1206_3216Metric
+switch: false
+transistor_footprint: SOT-23
+usb_connector: USB B Micro
+usb_connector_footprint:
+  footprint: USB_Micro-B_Amphenol_10103594-0001LF_Horizontal
+  part: USB_B_Micro
+usb_uart: CP2104

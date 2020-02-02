@@ -12,6 +12,7 @@ class TestGenerator(unittest.TestCase):
         """Assert equality of two supplied files"""
         with open(file1, 'r') as myfile:
             generated = myfile.read()
+            myfile.close()
 
         with open(file2, 'r') as myfile:
             target = myfile.read()
@@ -54,6 +55,12 @@ class TestGenerator(unittest.TestCase):
 
         generate_from_settings("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.yml")
         self.assertEqualsFile("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.py")
+    
+    def test_esp12_board1(self):
+        """Test ESP12 board 1"""
+
+        generate_from_settings("tests/tmp/board1.py", "tests/board1.yml")
+        self.assertEqualsFile("tests/tmp/board1.py", "tests/board1.py")
 
 if __name__ == '__main__':
     unittest.main()
