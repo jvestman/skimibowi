@@ -154,12 +154,13 @@ def generate_esp_uart_reset(args):
     transistors = {
         'THT': {'library': 'Transistor_BJT', 'part': 'PN2222A', 'footprint': 'Package_TO_SOT_THT:TO-92_Inline'},
         'SOT-223': {'library': 'Transistor_BJT', 'part': 'PZT2222A', 'footprint':'Package_TO_SOT_SMD:SOT-223'},
-        'SOT-23': {'library': 'Device', 'part':'Q_NPN_BEC', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
+        'SOT-23': {'library': 'Device', 'part':'Q_NPN_BEC', 'value': 'mmbt2222', 'footprint': 'Package_TO_SOT_SMD:SOT-23'}
     }
-
-    format_strings = args
-    format_strings['transistor'] = "Part('{library}', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
-    return '''
+    if args['transistor_footprint'] == "SOT-23":
+        transistor = "Part('{library}', '{part}', value='{value}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
+    else:
+        transistor = "Part('{library}', '{part}', footprint='{footprint}')".format(**transistors[args['transistor_footprint']])
+    return f"""
 Q1 = {transistor}
 Q2 = {transistor}
 Net.fetch('DTR') & R('10k') & Q1['B']
@@ -168,4 +169,4 @@ Net.fetch('DTR') & Q2['E']
 Net.fetch('RTS') & Q1['E']
 Q1['C'] & Net.fetch('RST')
 Q2['C'] & Net.fetch('GPIO0')
-'''.format(**format_strings)
+"""
