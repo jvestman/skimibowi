@@ -16,7 +16,9 @@
 
 """Functions that generate SKiDL subcircuits functions"""
 
-requirements = set()
+from ordered_set import OrderedSet
+
+requirements = OrderedSet()
 
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""

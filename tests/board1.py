@@ -3,13 +3,13 @@
 from skidl import Part, Net, generate_netlist, subcircuit
 
 
-def R(value):
-    """Creates default resistor footprint"""
-    return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
-
 def subcircuit_label(name):
     """Creates subcircuit label footprint"""
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{len(name)}")
+
+def R(value):
+    """Creates default resistor footprint"""
+    return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
 
 def C(value):
     """Creates default capacitor footprint"""
@@ -116,8 +116,8 @@ generate_cp2104()
 def generate_esp_uart_reset():
     """Generate reset circuitry for ESP"""
     subcircuit_label('esp_uart_reset')
-    Q1 = Part('Device', 'Q_NPN_BEC', footprint='Package_TO_SOT_SMD:SOT-23')
-    Q2 = Part('Device', 'Q_NPN_BEC', footprint='Package_TO_SOT_SMD:SOT-23')
+    Q1 = Part('Device', 'Q_NPN_BEC', value='mmbt2222', footprint='Package_TO_SOT_SMD:SOT-23')
+    Q2 = Part('Device', 'Q_NPN_BEC', value='mmbt2222', footprint='Package_TO_SOT_SMD:SOT-23')
     Net.fetch('DTR') & R('10k') & Q1['B']
     Net.fetch('RTS') & R('10k') & Q2['B']
     Net.fetch('DTR') & Q2['E']
