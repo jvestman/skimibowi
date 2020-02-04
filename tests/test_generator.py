@@ -62,5 +62,12 @@ class TestGenerator(unittest.TestCase):
         generate_from_settings("tests/tmp/board1.py", "tests/board1.yml")
         self.assertEqualsFile("tests/tmp/board1.py", "tests/board1.py")
 
+    def test_wemos_d1_mini_18b20u(self):
+        """Test ESP12 board 1"""
+
+        generate_from_settings("tests/tmp/wemos_d1_mini_18b20u.py", "tests/wemos_d1_mini_18b20u.yml")
+        self.assertEqualsFile("tests/tmp/wemos_d1_mini_18b20u.py", "tests/wemos_d1_mini_18b20u.py")
+    
+
 if __name__ == '__main__':
     unittest.main()

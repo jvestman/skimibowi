@@ -18,7 +18,7 @@
 
 from generator_functions import requirements, generate_subcircuit
 from passives_generator import generate_r
-from esp_generator import generate_esp, generate_esp8266ex, generate_esp_uart_reset
+from esp_generator import generate_esp, generate_esp8266ex, generate_esp_uart_reset, generate_wemos_d1_mini
 from arduino_generator import *
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
@@ -35,6 +35,9 @@ def generate(args):
 
     if args.get('mcu') in ['ESP8266EX']:
         code += generate_subcircuit(generate_esp8266ex, args)
+
+    if args.get('mcu') == "WeMos D1 mini":
+        code += generate_subcircuit(generate_wemos_d1_mini, args)
 
     if args.get('mcu') in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
         code += generate_atmega328p(args)
@@ -217,9 +220,18 @@ def generate_onewire_bus(args):
 
     requirements.add(generate_r)
 
-    return '''
+    mcurail = args['mcurail']
+
+    if args['mcu'] == 'WeMos D1 mini':
+        return f"""
+U1['D4'] += Net.fetch('DQ')
 Net.fetch('{mcurail}') & R('4k7') & Net.fetch('DQ')
-'''.format(**args)
+"""
+
+    return f"""
+U1['GPIO2'] += Net.fetch('DQ')
+Net.fetch('{mcurail}') & R('4k7') & Net.fetch('DQ')
+"""
 
 def generate_18b20u(args):
     """Generate 18B20U part and connect it to onewire bus"""
@@ -228,7 +240,6 @@ U3 = Part('Sensor_Temperature', 'DS18B20U', footprint="Package_SO:MSOP-8_3x3mm_P
 U3['VDD'] += Net.fetch('{mcurail}')
 U3['GND'] += Net.fetch('GND')
 U3['DQ'] += Net.fetch('DQ')
-U1['GPIO2'] += Net.fetch('DQ')
 '''.format(**args)
 
 def generate_18b20(args):
@@ -238,7 +249,6 @@ U2 = Part('Sensor_Temperature', 'DS18B20', footprint="Package_TO_SOT_THT:TO-92_I
 U2['VDD'] += Net.fetch('{mcurail}')
 U2['GND'] += Net.fetch('GND')
 U2['DQ'] += Net.fetch('DQ')
-U1['GPIO2'] += Net.fetch('DQ')
 '''.format(**args)
 
 def generate_onewire_connector(args):

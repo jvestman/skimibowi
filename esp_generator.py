@@ -109,6 +109,23 @@ w25q32['VCC'] += Net.fetch('{mcurail}')
 w25q32['GND'] += Net.fetch('GND')
 '''
 
+def generate_wemos_d1_mini(args):
+    """Generate Wemos D1 footprint"""
+    mcu = args['mcu']
+    mcu_footprint = args['mcu_footprint']
+    mcurail = args['mcurail']
+
+    if mcurail == '+3V3':
+        wemos_vcc = '3V3'
+    else:
+        wemos_vcc = '5V'
+
+    return f"""global U1
+U1 = Part('MCU_Module', 'WeMOs_D1_mini', footprint='{mcu_footprint}')
+U1['{wemos_vcc}'] += Net.fetch('{mcurail}')
+U1['GND'] += Net.fetch('GND')
+"""
+
 def generate_esp_serial(args):
     """Generate ESP serial networks"""
 
