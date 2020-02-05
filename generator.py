@@ -35,7 +35,7 @@ def generate(args):
 
     if args.get('mcu') in ['ESP8266EX']:
         code += generate_subcircuit(generate_esp8266ex, args)
-
+    
     if args.get('mcu') == "WeMos D1 mini":
         code += generate_subcircuit(generate_wemos_d1_mini, args)
 
@@ -132,6 +132,9 @@ def generate(args):
 
     if args.get('board_footprint', False) == 'Adafruit Feather':
         code += generate_adafruit_feather(args)
+        
+    if args.get('mcu') in ['ESP8266EX', 'ESP-12E', 'ESP-07'] and args.get('board_footprint') == 'Adafruit Feather':
+        code += generate_adadafruit_feather_esp_connections(args)
 
     code += '''
 generate_netlist()
@@ -328,8 +331,55 @@ REGULATOR['GND'] += Net.fetch('GND')
 def generate_adafruit_feather(args):
     """Generate Adafruit Feather board footprint"""
     return '''
-BOARD = Part('./library/feather.lib', 'Adafruit_Feather', footprint='Skimibowi:feather')
+BOARD = Part('./library/feather.lib', 'Adafruit_Feather', footprint='Skimibowi:Adafruit_Feather')
 '''.format(args)
+
+def generate_adadafruit_feather_esp_connections(args):
+    """Generate connections from ESP-module to Adafruit feather board"""
+    return f"""
+BOARD['RST'] += Net.fetch('RST')
+BOARD['3V3'] += Net.fetch('+3V3')
+BOARD['AREF'] += Net.fetch('')
+BOARD['GND'] += Net.fetch('GND')
+BOARD['A0'] += Net.fetch('ADC')
+BOARD['SCLK'] += Net.fetch('SCLK')
+BOARD['MOSI'] += Net.fetch('MOSI')
+BOARD['MISO'] += Net.fetch('MISO')
+BOARD['RX'] += Net.fetch('rx')
+BOARD['TX'] += Net.fetch('tx')
+BOARD['BAT'] += Net.fetch('+VBatt')
+BOARD['EN'] += NC
+BOARD['USB'] += Net.fetch('+VBus')
+BOARD['GPIO14'] += Net.fetch('GPIO14')
+BOARD['GPIO12'] += Net.fetch('GPIO12')
+BOARD['GPIO13'] += Net.fetch('GPIO13')
+BOARD['GPIO15'] += Net.fetch('GPIO15')
+BOARD['GPIO0'] += Net.fetch('GPIO0')
+BOARD['GPIO16'] += Net.fetch('GPIO16')
+BOARD['GPIO2'] += Net.fetch('GPIO2')
+BOARD['SCL'] += Net.fetch('SCL')
+BOARD['SDA'] += Net.fetch('SDA')
+
+U1['ADC'] += Net.fetch('ADC')
+U1['CS0'] += Net.fetch('CS0')
+U1['MISO'] += Net.fetch('MISO')
+U1['GPIO9'] += Net.fetch('GPIO9')
+U1['GPIO10'] += Net.fetch('GPIO10')
+U1['MOSI'] += Net.fetch('MOSI')
+U1['SCLK'] += Net.fetch('SCLK')
+
+U1['GPIO14'] += Net.fetch('GPIO14')
+U1['GPIO12'] += Net.fetch('GPIO12')
+U1['GPIO13'] += Net.fetch('GPIO13')
+U1['GPIO15'] += Net.fetch('GPIO15')
+U1['GPIO0'] += Net.fetch('GPIO0')
+U1['GPIO16'] += Net.fetch('GPIO16')
+U1['GPIO2'] += Net.fetch('GPIO2')
+U1['GPIO5'] += Net.fetch('SCL')
+U1['GPIO4'] += Net.fetch('SDA')
+
+
+"""
 
 def generate_hc12(args):
     """Generate footprint for HC-12 RF-module"""
