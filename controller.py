@@ -20,6 +20,7 @@ from yaml import load, dump, Loader
 from generator import generate
 
 footprints = {
+    'ESP-01': 'Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical',
     'ESP-07': 'RF_Module:ESP-07',
     'ESP-12E': 'RF_Module:ESP-12E',
     'WeMos D1 mini': 'Module:WEMOS_D1_mini_light',

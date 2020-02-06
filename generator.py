@@ -18,7 +18,7 @@
 
 from generator_functions import requirements, generate_subcircuit
 from passives_generator import generate_r
-from esp_generator import generate_esp, generate_esp8266ex, generate_esp_uart_reset, generate_wemos_d1_mini
+from esp_generator import generate_esp, generate_esp_01, generate_esp8266ex, generate_esp_uart_reset, generate_wemos_d1_mini
 from arduino_generator import *
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
@@ -32,6 +32,9 @@ def generate(args):
 
     if args.get('mcu') in ['ESP-12E', 'ESP-07']:
         code += generate_subcircuit(generate_esp, args)
+
+    if args.get('mcu') in ['ESP-01']:
+        code += generate_subcircuit(generate_esp_01, args)
 
     if args.get('mcu') in ['ESP8266EX']:
         code += generate_subcircuit(generate_esp8266ex, args)

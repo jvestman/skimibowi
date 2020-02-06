@@ -37,6 +37,24 @@ U1['EN'] & R('10k') & Net.fetch('{mcurail}')
 U1['GPIO15'] & R('4k7') & Net.fetch('GND')
 '''.format(**args) + ''.join(filter(None, [reset, led, reset_button, flash_button, esp_serial])) + '\n'
 
+def generate_esp_01(args):
+    """Generate ESP-module code to circuit"""
+    led = generate_ifdef('led', generate_power_led, args)
+    reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
+    flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
+    esp_serial = generate_inline(generate_esp_serial, args) if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)) else ''
+    requirements.add(generate_r)
+    return '''
+global U1
+U1 = Part('./library/Skimibowi.lib', 'ESP-01', footprint='{mcu_footprint}')
+
+U1['VCC'] += Net.fetch('{mcurail}')
+U1['GND'] += Net.fetch('GND')
+U1['CH_PD'] & R('10k') & Net.fetch('{mcurail}')
+U1['RST'] += Net.fetch('RST')
+'''.format(**args) + ''.join(filter(None, [led, reset_button, flash_button, esp_serial])) + '\n'
+
+
 def generate_esp8266ex_antenna(args):
     """Generate ESP8266EX antenna circuit"""
     requirements.add(generate_l)
