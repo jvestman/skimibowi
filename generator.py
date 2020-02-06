@@ -136,6 +136,12 @@ def generate(args):
     if args.get('mcu') in ['ESP8266EX', 'ESP-12E', 'ESP-07'] and args.get('board_footprint') == 'Adafruit Feather':
         code += generate_adadafruit_feather_esp_connections(args)
 
+    if args.get('title') and args.get('generate_labels'):
+        code += generate_title(args)
+    
+    if args.get('author') and args.get('generate_labels'):
+        code += generate_author(args)
+
     code += '''
 generate_netlist()
 '''
@@ -399,3 +405,19 @@ def generate_esp_software_serial(args):
 U1['GPIO13'] += Net.fetch('RXD2')
 U1['GPIO15'] += Net.fetch('TXD2')
 '''.format(**args)
+
+def generate_title(args):
+    
+    title = args.get('title')
+
+    return f"""
+Part('./library/Skimibowi.lib', 'Label', ref=" ", value='{title}', footprint='Skimibowi:label{len(title)}')
+"""
+
+def generate_author(args):
+
+    author = args.get('author')
+
+    return f"""
+Part('./library/Skimibowi.lib', 'Label', ref=" ", value='{author}', footprint='Skimibowi:label{len(author)}')
+"""
