@@ -135,13 +135,13 @@ def generate(args):
 
     if args.get('board_footprint', False) == 'Adafruit Feather':
         code += generate_adafruit_feather(args)
-        
+
     if args.get('mcu') in ['ESP8266EX', 'ESP-12E', 'ESP-07'] and args.get('board_footprint') == 'Adafruit Feather':
         code += generate_adadafruit_feather_esp_connections(args)
 
     if args.get('title') and args.get('generate_labels'):
         code += generate_title(args)
-    
+
     if args.get('author') and args.get('generate_labels'):
         code += generate_author(args)
 
@@ -410,7 +410,8 @@ U1['GPIO15'] += Net.fetch('TXD2')
 '''.format(**args)
 
 def generate_title(args):
-    
+    """Generate visible title label for PCB to netlist"""
+
     title = args.get('title')
 
     return f"""
@@ -418,6 +419,7 @@ Part('./library/Skimibowi.lib', 'Label', ref=" ", value='{title}', footprint='Sk
 """
 
 def generate_author(args):
+    """Generate visible author label for PCB to netlist"""
 
     author = args.get('author')
 
