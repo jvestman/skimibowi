@@ -2,6 +2,7 @@
 
 import unittest
 import sys
+import os
 sys.path.append('.')
 from controller import generate_from_settings
 
@@ -19,6 +20,12 @@ class TestGenerator(unittest.TestCase):
 
         self.maxDiff = 10000
         self.assertEqual(generated, target)
+
+    def setUp(self):
+        try:
+            os.mkdir("tests/tmp/")
+        except:
+            pass
 
     def test_empty_settings(self):
         """Test empty board"""
