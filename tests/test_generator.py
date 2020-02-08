@@ -63,11 +63,11 @@ class TestGenerator(unittest.TestCase):
         generate_from_settings("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.yml")
         self.assertEqualsFile("tests/tmp/esp12-ftdi-header.py", "tests/esp12-ftdi-header.py")
     
-    def test_esp12_board1(self):
+    def test_esp-12-mcp73831-ap221k-cp2104-feather(self):
         """Test ESP12 board 1"""
 
-        generate_from_settings("tests/tmp/board1.py", "tests/board1.yml")
-        self.assertEqualsFile("tests/tmp/board1.py", "tests/board1.py")
+        generate_from_settings("tests/tmp/esp-12-mcp73831-ap221k-cp2104-feather.py", "tests/esp-12-mcp73831-ap221k-cp2104-feather.yml")
+        self.assertEqualsFile("tests/tmp/esp-12-mcp73831-ap221k-cp2104-feather.py", "tests/esp-12-mcp73831-ap221k-cp2104-feather.py")
 
     def test_wemos_d1_mini_18b20u(self):
         """Test ESP12 board 1"""
