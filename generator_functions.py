@@ -28,10 +28,11 @@ def generate_subcircuit(function, args):
 
 """
 
+
 def generate_subcircuit_without_call(function, args):
     """Generate function with subcircuit decorator"""
     newline = '\n'
-    indent_str = '\n'+ '    '
+    indent_str = '\n' + '    '
     empty_line = '    \n'
     function_name = function.__name__.replace('generate_', '')
     if args.get('generate_labels'):
@@ -49,6 +50,7 @@ def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
     {function(args).strip().replace(newline, indent_str).replace(empty_line, newline)}"""
 
+
 def generate_ifdef(define, function, args):
     """Generate subcircuit function if key define is present in args dict"""
     if define in args:
@@ -56,11 +58,13 @@ def generate_ifdef(define, function, args):
 
     return ''
 
+
 def generate_inline(function, args):
     """Return function contents with comment line as inline code"""
     return f"""# {function.__doc__}
 {function(args)}
 """
+
 
 def generate_subcircuit_label(args):
     """Generate subcircuit label footprint"""

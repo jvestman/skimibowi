@@ -16,6 +16,7 @@
 
 """Generates ATMega / Arduino compatible boards"""
 
+
 def generate_atmega328p(args):
     """Generate ATmega328P subsystem to circuit"""
     return '''
@@ -45,6 +46,7 @@ U1['PC4'] += Net.fetch('SDA')
 U1['PC5'] += Net.fetch('SCL')
 '''.format(**args)
 
+
 def generate_attiny85(args):
     """Generate ATtiny85"""
     return '''
@@ -54,6 +56,7 @@ U1 = Part('MCU_Microchip_ATtiny', '{mcu}', footprint='{mcu_footprint}')
 U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
 '''.format(**args)
+
 
 def generate_icsp():
     """Generate In Circuit Serial Programmer header"""
@@ -66,6 +69,7 @@ ICSP_CONN[4] += U1['PB3']
 ICSP_CONN[5] += U1['RESET']
 ICSP_CONN[6] += Net.fetch('GND')
 '''
+
 
 def generate_arduino_uno_r3_board_footprint():
     """Generate Arduino Uno R3 board layout footprint"""
@@ -84,6 +88,7 @@ BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
 
 '''
+
 
 def generate_arduino_nano_v3_board_footprint():
     """Generate Arduino Nano V3 board layout footprint"""

@@ -25,6 +25,7 @@ class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
         super(QIComboBox, self).__init__(parent)
 
+
 class Skimibowi(QtWidgets.QWizard):
     def __init__(self, parent=None):
         super(Skimibowi, self).__init__(parent)
@@ -41,6 +42,7 @@ class Skimibowi(QtWidgets.QWizard):
         self.currentIdChanged.connect(self.id_changed)
         self.resize(640, 480)
 
+
     def id_changed(self):
         """Update wizard pages list in the left side pane of the Wizard"""
         titles = ""
@@ -50,6 +52,7 @@ class Skimibowi(QtWidgets.QWizard):
                 pagename = '<b>' + pagename + '</b>'
             titles += '<p>' + pagename + '</p>'
         self.label.setText(titles)
+
 
 class MCU(QtWidgets.QWizardPage):
     """Wizard page for configuring the MCU being used"""
@@ -82,6 +85,7 @@ class MCU(QtWidgets.QWizardPage):
         self.registerField("icsp", self.icsp)
         self.setLayout(layout)
 
+
 class PowerManagementPage(QtWidgets.QWizardPage):
     """Wizard page for configuring board power management devices and networks"""
 
@@ -100,7 +104,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.layout.addWidget(self.regulator)
         self.caps = QtWidgets.QGroupBox("Regulator bypass capasitors")
         self.caps.layout = QtWidgets.QHBoxLayout()
-        self.caps.setLayout(self.caps.layout)        
+        self.caps.setLayout(self.caps.layout)
         self.layout.addWidget(self.caps)
         self.caps.layout.addWidget(QtWidgets.QLabel("Vin"))
         self.vin_bypass_cap = QtWidgets.QLineEdit()
@@ -136,6 +140,7 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("fuse", self.fuse, "currentText")
         self.registerField("switch", self.switch)
         self.registerField("autoselect", self.autoselect)
+
 
 class FootprintsPage(QtWidgets.QWizardPage):
     """Wizard page for configuring default footprints for classes of devices and board footprint"""
@@ -178,9 +183,11 @@ class FootprintsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.board_footprint)
         self.setLayout(layout)
 
+
     def initializePage(self):
         self.common_footprint_label.setText("Capasitor, resistor and diode form factor")
         self.board_footprint_label.setText("Board outline footprint")
+
 
 class PeripheralsPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
@@ -239,6 +246,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.peripherals["ina219"])
         self.setLayout(layout)
 
+
 class SerialSettingsPage(QtWidgets.QWizardPage):
     """Wizard page for configuring serial bus connected peripherals"""
     def __init__(self, parent=None):
@@ -282,8 +290,10 @@ class FinalPage(QtWidgets.QWizardPage):
         self.generate.clicked.connect(self.generate_handler)
         self.setLayout(layout)
 
+
     def generate_handler(self):
         generate_skidl(self)
+
 
 if __name__ == '__main__':
     import sys

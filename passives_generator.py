@@ -24,6 +24,7 @@ def R(value):
     return Part('Device', 'R', value=value, footprint='{args['resistor_footprint']}')
 """
 
+
 def generate_c(args):
     """Generate default capacitor footprint"""
     return f"""
@@ -31,6 +32,7 @@ def C(value):
     \"\"\"Creates default capacitor footprint\"\"\"
     return Part('Device', 'C', value=value, footprint='{args['capacitor_footprint']}')
 """
+
 
 def generate_l(args):
     """Generate default inductor footprint"""

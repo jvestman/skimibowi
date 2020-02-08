@@ -26,6 +26,7 @@ BM_LED = Part('Device', 'LED', footprint='{args['led_footprint']}')
 return R('1k') & BM_LED & Net.fetch('+VBus')
 """
 
+
 def mcp73871_leds(args):
     """MCP73871 Status leds"""
     return f"""
@@ -33,6 +34,7 @@ BATTERYMANAGER['STAT1'] & led_pull_up()
 BATTERYMANAGER['STAT2'] & led_pull_up()
 BATTERYMANAGER['PG'] & led_pull_up()
 """
+
 
 def mcp73871(args):
     """MCP73871-2AA battery management IC"""
@@ -68,6 +70,7 @@ BATTERYMANAGER['VPCC'] += BM_VPCC_R2[1]
 BATTERYMANAGER['THERM'] & R('10k') & Net.fetch('GND')
 
 """
+
 
 def generate_mcp73831(args):
     """Generate MCP73831 battery management IC"""
