@@ -36,8 +36,8 @@ footprints = {
 
 battery_footprints = {
     'No battery': '',
-    '2xAA - Keystone 2462':'Battery:BatteryHolder_Keystone_2462_2xAA',
-    '3xAA - TruPower BH-331P':'BatteryHolder_TruPower_BH-331P_3xAA',
+    '2xAA - Keystone 2462': 'Battery:BatteryHolder_Keystone_2462_2xAA',
+    '3xAA - TruPower BH-331P': 'BatteryHolder_TruPower_BH-331P_3xAA',
     '2xAAA - Keystone 2468': 'Battery:BatteryHolder_Keystone_2468_2xAAA',
     '3xAAA - Keystone 2479': 'Battery:BatteryHolder_Keystone_2479_3xAAA',
     '18650 - Keystone 1042': 'Battery:BatteryHolder_Keystone_1042_1x18650',
@@ -101,8 +101,9 @@ onewire_connector_footprints = {
 fuse_footprints = {
     'No fuse': None,
     'Schurter 0031.8201 5x20mm holder': 'Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open',
-    'SMD 1812':'Fuse_1812_4532Metric'
+    'SMD 1812': 'Fuse_1812_4532Metric'
 }
+
 
 def fill_variables(wizard):
     """Fill circuit configuration based on selections made in wizard UI"""
@@ -147,6 +148,7 @@ def fill_variables(wizard):
         'author': wizard.field('author')
         }
 
+
 def generate_skidl(wizard):
     """Generate SKiDL code based on chosen wizard options and save those settings to settings.yml
     where they are read when the wizard started next time"""
@@ -157,6 +159,7 @@ def generate_skidl(wizard):
 
     with open(wizard.field('filename'), 'w') as file:
         file.write(code)
+
 
 def load_settings(wizard, settings_filename="settings.yml"):
     """Load chosen wizard settings from the previous time SKiDL code was generated with wizard"""
