@@ -90,8 +90,8 @@ Net.fetch('{mcurail}') & C('0.1uF') & Net.fetch('GND')
 
 l = L('4.3nH')
 Net.fetch('{mcurail}') & l & esp8266ex['VDD3P3']
-l[1] & C('10uF') & Net.fetch('GND') 
-l[1] & C('0.1uF') & Net.fetch('GND') 
+l[1] & C('10uF') & Net.fetch('GND')
+l[1] & C('0.1uF') & Net.fetch('GND')
 l[2] & C('0.1uF') & Net.fetch('GND')"""
 
 

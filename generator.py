@@ -23,6 +23,7 @@ from arduino_generator import *
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
 
+
 def generate(args):
     """Generates microcontroller board descriptions in SKiDL """
 
@@ -229,7 +230,7 @@ def generate_autoselect(args):
     return '''
 AUTOSELECTOR = Part('Device', 'D', footprint='Diode_SMD:D_SMA')
 Net.fetch('+5V') & AUTOSELECTOR & Net.fetch('+VBus')
-'''.format(*args)   
+'''.format(*args)
 
 
 def generate_onewire_bus(args):
@@ -341,7 +342,7 @@ def generate_regulator(args):
     footprint = args['regulator_data']['footprint']
     output = args['regulator_data']['output']
     enable_pin = args['regulator_data'].get('enable_pin')
-    
+
     def regulator_enable():
         return ("""REGULATOR['EN'] += REGULATOR['VIN']
 """ if enable_pin else '')

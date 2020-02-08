@@ -38,6 +38,7 @@ FTDI230['RTS'] += Net.fetch('RTS')
 Net.fetch('GND') & C('100nF') & FTDI230['3V3OUT']
 '''.format(**args)
 
+
 def generate_ftdi232rl(args):
     """Generate FTDI uart circuitry"""
     return '''
@@ -72,6 +73,7 @@ CP2102['DTR'] += Net.fetch('DTR')
 CP2102['RTS'] += Net.fetch('RTS')
 '''.format(**args)
 
+
 def generate_cp2104(args):
     """Generate CP2104 usb uart circuitry"""
 
@@ -84,7 +86,7 @@ cp2104['VIO'] += Net.fetch('{mcurail}')
 cp2104['VDD'] += Net.fetch('{mcurail}')
 cp2104['REGIN'] += Net.fetch('{mcurail}')
 
-Net.fetch('GND') & C('10uF') & (cp2104['VIO'] | cp2104['VDD'] | cp2104['REGIN']) 
+Net.fetch('GND') & C('10uF') & (cp2104['VIO'] | cp2104['VDD'] | cp2104['REGIN'])
 
 cp2104['GND'] += Net.fetch('GND')
 cp2104['VBUS'] += Net.fetch('+VBus')
@@ -102,6 +104,7 @@ cp2104['VPP'] & C('4.7uF') & Net.fetch('GND')
 cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
 
 '''.format(**args)
+
 
 def generate_usb_connector(args):
     """Generate USB connector"""
