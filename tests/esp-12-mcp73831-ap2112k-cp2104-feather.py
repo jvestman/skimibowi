@@ -92,7 +92,7 @@ def generate_cp2104():
     cp2104['VDD'] += Net.fetch('+3V3')
     cp2104['REGIN'] += Net.fetch('+3V3')
 
-    Net.fetch('GND') & C('10uF') & (cp2104['VIO'] | cp2104['VDD'] | cp2104['REGIN']) 
+    Net.fetch('GND') & C('10uF') & (cp2104['VIO'] | cp2104['VDD'] | cp2104['REGIN'])
 
     cp2104['GND'] += Net.fetch('GND')
     cp2104['VBUS'] += Net.fetch('+VBus')
