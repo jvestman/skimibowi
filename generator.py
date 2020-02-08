@@ -38,7 +38,7 @@ def generate(args):
 
     if args.get('mcu') in ['ESP8266EX']:
         code += generate_subcircuit(generate_esp8266ex, args)
-    
+
     if args.get('mcu') == "WeMos D1 mini":
         code += generate_subcircuit(generate_wemos_d1_mini, args)
 
@@ -161,7 +161,6 @@ from skidl import Part, NC, Net, generate_netlist, subcircuit
 ''' + reqcode + code
 
 
-
 def generate_battery(args):
     """Generate Battery Holder"""
     return '''
@@ -170,17 +169,20 @@ BATTERY['+'] += Net.fetch('+VBatt')
 BATTERY['-'] += Net.fetch('GND')
 '''.format(**args)
 
+
 def generate_power_switch(args):
     """Generate power switch"""
     return '''
 SWITCH = Part('Switch', 'SW_DPDT_x2', footprint='Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight')
 '''.format(**args)
 
+
 def generate_fuse(args):
     """Generate Fuse"""
     return '''
 FUSE = Part('Device', 'Fuse', footprint='{fuse_footprint}')
 '''.format(**args)
+
 
 def generate_power_connector(args):
     """Generate power connector"""
@@ -194,6 +196,7 @@ BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footpri
 BATTERY[1] += Net.fetch('{battery_connector_pos}')
 BATTERY[2] += Net.fetch('GND')
 '''.format(**args)
+
 
 def connect_power_network(args):
     """Connect components that connect mcu/regulator throuh optional power switch, fuse and ina219 to battery"""
@@ -220,12 +223,14 @@ def connect_power_network(args):
     line = " & ".join(components)
     return '\n' + line + '\n'
 
+
 def generate_autoselect(args):
     """Generate +5V/USB auto selector"""
     return '''
 AUTOSELECTOR = Part('Device', 'D', footprint='Diode_SMD:D_SMA')
 Net.fetch('+5V') & AUTOSELECTOR & Net.fetch('+VBus')
 '''.format(*args)   
+
 
 def generate_onewire_bus(args):
     """Generate DQ net for onewire bus"""
@@ -245,6 +250,7 @@ U1['GPIO2'] += Net.fetch('DQ')
 Net.fetch('{mcurail}') & R('4k7') & Net.fetch('DQ')
 """
 
+
 def generate_18b20u(args):
     """Generate 18B20U part and connect it to onewire bus"""
     return '''
@@ -253,6 +259,7 @@ U3['VDD'] += Net.fetch('{mcurail}')
 U3['GND'] += Net.fetch('GND')
 U3['DQ'] += Net.fetch('DQ')
 '''.format(**args)
+
 
 def generate_18b20(args):
     """Generate 18b20 part and connect it to onewire bus"""
@@ -263,6 +270,7 @@ U2['GND'] += Net.fetch('GND')
 U2['DQ'] += Net.fetch('DQ')
 '''.format(**args)
 
+
 def generate_onewire_connector(args):
     """Generate connector for external onewire devices"""
     return '''
@@ -271,6 +279,7 @@ ONEWIRECONN[1] += Net.fetch('{mcurail}')
 ONEWIRECONN[2] += Net.fetch('DQ')
 ONEWIRECONN[3] += Net.fetch('GND')
 '''.format(**args)
+
 
 def generate_ina219_i2c_address(args):
     """Generate resistors for setting up INA219 I2C bus address"""
@@ -281,6 +290,7 @@ def generate_ina219_i2c_address(args):
 Net.fetch('GND') & R('10k') & INA219['A0']
 Net.fetch('GND') & R('10k') & INA219['A1']
 """
+
 
 def generate_ina219(args):
     """Generate INA219 that measures voltage and current at battery + terminal"""
@@ -308,6 +318,7 @@ INA219['IN-'] += INA219_R_SHUNT[2]
 {generate_subcircuit(generate_ina219_i2c_address, args)}
 """
 
+
 def generate_ftdi_header(args):
     """Generate header for connecting FTDI programmer"""
 
@@ -320,6 +331,7 @@ FTDI_HEADER[4] += Net.fetch('rx')
 FTDI_HEADER[5] += Net.fetch('tx')
 FTDI_HEADER[6] += Net.fetch('RTS')
 '''.format(**args)
+
 
 def generate_regulator(args):
     """Generate regulator that regulates battery voltage to corresponding voltage rail"""
@@ -356,6 +368,7 @@ def generate_adafruit_feather(args):
     return '''
 BOARD = Part('./library/feather.lib', 'Adafruit_Feather', footprint='Skimibowi:Adafruit_Feather')
 '''.format(args)
+
 
 def generate_adadafruit_feather_esp_connections(args):
     """Generate connections from ESP-module to Adafruit feather board"""
@@ -404,6 +417,7 @@ U1['GPIO4'] += Net.fetch('SDA')
 
 """
 
+
 def generate_hc12(args):
     """Generate footprint for HC-12 RF-module"""
 
@@ -415,6 +429,7 @@ HC12['RXD'] += Net.fetch('TXD2')
 HC12['TXD'] += Net.fetch('RXD2')
 '''.format(**args)
 
+
 def generate_esp_software_serial(args):
     """Generate ESP software serial networks"""
 
@@ -422,6 +437,7 @@ def generate_esp_software_serial(args):
 U1['GPIO13'] += Net.fetch('RXD2')
 U1['GPIO15'] += Net.fetch('TXD2')
 '''.format(**args)
+
 
 def generate_title(args):
     """Generate visible title label for PCB to netlist"""
@@ -431,6 +447,7 @@ def generate_title(args):
     return f"""
 Part('./library/Skimibowi.lib', 'Label', ref=" ", value='{title}', footprint='Skimibowi:label{len(title)}')
 """
+
 
 def generate_author(args):
     """Generate visible author label for PCB to netlist"""

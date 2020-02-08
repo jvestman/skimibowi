@@ -178,6 +178,7 @@ def load_settings(wizard, settings_filename="settings.yml"):
     except:
         pass
 
+
 def generate_from_settings(filename, settings_filename="settings.yml"):
     """Generate SKiDL program from settings file"""
 
