@@ -130,6 +130,8 @@ class PowerManagementPage(QtWidgets.QWizardPage):
         self.registerField("mcurail", self.mcurail, "currentText")
         self.registerField("powersource", self.powersource, "currentText")
         self.registerField("regulator", self.regulator, "currentText")
+        self.registerField("regulator_vin_bypass_cap", self.vin_bypass_cap)
+        self.registerField("regulator_vout_bypass_cap", self.vout_bypass_cap)
         self.registerField("battery_management", self.battery_management, "currentText")
         self.registerField("fuse", self.fuse, "currentText")
         self.registerField("switch", self.switch)

@@ -74,7 +74,7 @@ REGULATOR = Part('Regulator_Linear', 'AP2112K-3.3', value='AP2112K-3.3', footpri
 REGULATOR['VO'] += Net.fetch('+3V3')
 REGULATOR['GND'] += Net.fetch('GND')
 REGULATOR['EN'] += REGULATOR['VIN']
-    
+
 USBMICRO = Part('Connector', 'USB_B_Micro', footprint='USB_Micro-B_Amphenol_10103594-0001LF_Horizontal')
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')

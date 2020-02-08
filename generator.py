@@ -225,7 +225,7 @@ def generate_autoselect(args):
     return '''
 AUTOSELECTOR = Part('Device', 'D', footprint='Diode_SMD:D_SMA')
 Net.fetch('+5V') & AUTOSELECTOR & Net.fetch('+VBus')
-'''.format(*args)
+'''.format(*args)   
 
 def generate_onewire_bus(args):
     """Generate DQ net for onewire bus"""
@@ -323,19 +323,33 @@ FTDI_HEADER[6] += Net.fetch('RTS')
 
 def generate_regulator(args):
     """Generate regulator that regulates battery voltage to corresponding voltage rail"""
-    if 'enable_pin' in args['regulator_data']:
-        return '''
-REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
-REGULATOR['VO'] += Net.fetch('{output}')
-REGULATOR['GND'] += Net.fetch('GND')
-REGULATOR['EN'] += REGULATOR['VIN']
-    '''.format(**(args['regulator_data']))
 
-    return '''
+    module = args['regulator_data']['module']
+    part = args['regulator_data']['part']
+    footprint = args['regulator_data']['footprint']
+    output = args['regulator_data']['output']
+    enable_pin = args['regulator_data'].get('enable_pin')
+    
+    def regulator_enable():
+        return ("""REGULATOR['EN'] += REGULATOR['VIN']
+""" if enable_pin else '')
+
+    def regulator_vin_bypass_cap(args):
+        vin_bypass_cap = args.get('regulator_vin_bypass_cap')
+        return (f"""Net.fetch('GND') & C('{vin_bypass_cap}') REGULATOR['VI']
+""" if vin_bypass_cap else '')
+
+    def regulator_vout_bypass_cap(args):
+        vout_bypass_cap = args.get('regulator_vout_bypass_cap')
+        return (f"""Net.fetch('GND') & C('{vout_bypass_cap}') REGULATOR['VO']
+""" if vout_bypass_cap else '')
+
+    return f"""
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
 REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
-'''.format(**(args['regulator_data']))
+""" + regulator_enable() + regulator_vin_bypass_cap(args) + regulator_vout_bypass_cap(args) 
+
 
 def generate_adafruit_feather(args):
     """Generate Adafruit Feather board footprint"""
