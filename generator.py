@@ -344,17 +344,17 @@ def generate_regulator(args):
     enable_pin = args['regulator_data'].get('enable_pin')
 
     def regulator_enable():
-        return ("""REGULATOR['EN'] += REGULATOR['VIN']
+        return ("""REGULATOR['EN'] & R('10k') & REGULATOR['VIN']
 """ if enable_pin else '')
 
     def regulator_vin_bypass_cap(args):
         vin_bypass_cap = args.get('regulator_vin_bypass_cap')
-        return (f"""Net.fetch('GND') & C('{vin_bypass_cap}') REGULATOR['VI']
+        return (f"""Net.fetch('GND') & C('{vin_bypass_cap}') & REGULATOR['VI']
 """ if vin_bypass_cap else '')
 
     def regulator_vout_bypass_cap(args):
         vout_bypass_cap = args.get('regulator_vout_bypass_cap')
-        return (f"""Net.fetch('GND') & C('{vout_bypass_cap}') REGULATOR['VO']
+        return (f"""Net.fetch('GND') & C('{vout_bypass_cap}') & REGULATOR['VO']
 """ if vout_bypass_cap else '')
 
     return f"""

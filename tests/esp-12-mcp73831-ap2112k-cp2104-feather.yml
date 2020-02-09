@@ -39,3 +39,5 @@ usb_connector_footprint:
   footprint: USB_Micro-B_Amphenol_10103594-0001LF_Horizontal
   part: USB_B_Micro
 usb_uart: CP2104
+regulator_vin_bypass_cap: 10uF
+regulator_vout_bypass_cap: 10uF
