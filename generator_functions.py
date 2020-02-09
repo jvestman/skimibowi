@@ -20,6 +20,7 @@ from ordered_set import OrderedSet
 
 requirements = OrderedSet()
 
+
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""
     return f"""{generate_subcircuit_without_call(function, args)}

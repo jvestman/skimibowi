@@ -361,7 +361,7 @@ def generate_regulator(args):
 REGULATOR = Part('{module}', '{part}', value='{part}', footprint='{footprint}')
 REGULATOR['VO'] += Net.fetch('{output}')
 REGULATOR['GND'] += Net.fetch('GND')
-""" + regulator_enable() + regulator_vin_bypass_cap(args) + regulator_vout_bypass_cap(args) 
+""" + regulator_enable() + regulator_vin_bypass_cap(args) + regulator_vout_bypass_cap(args)
 
 
 def generate_adafruit_feather(args):

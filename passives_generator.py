@@ -16,6 +16,7 @@
 
 """Generates passive component footprints to SKiDL programs"""
 
+
 def generate_r(args):
     """Generate default resistor footprint"""
     return f"""

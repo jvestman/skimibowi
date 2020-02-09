@@ -21,6 +21,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from controller import footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl, generate_from_settings
 
+
 class QIComboBox(QtWidgets.QComboBox):
     def __init__(self, parent=None):
         super(QIComboBox, self).__init__(parent)
@@ -41,7 +42,6 @@ class Skimibowi(QtWidgets.QWizard):
         self.setSideWidget(self.label)
         self.currentIdChanged.connect(self.id_changed)
         self.resize(640, 480)
-
 
     def id_changed(self):
         """Update wizard pages list in the left side pane of the Wizard"""
@@ -183,7 +183,6 @@ class FootprintsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.board_footprint)
         self.setLayout(layout)
 
-
     def initializePage(self):
         self.common_footprint_label.setText("Capasitor, resistor and diode form factor")
         self.board_footprint_label.setText("Board outline footprint")
@@ -289,7 +288,6 @@ class FinalPage(QtWidgets.QWizardPage):
         layout.addWidget(self.generate)
         self.generate.clicked.connect(self.generate_handler)
         self.setLayout(layout)
-
 
     def generate_handler(self):
         generate_skidl(self)

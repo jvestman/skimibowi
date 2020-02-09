@@ -19,6 +19,7 @@
 from generator_functions import requirements
 from passives_generator import generate_r, generate_c
 
+
 def generate_ftdi230(args):
     """Generate FTDI uart circuitry"""
 

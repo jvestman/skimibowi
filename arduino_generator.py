@@ -31,7 +31,7 @@ U1['GND'] += Net.fetch('GND')
 ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
 U1['XTAL1'] += ATMEGA_XTAL[1]
 U1['XTAL2'] += ATMEGA_XTAL[3]
-ATMEGA_XTAL[2] += Net.fetch('GND') 
+ATMEGA_XTAL[2] += Net.fetch('GND')
 
 ATMEGA_XTAL_R = Part('Device', 'R', value='1M', footprint='{resistor_footprint}')
 U1['XTAL1'] += ATMEGA_XTAL_R[1]

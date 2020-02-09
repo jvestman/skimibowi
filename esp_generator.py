@@ -19,6 +19,7 @@
 from generator_functions import generate_subcircuit, generate_ifdef, generate_inline, requirements
 from passives_generator import generate_c, generate_r, generate_l
 
+
 def generate_esp(args):
     """Generate ESP-module code to circuit"""
     reset = generate_reset_line(args) if args.get('reset', False) else ''
