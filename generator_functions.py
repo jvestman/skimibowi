@@ -74,3 +74,18 @@ def subcircuit_label(name):
     \"\"\"Creates subcircuit label footprint\"\"\"
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """
+
+def generate_connect_parts(args):
+    """Generate function that generates connect_parts function"""
+    return '''
+def connect_parts(a, b):
+    flatten = itertools.chain.from_iterable
+
+    a_pins = list(flatten([pin.name.split("/") for pin in a.get_pins()]))
+    b_pins = list(flatten([pin.name.split("/") for pin in b.get_pins()]))
+    common_pins = [value for value in a_pins if value in b_pins]
+
+    for pin_name in common_pins:
+        a[pin_name] += Net.fetch(pin_name)
+        b[pin_name] += Net.fetch(pin_name)
+'''
