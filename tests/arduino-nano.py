@@ -52,7 +52,7 @@ USBMICRO = Part('Connector', 'USB_B_Mini', footprint='USB_Mini-B_Lumberg_2486_01
 USBMICRO['VBUS'] += Net.fetch('+VBus')
 USBMICRO['GND'] += Net.fetch('GND')
 
-REGULATOR['VI'] & BATTERYMANAGER[1,14] & FUSE & Net.fetch('+VBus')
+REGULATOR['VI'] & FUSE & Net.fetch('+VBus')
 
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('+5V')
