@@ -19,10 +19,13 @@
 from ordered_set import OrderedSet
 
 requirements = OrderedSet()
-
+import_statements = OrderedSet()
 
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""
+
+    import_statements.add('from skidl import subcircuit')
+
     return f"""{generate_subcircuit_without_call(function, args)}
 
 {function.__name__}()
