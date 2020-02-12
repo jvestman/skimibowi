@@ -80,8 +80,10 @@ def subcircuit_label(name):
 
 def generate_connect_parts(args):
     """Generate function that generates connect_parts function"""
+
     return '''
 def connect_parts(a, b):
+    """Connect pins with same name of two parts"""
     flatten = itertools.chain.from_iterable
 
     a_pins = list(flatten([pin.name.split("/") for pin in a.get_pins()]))
