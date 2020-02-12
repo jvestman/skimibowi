@@ -2,6 +2,7 @@
 """Creates Kicad netlist file for a microcontroller board"""
 
 from skidl import subcircuit
+import itertools
 from skidl import generate_netlist
 from skidl import Net
 from skidl import Part
@@ -18,6 +19,18 @@ def R(value):
 def C(value):
     """Creates default capacitor footprint"""
     return Part('Device', 'C', value=value, footprint='Capacitor_SMD:C_1206_3216Metric')
+
+def connect_parts(a, b):
+    """Connect pins with same name of two parts"""
+    flatten = itertools.chain.from_iterable
+
+    a_pins = list(flatten([pin.name.split("/") for pin in a.get_pins()]))
+    b_pins = list(flatten([pin.name.split("/") for pin in b.get_pins()]))
+    common_pins = [value for value in a_pins if value in b_pins]
+
+    for pin_name in common_pins:
+        a[pin_name] += Net.fetch(pin_name)
+        b[pin_name] += Net.fetch(pin_name)
 
 @subcircuit
 def generate_esp():
@@ -136,44 +149,20 @@ generate_esp_uart_reset()
 
 BOARD = Part('./library/feather.lib', 'Adafruit_Feather', footprint='Skimibowi:Adafruit_Feather')
 
+connect_parts(BOARD, U1)
+
 BOARD['RST'] += Net.fetch('RST')
 BOARD['3V3'] += Net.fetch('+3V3')
-BOARD['AREF'] += Net.fetch('')
-BOARD['GND'] += Net.fetch('GND')
 BOARD['A0'] += Net.fetch('ADC')
-BOARD['SCLK'] += Net.fetch('SCLK')
-BOARD['MOSI'] += Net.fetch('MOSI')
-BOARD['MISO'] += Net.fetch('MISO')
 BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
 BOARD['BAT'] += Net.fetch('+VBatt')
-BOARD['EN'] += NC # noqa: F821
+#BOARD['EN'] += NC # noqa: F821
 BOARD['USB'] += Net.fetch('+VBus')
-BOARD['GPIO14'] += Net.fetch('GPIO14')
-BOARD['GPIO12'] += Net.fetch('GPIO12')
-BOARD['GPIO13'] += Net.fetch('GPIO13')
-BOARD['GPIO15'] += Net.fetch('GPIO15')
-BOARD['GPIO0'] += Net.fetch('GPIO0')
-BOARD['GPIO16'] += Net.fetch('GPIO16')
-BOARD['GPIO2'] += Net.fetch('GPIO2')
+U1['ADC'] += Net.fetch('ADC')
+
 BOARD['SCL'] += Net.fetch('SCL')
 BOARD['SDA'] += Net.fetch('SDA')
-
-U1['ADC'] += Net.fetch('ADC')
-U1['CS0'] += Net.fetch('CS0')
-U1['MISO'] += Net.fetch('MISO')
-U1['GPIO9'] += Net.fetch('GPIO9')
-U1['GPIO10'] += Net.fetch('GPIO10')
-U1['MOSI'] += Net.fetch('MOSI')
-U1['SCLK'] += Net.fetch('SCLK')
-
-U1['GPIO14'] += Net.fetch('GPIO14')
-U1['GPIO12'] += Net.fetch('GPIO12')
-U1['GPIO13'] += Net.fetch('GPIO13')
-U1['GPIO15'] += Net.fetch('GPIO15')
-U1['GPIO0'] += Net.fetch('GPIO0')
-U1['GPIO16'] += Net.fetch('GPIO16')
-U1['GPIO2'] += Net.fetch('GPIO2')
 U1['GPIO5'] += Net.fetch('SCL')
 U1['GPIO4'] += Net.fetch('SDA')
 
