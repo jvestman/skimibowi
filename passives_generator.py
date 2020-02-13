@@ -42,3 +42,21 @@ def L(value):
     \"\"\"Creates default resistor footprint\"\"\"
     return Part('Device', 'L', value=value, footprint='{args['resistor_footprint']}')
 """
+
+def generate_device(args):
+    """Generate part lookup function"""
+    return f"""
+def Device(library, name):
+    \"\"\"Make part lookup and return the part with footprint set\"\"\"
+    footprint = show(library, name).F2
+    return Part(library, name, value=name, footprint=footprint)
+"""
+
+def generate_d(args):
+    """Generate part lookup function"""
+    return f"""
+def D(name):
+    \"\"\"Creates diode\"\"\"
+    footprint = show('diode', name).F2
+    return Device('Diode', name)
+"""
