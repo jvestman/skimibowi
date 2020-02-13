@@ -2,6 +2,7 @@
 """Creates Kicad netlist file for a microcontroller board"""
 
 from skidl import subcircuit
+from skidl import show
 import itertools
 from skidl import generate_netlist
 from skidl import Net
