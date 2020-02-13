@@ -19,10 +19,13 @@
 from ordered_set import OrderedSet
 
 requirements = OrderedSet()
-
+import_statements = OrderedSet()
 
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""
+
+    import_statements.add('from skidl import subcircuit')
+
     return f"""{generate_subcircuit_without_call(function, args)}
 
 {function.__name__}()
@@ -74,3 +77,20 @@ def subcircuit_label(name):
     \"\"\"Creates subcircuit label footprint\"\"\"
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """
+
+def generate_connect_parts(args):
+    """Generate function that generates connect_parts function"""
+
+    return '''
+def connect_parts(a, b):
+    """Connect pins with same name of two parts"""
+    flatten = itertools.chain.from_iterable
+
+    a_pins = list(flatten([pin.name.split("/") for pin in a.get_pins()]))
+    b_pins = list(flatten([pin.name.split("/") for pin in b.get_pins()]))
+    common_pins = [value for value in a_pins if value in b_pins]
+
+    for pin_name in common_pins:
+        a[pin_name] += Net.fetch(pin_name)
+        b[pin_name] += Net.fetch(pin_name)
+'''
