@@ -111,7 +111,7 @@ USBMICRO['GND'] += Net.fetch('GND')
 USBMICRO['D-'] += Net.fetch('USBD-')
 USBMICRO['D+'] += Net.fetch('USBD+')
 
-REGULATOR['VI'] & D("B120-E3") & BATTERY
+REGULATOR['VI'] & D("MBR0520LT") & BATTERY
 
 @subcircuit
 def generate_cp2104():
