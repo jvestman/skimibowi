@@ -31,6 +31,7 @@ footprints = {
     'ATmega328P-PU': 'Package_DIP:DIP-28_W7.62mm',
     'ATmega328P-AU': 'Package_QFP:TQFP-32_7x7mm_P0.8mm',
     'ATmega328P-MU': 'Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.1x3.1mm',
+    'Arduino Nano': 'Module:Arduino_Nano',
     'No MCU': ''
 }
 
