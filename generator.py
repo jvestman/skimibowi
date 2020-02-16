@@ -213,7 +213,7 @@ def connect_power_network(args):
         requirements.add(generate_device)
         requirements.add(generate_d)
         import_statements.add("from skidl import show")
-        components = ['REGULATOR[\'VI\']', 'D("B120-E3")']
+        components = ['REGULATOR[\'VI\']', 'D("MBR0520LT")']
     else:
         components = ['Net.fetch(\'+VBatt\')']
 
