@@ -19,7 +19,7 @@
 from generator_functions import requirements, generate_subcircuit, generate_connect_parts, import_statements
 from passives_generator import generate_r, generate_device, generate_d
 from esp_generator import generate_esp, generate_esp_01, generate_esp8266ex, generate_esp_uart_reset, generate_wemos_d1_mini
-from arduino_generator import *
+from arduino_generator import generate_atmega328p, generate_attiny85, generate_arduino_nano_v3_board_footprint, generate_arduino_uno_r3_board_footprint, generate_atmega_arduino_board_connections, generate_icsp
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
 
