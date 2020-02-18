@@ -21,6 +21,7 @@ from ordered_set import OrderedSet
 requirements = OrderedSet()
 import_statements = OrderedSet()
 
+
 def generate_subcircuit(function, args):
     """Generate SKiDL @subcircuit which body will be the return value of argument function"""
 
@@ -77,6 +78,7 @@ def subcircuit_label(name):
     \"\"\"Creates subcircuit label footprint\"\"\"
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{{len(name)}}")
 """
+
 
 def generate_connect_parts(args):
     """Generate function that generates connect_parts function"""

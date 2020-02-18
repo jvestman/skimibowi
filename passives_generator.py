@@ -43,6 +43,7 @@ def L(value):
     return Part('Device', 'L', value=value, footprint='{args['resistor_footprint']}')
 """
 
+
 def generate_device(args):
     """Generate part lookup function"""
     return f"""
@@ -51,6 +52,7 @@ def Device(library, name):
     footprint = show(library, name).F2
     return Part(library, name, value=name, footprint=footprint)
 """
+
 
 def generate_d(args):
     """Generate part lookup function"""
