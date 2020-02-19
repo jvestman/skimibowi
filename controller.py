@@ -48,14 +48,57 @@ battery_footprints = {
 
 regulators = {
     'No regulator': None,
-    'LD1117S33TR': {'module': 'Regulator_Linear', 'part': 'LD1117S33TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+3V3'},
-    'LD1117S50TR': {'module': 'Regulator_Linear', 'part': 'LD1117S50TR_SOT223', 'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2', 'output': '+5V'},
-    'LP2985-30': {'module': 'Regulator_Linear', 'part': 'LP2985-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V'},
-    'LP2985-33': {'module': 'Regulator_Linear', 'part': 'LP2985-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3'},
-    'LP2985-50': {'module': 'Regulator_Linear', 'part': 'LP2985-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V'},
-    'AP2112K-3.0': {'module': 'Regulator_Linear', 'part': 'AP2112K-3.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V', 'enable_pin': True},
-    'AP2112K-3.3': {'module': 'Regulator_Linear', 'part': 'AP2112K-3.3', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+3V3', 'enable_pin': True},
-    'AP2112K-5.0': {'module': 'Regulator_Linear', 'part': 'AP2112K-5.0', 'footprint': 'Package_TO_SOT_SMD:SOT-23-5', 'output': '+5V', 'enable_pin': True}
+    'LD1117S33TR': {
+        'module': 'Regulator_Linear',
+        'part': 'LD1117S33TR_SOT223',
+        'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2',
+        'output': '+3V3'
+    },
+    'LD1117S50TR': {
+        'module': 'Regulator_Linear',
+        'part': 'LD1117S50TR_SOT223',
+        'footprint': 'Package_TO_SOT_SMD:SOT-223-3_TabPin2',
+        'output': '+5V'
+    },
+    'LP2985-30': {
+        'module': 'Regulator_Linear',
+        'part': 'LP2985-3.0',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+3V'
+    },
+    'LP2985-33': {
+        'module': 'Regulator_Linear',
+        'part': 'LP2985-3.3',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+3V3'
+    },
+    'LP2985-50': {
+        'module': 'Regulator_Linear',
+        'part': 'LP2985-5.0',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+5V'
+    },
+    'AP2112K-3.0': {
+        'module': 'Regulator_Linear',
+        'part': 'AP2112K-3.0',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+3V',
+        'enable_pin': True
+    },
+    'AP2112K-3.3': {
+        'module': 'Regulator_Linear',
+        'part': 'AP2112K-3.3',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+3V3',
+        'enable_pin': True
+    },
+    'AP2112K-5.0': {
+        'module': 'Regulator_Linear',
+        'part': 'AP2112K-5.0',
+        'footprint': 'Package_TO_SOT_SMD:SOT-23-5',
+        'output': '+5V',
+        'enable_pin': True
+    }
 }
 
 resistor_footprints = {
