@@ -16,6 +16,7 @@ def R(value):
     """Creates default resistor footprint"""
     return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
 
+
 @subcircuit
 def generate_wemos_d1_mini():
     """Generate Wemos D1 footprint"""

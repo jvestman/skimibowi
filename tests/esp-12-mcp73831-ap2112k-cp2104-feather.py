@@ -48,6 +48,7 @@ def connect_parts(a, b):
         a[pin_name] += Net.fetch(pin_name)
         b[pin_name] += Net.fetch(pin_name)
 
+
 @subcircuit
 def generate_esp():
     """Generate ESP-module code to circuit"""
@@ -59,6 +60,7 @@ def generate_esp():
     U1['GND'] += Net.fetch('GND')
     U1['EN'] & R('10k') & Net.fetch('+3V3')
     U1['GPIO15'] & R('4k7') & Net.fetch('GND')
+
 
     @subcircuit
     def generate_power_led():
@@ -86,6 +88,7 @@ generate_esp()
 BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal')
 BATTERY[1] += Net.fetch('+VBatt')
 BATTERY[2] += Net.fetch('GND')
+
 
 @subcircuit
 def generate_mcp73831():
@@ -118,6 +121,7 @@ USBMICRO['D+'] += Net.fetch('USBD+')
 
 REGULATOR['VI'] & D("MBR0520LT") & BATTERY
 
+
 @subcircuit
 def generate_cp2104():
     """Generate CP2104 usb uart circuitry"""
@@ -145,6 +149,7 @@ def generate_cp2104():
     cp2104['RST'] & R('4k7') & Net.fetch('+3V3')
 
 generate_cp2104()
+
 
 
 @subcircuit

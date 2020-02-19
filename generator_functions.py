@@ -43,6 +43,7 @@ def generate_subcircuit_without_call(function, args):
     if args.get('generate_labels'):
         requirements.add(generate_subcircuit_label)
         return f"""
+
 @subcircuit
 def {function.__name__}():
     \"\"\"{function.__doc__}\"\"\"
