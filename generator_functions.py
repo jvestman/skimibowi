@@ -29,6 +29,7 @@ def generate_subcircuit(function, args):
 
     return f"""{generate_subcircuit_without_call(function, args)}
 
+
 {function.__name__}()
 
 """

@@ -31,6 +31,7 @@ def generate_esp():
         led = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
         U1['GPIO0'] & (R('1k') & led & Net.fetch('+VBatt'))
 
+
     generate_power_led()
 
     # Generate button for pulling ESP RST pin to low (e.g. reset)
@@ -44,6 +45,7 @@ def generate_esp():
     sw_flash = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
     sw_flash[1] += U1['GPIO0']
     sw_flash[2] += Net.fetch('GND')
+
 
 generate_esp()
 

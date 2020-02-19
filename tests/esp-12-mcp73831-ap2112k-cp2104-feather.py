@@ -69,6 +69,7 @@ def generate_esp():
         led = Part('Device', 'LED', footprint='LED_SMD:LED_1206_3216Metric')
         U1['GPIO0'] & (R('1k') & led & Net.fetch('+3V3'))
 
+
     generate_power_led()
 
     # Generate button for pulling ESP RST pin to low (e.g. reset)
@@ -81,6 +82,7 @@ def generate_esp():
 
     U1['TX'] += Net.fetch('tx')
     U1['RX'] += Net.fetch('rx')
+
 
 generate_esp()
 
@@ -102,6 +104,7 @@ def generate_mcp73831():
     BATTERYMANAGER['VSS'] += Net.fetch('GND')
     Net.fetch('GND') & R('2k') & BATTERYMANAGER['PROG']
     Net.fetch('+VLipo') & C('10uF') & Net.fetch('GND')
+
 
 generate_mcp73831()
 
@@ -148,6 +151,7 @@ def generate_cp2104():
     # Optional, improves stability
     cp2104['RST'] & R('4k7') & Net.fetch('+3V3')
 
+
 generate_cp2104()
 
 
@@ -164,6 +168,7 @@ def generate_esp_uart_reset():
     Net.fetch('RTS') & Q1['E']
     Q1['C'] & Net.fetch('RST')
     Q2['C'] & Net.fetch('GPIO0')
+
 
 generate_esp_uart_reset()
 
