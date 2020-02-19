@@ -13,23 +13,28 @@ def subcircuit_label(name):
     """Creates subcircuit label footprint"""
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{len(name)}")
 
+
 def R(value):
     """Creates default resistor footprint"""
     return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
 
+
 def C(value):
     """Creates default capacitor footprint"""
     return Part('Device', 'C', value=value, footprint='Capacitor_SMD:C_1206_3216Metric')
+
 
 def Device(library, name):
     """Make part lookup and return the part with footprint set"""
     footprint = show(library, name).F2
     return Part(library, name, value=name, footprint=footprint)
 
+
 def D(name):
     """Creates diode"""
     footprint = show('diode', name).F2
     return Device('Diode', name)
+
 
 def connect_parts(a, b):
     """Connect pins with same name of two parts"""

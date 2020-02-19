@@ -11,6 +11,7 @@ def subcircuit_label(name):
     """Creates subcircuit label footprint"""
     Part('./library/Skimibowi.lib', 'Label', ref=" ", value=name, footprint=f"Skimibowi:label{len(name)}")
 
+
 def R(value):
     """Creates default resistor footprint"""
     return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
