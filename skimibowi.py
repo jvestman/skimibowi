@@ -253,10 +253,21 @@ class SerialSettingsPage(QtWidgets.QWizardPage):
         self.setTitle("Serial devices")
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
-        self.layout.addWidget(QtWidgets.QLabel('HC-12'))
+        self.hc12_group = QtWidgets.QGroupBox("")
         self.hc12 = QtWidgets.QCheckBox("HC-12")
-        self.layout.addWidget(self.hc12)
         self.registerField('hc12', self.hc12)
+        self.hc12_group.layout = QtWidgets.QHBoxLayout()
+        self.hc12_group.layout.addWidget(self.hc12)
+        self.hc12_group.setLayout(self.hc12_group.layout)
+        self.hc12_label = QtWidgets.QLabel('Bus:')
+        self.hc12_group.layout.addWidget(self.hc12_label)
+        self.hc12_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.hc12_serial = QIComboBox(self)
+        self.hc12_serial.addItem("TXD/RXD")
+        self.hc12_serial.addItem("TXD2/RXD2")
+        self.registerField("hc12_serial", self.hc12_serial, "currentText")
+        self.hc12_group.layout.addWidget(self.hc12_serial)
+        self.layout.addWidget(self.hc12_group)
 
 
 class FinalPage(QtWidgets.QWizardPage):
