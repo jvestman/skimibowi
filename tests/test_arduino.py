@@ -18,6 +18,12 @@ class TestGenerator(unittest.TestCase):
 
         self.maxDiff = 10000
         self.assertEqual(generated, target)
+    
+    def setUp(self):
+        try:
+            os.mkdir("tests/tmp/")
+        except:
+            pass
 
     def test_arduino_nano(self):
         """Test Arduino Nano generation"""
