@@ -22,8 +22,8 @@ class TestGenerator(unittest.TestCase):
     def test_arduino_nano(self):
         """Test Arduino Nano generation"""
 
-        #generate_from_settings("tests/tmp/arduino-nano.py", "tests/arduino-nano.yml")
-        #self.assertEqualsFile("tests/tmp/arduino-nano.py", "tests/arduino-nano.py")
+        generate_from_settings("tests/tmp/arduino-nano.py", "tests/arduino-nano.yml")
+        self.assertEqualsFile("tests/tmp/arduino-nano.py", "tests/arduino-nano.py")
 
 if __name__ == '__main__':
     unittest.main()

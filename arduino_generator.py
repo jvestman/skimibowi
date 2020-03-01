@@ -81,8 +81,8 @@ BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
 
-BOARD['SDA'] += Net.fetch('SDA')
-BOARD['SCL'] += Net.fetch('SCL')
+BOARD['A4'] += Net.fetch('SDA')
+BOARD['A5'] += Net.fetch('SCL')
 
 BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
@@ -100,8 +100,8 @@ BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
 
-BOARD['SDA'] += Net.fetch('SDA')
-BOARD['SCL'] += Net.fetch('SCL')
+BOARD['A4'] += Net.fetch('SDA')
+BOARD['A5'] += Net.fetch('SCL')
 
 BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
