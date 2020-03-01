@@ -32,7 +32,6 @@ def Device(library, name):
 
 def D(name):
     """Creates diode"""
-    footprint = show('diode', name).F2
     return Device('Diode', name)
 
 

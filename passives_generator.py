@@ -59,6 +59,5 @@ def generate_d(args):
     return f"""
 def D(name):
     \"\"\"Creates diode\"\"\"
-    footprint = show('diode', name).F2
     return Device('Diode', name)
 """
