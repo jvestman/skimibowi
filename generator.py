@@ -19,7 +19,13 @@
 from generator_functions import requirements, generate_subcircuit, generate_connect_parts, import_statements
 from passives_generator import generate_r, generate_device, generate_d
 from esp_generator import generate_esp, generate_esp_01, generate_esp8266ex, generate_esp_uart_reset, generate_wemos_d1_mini
-from arduino_generator import generate_atmega328p, generate_attiny85, generate_arduino_nano_v3_board_footprint, generate_arduino_uno_r3_board_footprint, generate_atmega_arduino_board_connections, generate_icsp
+from arduino_generator import generate_atmega328p
+from arduino_generator import generate_attiny85
+from arduino_generator import generate_arduino_nano
+from arduino_generator import generate_arduino_nano_v3_board_footprint
+from arduino_generator import generate_arduino_uno_r3_board_footprint
+from arduino_generator import generate_atmega_arduino_board_connections
+from arduino_generator import generate_icsp
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
 
@@ -51,6 +57,9 @@ def generate(args):
 
     if args.get('mcu') in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
         code += generate_attiny85(args)
+    
+    if args.get('mcu') in ['Arduino Nano']:
+        code += generate_arduino_nano(args)
 
     if args.get('powersource', 'No battery') not in ['No battery', 'JST PH S2B', 'Barrel Jack 2.0/5.5mm']:
         code += generate_battery(args)
@@ -413,7 +422,7 @@ def generate_hc12(args):
     """Generate footprint for HC-12 RF-module"""
 
     return '''
-HC12 = Part('Skimibowi', 'HC-12', footprint="Skimibowi:HC-12")
+HC12 = Part('./library/Skimibowi.lib', 'HC-12', footprint="Skimibowi:HC-12")
 HC12['VCC'] += Net.fetch('{mcurail}')
 HC12['GND'] += Net.fetch('GND')
 HC12['RXD'] += Net.fetch('TXD2')

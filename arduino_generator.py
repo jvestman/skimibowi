@@ -57,6 +57,22 @@ U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
 '''.format(**args)
 
+def generate_arduino_nano(args):
+    """Genearate Arduino nano footprint"""
+    return '''
+nano = Part('MCU_module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
+
+nano['+5V'] += Net.fetch('+5V')
+nano['3V3'] += Net.fetch('+3V3')
+nano['GND'] += Net.fetch('GND')
+nano['Vin'] += Net.fetch('+VBatt')
+
+nano['RX'] += Net.fetch('rx')
+nano['TX'] += Net.fetch('tx')
+
+nano['D3'] += Net.fetch('TXD2')
+nano['D4'] += Net.fetch('RXD2')
+'''
 
 def generate_icsp():
     """Generate In Circuit Serial Programmer header"""
@@ -105,6 +121,10 @@ BOARD['A5'] += Net.fetch('SCL')
 
 BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
+
+BOARD['D3'] += Net.fetch('TXD2')
+BOARD['D4'] += Net.fetch('RXD2')
+
 '''
 
 
