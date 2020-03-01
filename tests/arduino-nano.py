@@ -9,7 +9,7 @@ def R(value):
 
 U1 = Part('MCU_Microchip_ATmega', 'ATmega328P-AU', footprint='Package_QFP:TQFP-32_7x7mm_P0.8mm')
 
-#Power networks
+# Power networks
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
@@ -28,7 +28,7 @@ U1['XTAL2'] += ATMEGA_XTAL_R[2]
 U1['PD1'] += Net.fetch('tx')
 U1['PD0'] += Net.fetch('rx')
 
-#I2C
+# I2C
 U1['PC4'] += Net.fetch('SDA')
 U1['PC5'] += Net.fetch('SCL')
 
