@@ -20,7 +20,7 @@ import argparse
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from controller import footprints
-from controller import battery_footprints 
+from controller import battery_footprints
 from controller import regulators
 from controller import resistor_footprints
 from controller import usb_connector_footprints

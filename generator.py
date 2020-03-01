@@ -97,7 +97,8 @@ def generate(args):
     if args.get('usb_connector', 'No USB connector') != 'No USB connector':
         code += generate_usb_connector(args)
 
-    if args.get('powersource', 'No battery') != 'No battery' or args.get('usb_connector', 'No USB connector') != 'No USB connector':
+    if args.get('powersource', 'No battery') != 'No battery' \
+       or args.get('usb_connector', 'No USB connector') != 'No USB connector':
         code += connect_power_network(args)
 
     if args.get('usb_uart', False) == 'FT231':
@@ -138,7 +139,8 @@ def generate(args):
     if args.get('board_footprint', False) == 'Adafruit Feather':
         code += generate_adafruit_feather(args)
 
-    if args.get('mcu') in ['ESP8266EX', 'ESP-12E', 'ESP-07'] and args.get('board_footprint') == 'Adafruit Feather':
+    if args.get('mcu') in ['ESP8266EX', 'ESP-12E', 'ESP-07'] \
+       and args.get('board_footprint') == 'Adafruit Feather':
         code += generate_adadafruit_feather_esp_connections(args)
 
     if args.get('title') and args.get('generate_labels'):
