@@ -121,10 +121,6 @@ BOARD['A5'] += Net.fetch('SCL')
 
 BOARD['RX'] += Net.fetch('rx')
 BOARD['TX'] += Net.fetch('tx')
-
-BOARD['D3'] += Net.fetch('TXD2')
-BOARD['D4'] += Net.fetch('RXD2')
-
 '''
 
 
