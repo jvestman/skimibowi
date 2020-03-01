@@ -26,7 +26,10 @@ def generate_esp(args):
     led = generate_ifdef('led', generate_power_led, args)
     reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
     flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
-    esp_serial = generate_inline(generate_esp_serial, args) if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)) else ''
+    if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)):
+        esp_serial = generate_inline(generate_esp_serial, args)
+    else:
+        esp_serial = ''
     requirements.add(generate_r)
     return '''
 global U1
@@ -44,7 +47,10 @@ def generate_esp_01(args):
     led = generate_ifdef('led', generate_power_led, args)
     reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
     flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
-    esp_serial = generate_inline(generate_esp_serial, args) if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)) else ''
+    if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)):
+        esp_serial = generate_inline(generate_esp_serial, args)
+    else:
+        esp_serial = ''
     requirements.add(generate_r)
     return '''
 global U1

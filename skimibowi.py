@@ -19,7 +19,16 @@
 import argparse
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-from controller import footprints, battery_footprints, regulators, resistor_footprints, usb_connector_footprints, fuse_footprints, onewire_connector_footprints, load_settings, generate_skidl, generate_from_settings
+from controller import footprints
+from controller import battery_footprints 
+from controller import regulators
+from controller import resistor_footprints
+from controller import usb_connector_footprints
+from controller import fuse_footprints
+from controller import onewire_connector_footprints
+from controller import load_settings
+from controller import generate_skidl
+from controller import generate_from_settings
 
 
 class QIComboBox(QtWidgets.QComboBox):
