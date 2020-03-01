@@ -43,6 +43,8 @@ class Skimibowi(QtWidgets.QWizard):
         self.addPage(PowerManagementPage(self))
         self.addPage(PeripheralsPage(self))
         self.addPage(SerialSettingsPage(self))
+        self.addPage(I2CSettingsPage(self))
+        self.addPage(SpiSettingsPage(self))
         self.addPage(FootprintsPage(self))
         self.addPage(FinalPage(self))
         self.setWindowTitle("Skidl Microcontroller Board  Wizard")
@@ -231,12 +233,6 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.onewire_connector = QtWidgets.QComboBox()
         self.onewire_connector.addItems(onewire_connector_footprints.keys())
         self.registerField("onewire_connector", self.onewire_connector, "currentText")
-        self.spi_label = QtWidgets.QLabel()
-        self.spi_label.setText("SPI")
-        self.i2c_label = QtWidgets.QLabel()
-        self.i2c_label.setText("I2C")
-        self.peripherals["ina219"] = QtWidgets.QCheckBox("INA219")
-        self.registerField("ina219", self.peripherals["ina219"])
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.usb_uart_label)
         layout.addWidget(self.usb_uart)
@@ -249,9 +245,6 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.peripherals["DS18B20U"])
         layout.addWidget(self.onewire_connector_label)
         layout.addWidget(self.onewire_connector)
-        layout.addWidget(self.spi_label)
-        layout.addWidget(self.i2c_label)
-        layout.addWidget(self.peripherals["ina219"])
         self.setLayout(layout)
 
 
@@ -278,6 +271,52 @@ class SerialSettingsPage(QtWidgets.QWizardPage):
         self.hc12_group.layout.addWidget(self.hc12_serial)
         self.layout.addWidget(self.hc12_group)
 
+class SpiSettingsPage(QtWidgets.QWizardPage):
+    """Wizard page for configuring SPI bus connected peripherals"""
+    def __init__(self, parent=None):
+        super(SpiSettingsPage, self).__init__(parent)
+        self.setTitle("SPI devices")
+        self.layout = QtWidgets.QVBoxLayout()
+        self.setLayout(self.layout)
+        self.addDeviceGroupBox("ssd1306", "SSD1306")
+        self.addDeviceGroupBox("si4463", "Si4463")
+
+    def addDeviceGroupBox(self, name, title):
+        gp = QtWidgets.QGroupBox("")
+        checkbox = QtWidgets.QCheckBox(title)
+        self.registerField(name, checkbox)
+        gp.layout = QtWidgets.QHBoxLayout()
+        gp.layout.addWidget(checkbox)
+        gp.setLayout(gp.layout)
+        label = QtWidgets.QLabel('CS:')
+        gp.layout.addWidget(label)
+        label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        combobox = QIComboBox(self)
+        combobox.addItem("GPIO1")
+        combobox.addItem("GPIO2")
+        self.registerField(f"{name}_cs", combobox, "currentText")
+        gp.layout.addWidget(combobox)
+        self.layout.addWidget(gp)
+
+
+class I2CSettingsPage(QtWidgets.QWizardPage):
+    """Wizard page for configuring SPI bus connected peripherals"""
+    def __init__(self, parent=None):
+        super(I2CSettingsPage, self).__init__(parent)
+        self.setTitle("I2C devices")
+        self.layout = QtWidgets.QVBoxLayout()
+        self.setLayout(self.layout)
+        self.addDeviceGroupBox("ina219", "INA219")
+        self.addDeviceGroupBox("si5351a", "Si5351A")
+
+    def addDeviceGroupBox(self, name, title):
+        gp = QtWidgets.QGroupBox("")
+        checkbox = QtWidgets.QCheckBox(title)
+        self.registerField(name, checkbox)
+        gp.layout = QtWidgets.QHBoxLayout()
+        gp.layout.addWidget(checkbox)
+        gp.setLayout(gp.layout)
+        self.layout.addWidget(gp)
 
 class FinalPage(QtWidgets.QWizardPage):
     """Wizard page for generating SKiDL source code"""
