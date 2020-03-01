@@ -2,6 +2,7 @@
 
 import unittest
 import sys
+import os
 sys.path.append('.')
 from controller import generate_from_settings
 
