@@ -271,6 +271,7 @@ class SerialSettingsPage(QtWidgets.QWizardPage):
         self.hc12_group.layout.addWidget(self.hc12_serial)
         self.layout.addWidget(self.hc12_group)
 
+
 class SpiSettingsPage(QtWidgets.QWizardPage):
     """Wizard page for configuring SPI bus connected peripherals"""
     def __init__(self, parent=None):
@@ -317,6 +318,7 @@ class I2CSettingsPage(QtWidgets.QWizardPage):
         gp.layout.addWidget(checkbox)
         gp.setLayout(gp.layout)
         self.layout.addWidget(gp)
+
 
 class FinalPage(QtWidgets.QWizardPage):
     """Wizard page for generating SKiDL source code"""

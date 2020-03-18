@@ -57,6 +57,7 @@ U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
 '''.format(**args)
 
+
 def generate_arduino_nano(args):
     """Genearate Arduino nano footprint"""
     return '''
@@ -73,6 +74,7 @@ nano['TX'] += Net.fetch('tx')
 nano['D3'] += Net.fetch('TXD2')
 nano['D4'] += Net.fetch('RXD2')
 '''
+
 
 def generate_icsp():
     """Generate In Circuit Serial Programmer header"""

@@ -141,7 +141,6 @@ w25q32['GND'] += Net.fetch('GND')
 
 def generate_wemos_d1_mini(args):
     """Generate Wemos D1 footprint"""
-    mcu = args['mcu']
     mcu_footprint = args['mcu_footprint']
     mcurail = args['mcurail']
 
