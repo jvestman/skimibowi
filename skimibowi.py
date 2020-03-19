@@ -17,8 +17,8 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PySide2 import QtCore
+from PySide2 import QtWidgets
 from controller import footprints
 from controller import battery_footprints
 from controller import regulators
