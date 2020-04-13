@@ -33,6 +33,7 @@ def generate_esp(args):
     led = generate_ifdef('led', generate_power_led, args)
     reset_button = generate_inline(generate_reset_button, args) if args.get('Reset button', False) else ''
     flash_button = generate_inline(generate_flash_button, args) if args.get('Flash button', False) else ''
+    spi_bus = generate_inline(generate_esp_spi, args) if spi_bus_needed(args) else ''
     if ((args.get('usb_uart', 'No USB') != 'No USB') or args.get('FTDI header', False)):
         esp_serial = generate_inline(generate_esp_serial, args)
     else:
@@ -46,7 +47,19 @@ U1['VCC'] += Net.fetch('{mcurail}')
 U1['GND'] += Net.fetch('GND')
 U1['EN'] & R('10k') & Net.fetch('{mcurail}')
 U1['GPIO15'] & R('4k7') & Net.fetch('GND')
-'''.format(**args) + ''.join(filter(None, [reset, led, reset_button, flash_button, esp_serial])) + '\n'
+'''.format(**args) + ''.join(filter(None, [reset, led, reset_button, flash_button, esp_serial, spi_bus])) + '\n'
+
+def spi_bus_needed(args):
+    return args.get('sh1106', False)
+
+def generate_esp_spi(args):
+    """Generate SPI bus for ESP-12 module"""
+    return '''
+U1['MOSI'] += Net.fetch('MOSI')
+U1['MISO'] += Net.fetch('MISO')
+U1['CS0'] += Net.fetch('SS')
+U1['SCLK'] += Net.fetch('SCLK')
+'''
 
 
 def generate_esp_01(args):

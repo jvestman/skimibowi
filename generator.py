@@ -142,6 +142,9 @@ def generate(args):
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_esp_software_serial(args)
 
+    if args.get('sh1106', False):
+        code += generate_sh1106(args)
+
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint()
         if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
@@ -458,6 +461,21 @@ HC12['VCC'] += Net.fetch('{mcurail}')
 HC12['GND'] += Net.fetch('GND')
 HC12['RXD'] += Net.fetch('TXD2')
 HC12['TXD'] += Net.fetch('RXD2')
+'''.format(**args)
+
+
+def generate_sh1106(args):
+    """Generate footprint for SH1106 display module"""
+
+    return '''
+SH1106 = Part('./library/Skimibowi.lib', 'SH1106', footprint="Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical")
+SH1106['GND'] += Net.fetch('GND')
+SH1106['VCC'] += Net.fetch('+3V3')
+SH1106['CLK'] += Net.fetch('SCLK')
+SH1106['MOSI'] += Net.fetch('MOSI')
+SH1106['RES'] += Net.fetch('RES')
+SH1106['DC'] += Net.fetch('MISO')
+SH1106['CS'] += Net.fetch('SS')
 '''.format(**args)
 
 

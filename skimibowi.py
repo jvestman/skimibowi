@@ -286,7 +286,7 @@ class SpiSettingsPage(QtWidgets.QWizardPage):
         self.setTitle("SPI devices")
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
-        self.addDeviceGroupBox("ssd1306", "SSD1306")
+        self.addDeviceGroupBox("sh1106", "sh1106")
         self.addDeviceGroupBox("si4463", "Si4463")
 
     def addDeviceGroupBox(self, name, title):
