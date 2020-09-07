@@ -195,6 +195,7 @@ def fill_variables(wizard):
         'autoselect': wizard.field('autoselect'),
         'hc12': wizard.field('hc12'),
         'sh1106': wizard.field('sh1106'),
+        'si5351': wizard.field('si5351'),
         'generate_labels': wizard.field('generate_labels'),
         'title': wizard.field('title'),
         'author': wizard.field('author')
@@ -224,7 +225,7 @@ def load_settings(wizard, settings_filename="settings.yml"):
                               'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
                               'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
                               'regulator', 'onewire_connector', 'autoselect', 'hc12', 'generate_labels',
-                              'title', 'author', 'regulator_vin_bypass_cap', 'regulator_vout_bypass_cap', 'sh1106']:
+                              'title', 'author', 'regulator_vin_bypass_cap', 'regulator_vout_bypass_cap', 'sh1106', 'si5351']:
                     if field in settings:
                         wizard.setField(field, settings[field])
     except:

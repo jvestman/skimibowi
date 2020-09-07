@@ -315,7 +315,7 @@ class I2CSettingsPage(QtWidgets.QWizardPage):
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
         self.addDeviceGroupBox("ina219", "INA219")
-        self.addDeviceGroupBox("si5351a", "Si5351A")
+        self.addDeviceGroupBox("si5351", "Si5351A")
 
     def addDeviceGroupBox(self, name, title):
         gp = QtWidgets.QGroupBox("")

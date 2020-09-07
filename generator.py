@@ -145,6 +145,9 @@ def generate(args):
     if args.get('sh1106', False):
         code += generate_sh1106(args)
 
+    if args.get('si5351', False):
+        code += generate_si5351(args)
+
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint()
         if args['mcu'] in ['ATmega328P', 'ATmega328P-AU', 'ATmega328P-MU']:
@@ -477,6 +480,22 @@ SH1106['RES'] += Net.fetch('RES')
 SH1106['DC'] += Net.fetch('MISO')
 SH1106['CS'] += Net.fetch('SS')
 '''.format(**args)
+
+
+def generate_si5351(args):
+    """Generate footprint for SI5351"""
+
+    return '''
+SI5351 = Part('Oscillator', 'Si5351A-B-GT', footprint="Package_SO:MSOP-10_3x3mm_P0.5mm")
+crystal = Part('Device','Crystal_GND24', value="ABM8G-25.000MHZ-4Y-T3", footprint='Crystal_SMD_Abracon_ABM8G-4Pin_3.2x2.5mm')
+SI5351['VDD'] += Net.fetch('+3V3')
+SI5351['VDDO'] += Net.fetch('+3V3')
+SI5351['GND'] += Net.fetch('GND')
+SI5351['XA'] += crystal[1]
+SI5351['XB'] += crystal[2]
+SI5351['SDA'] += U1['GPIO4']
+SI5351['SCL'] += U1['GPIO5']
+'''
 
 
 def generate_esp_software_serial(args):
