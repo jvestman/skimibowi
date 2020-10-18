@@ -23,6 +23,9 @@
 
 """Generates ATMega / Arduino compatible boards"""
 
+from generator_functions import requirements
+from passives_generator import generate_r, generate_c
+
 
 def generate_atmega328p(args):
     """Generate ATmega328P subsystem to circuit"""
@@ -66,7 +69,7 @@ U1['GND'] += Net.fetch('GND')
 
 
 def generate_arduino_nano(args):
-    """Genearate Arduino nano footprint"""
+    """Generate Arduino nano footprint"""
     return '''
 nano = Part('MCU_module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
 
@@ -94,6 +97,24 @@ ICSP_CONN[4] += U1['PB3']
 ICSP_CONN[5] += U1['~RESET~/PC6']
 ICSP_CONN[6] += Net.fetch('GND')
 '''
+
+
+def generate_arduino_reset_button():
+    """Generate reset button"""
+    return '''
+SW_RESET = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW_RESET[1] += U1['~RESET~/PC6']
+SW_RESET[2] += Net.fetch('GND')
+'''
+
+def generate_arduino_ftdi_reset(args):
+    """Generate connection to FTDI header reset"""
+    requirements.add(generate_r)
+    requirements.add(generate_c)
+    return '''
+U1['~RESET~/PC6'] & R('1k') & Net.fetch('{mcurail}')
+U1['~RESET~/PC6'] & C('100nF') & Net.fetch('RTS')
+'''.format(**args)
 
 
 def generate_arduino_uno_r3_board_footprint():

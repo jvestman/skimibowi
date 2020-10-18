@@ -33,6 +33,8 @@ from arduino_generator import generate_arduino_nano_v3_board_footprint
 from arduino_generator import generate_arduino_uno_r3_board_footprint
 from arduino_generator import generate_atmega_arduino_board_connections
 from arduino_generator import generate_icsp
+from arduino_generator import generate_arduino_reset_button
+from arduino_generator import generate_arduino_ftdi_reset
 from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
 from battery_manager_generator import generate_mcp73831, mcp73871
 
@@ -61,6 +63,10 @@ def generate(args):
         code += generate_atmega328p(args)
         if args['icsp']:
             code += generate_icsp()
+        if args['Reset button']:
+            code += generate_arduino_reset_button()
+        if args['FTDI header']:
+            code += generate_arduino_ftdi_reset(args)
 
     if args.get('mcu') in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
         code += generate_attiny85(args)

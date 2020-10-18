@@ -79,6 +79,10 @@ ICSP_CONN[4] += U1['PB3']
 ICSP_CONN[5] += U1['~RESET~/PC6']
 ICSP_CONN[6] += Net.fetch('GND')
 
+SW_RESET = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
+SW_RESET[1] += U1['~RESET~/PC6']
+SW_RESET[2] += Net.fetch('GND')
+
 FUSE = Part('Device', 'Fuse', footprint='Fuse_1812_4532Metric')
 
 REGULATOR = Part('Regulator_Linear', 'LD1117S50TR_SOT223', value='LD1117S50TR_SOT223', footprint='Package_TO_SOT_SMD:SOT-223-3_TabPin2')
