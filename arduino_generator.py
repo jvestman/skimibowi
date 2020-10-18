@@ -36,13 +36,13 @@ U1['GND'] += Net.fetch('GND')
 
 # Crystal
 ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
-U1['XTAL1'] += ATMEGA_XTAL[1]
-U1['XTAL2'] += ATMEGA_XTAL[3]
+U1['XTAL1/PB6'] += ATMEGA_XTAL[1]
+U1['XTAL2/PB7'] += ATMEGA_XTAL[3]
 ATMEGA_XTAL[2] += Net.fetch('GND')
 
 ATMEGA_XTAL_R = Part('Device', 'R', value='1M', footprint='{resistor_footprint}')
-U1['XTAL1'] += ATMEGA_XTAL_R[1]
-U1['XTAL2'] += ATMEGA_XTAL_R[2]
+U1['XTAL1/PB6'] += ATMEGA_XTAL_R[1]
+U1['XTAL2/PB7'] += ATMEGA_XTAL_R[2]
 
 # Serial communications
 U1['PD1'] += Net.fetch('tx')
@@ -91,7 +91,7 @@ ICSP_CONN[1] += U1['PB4']
 ICSP_CONN[2] += Net.fetch('+5V')
 ICSP_CONN[3] += U1['PB5']
 ICSP_CONN[4] += U1['PB3']
-ICSP_CONN[5] += U1['RESET']
+ICSP_CONN[5] += U1['RESET/PC6']
 ICSP_CONN[6] += Net.fetch('GND')
 '''
 
@@ -100,7 +100,7 @@ def generate_arduino_uno_r3_board_footprint():
     """Generate Arduino Uno R3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Uno_R3', footprint='Module:Arduino_UNO_R3_WithMountingHoles')
-BOARD['RESET'] += U1['RESET']
+BOARD['RESET'] += U1['RESET/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
@@ -119,7 +119,7 @@ def generate_arduino_nano_v3_board_footprint():
     """Generate Arduino Nano V3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['RESET'] += U1['RESET']
+BOARD['RESET'] += U1['RESET/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
