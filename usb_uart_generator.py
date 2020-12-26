@@ -24,7 +24,8 @@
 """Generates USB UART nets"""
 
 from generator_functions import requirements
-from passives_generator import generate_r, generate_c
+from passives_generator import generate_r, generate_c, generate_d, generate_device
+from generator_functions import import_statements
 
 
 def generate_ftdi230(args):
@@ -111,6 +112,21 @@ cp2104['VPP'] & C('4.7uF') & Net.fetch('GND')
 # Optional, improves stability
 cp2104['RST'] & R('4k7') & Net.fetch('{mcurail}')
 
+'''.format(**args)
+
+
+def generate_vusb_avr(args):
+    """Generate Virtual USB circuit for AVR"""
+    requirements.add(generate_r)
+    requirements.add(generate_device)
+    requirements.add(generate_d)
+    import_statements.add("from skidl import show")
+    return '''
+Net.fetch('USBD-') & R('68') & U1['PD7']
+Net.fetch('USBD+') & R('68') & U1['PD2']
+Net.fetch('USBD-') & D('BZT52Bxx', value="BZT52B3V6") & Net.fetch('GND')
+Net.fetch('USBD+') & D('BZT52Bxx', value="BZT52B3V6") & Net.fetch('GND')
+Net.fetch('USBD-') & R('1k5') & Net.fetch('{mcurail}')
 '''.format(**args)
 
 

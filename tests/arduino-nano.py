@@ -31,15 +31,17 @@ from skidl import Net
 from skidl import Part
 
 
-def Device(library, name):
+def Device(library, name, value=""):
     """Make part lookup and return the part with footprint set"""
     footprint = show(library, name).F2
-    return Part(library, name, value=name, footprint=footprint)
+    if not value:
+        value=name
+    return Part(library, name, value=value, footprint=footprint)
 
 
-def D(name):
+def D(name,value=""):
     """Creates diode"""
-    return Device('Diode', name)
+    return Device('Diode', name, value=value)
 
 
 def C(value):
@@ -98,7 +100,7 @@ USBMICRO['GND'] += Net.fetch('GND')
 USBMICRO['D-'] += Net.fetch('USBD-')
 USBMICRO['D+'] += Net.fetch('USBD+')
 
-REGULATOR['VI'] & D("MBR0520LT") & FUSE & Net.fetch('+VBus')
+REGULATOR['VI'] & D("MBR0520LT") & FUSE
 
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('+5V')

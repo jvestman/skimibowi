@@ -48,15 +48,17 @@ def C(value):
     return Part('Device', 'C', value=value, footprint='Capacitor_SMD:C_1206_3216Metric')
 
 
-def Device(library, name):
+def Device(library, name, value=""):
     """Make part lookup and return the part with footprint set"""
     footprint = show(library, name).F2
-    return Part(library, name, value=name, footprint=footprint)
+    if not value:
+        value=name
+    return Part(library, name, value=value, footprint=footprint)
 
 
-def D(name):
+def D(name,value=""):
     """Creates diode"""
-    return Device('Diode', name)
+    return Device('Diode', name, value=value)
 
 
 def connect_parts(a, b):

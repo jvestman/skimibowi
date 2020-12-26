@@ -23,6 +23,7 @@
 
 """Generates passive component footprints to SKiDL programs"""
 
+from generator_functions import import_statements
 
 def generate_r(args):
     """Generate default resistor footprint"""
@@ -53,18 +54,21 @@ def L(value):
 
 def generate_device(args):
     """Generate part lookup function"""
+
     return f"""
-def Device(library, name):
+def Device(library, name, value=""):
     \"\"\"Make part lookup and return the part with footprint set\"\"\"
     footprint = show(library, name).F2
-    return Part(library, name, value=name, footprint=footprint)
+    if not value:
+        value=name
+    return Part(library, name, value=value, footprint=footprint)
 """
 
 
 def generate_d(args):
     """Generate part lookup function"""
     return f"""
-def D(name):
+def D(name,value=""):
     \"\"\"Creates diode\"\"\"
-    return Device('Diode', name)
+    return Device('Diode', name, value=value)
 """

@@ -121,17 +121,17 @@ def generate_arduino_uno_r3_board_footprint():
     """Generate Arduino Uno R3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Uno_R3', footprint='Module:Arduino_UNO_R3_WithMountingHoles')
-BOARD['RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~RESET~/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
 BOARD['Vin'] += Net.fetch('Vin')
 
-BOARD['A4'] += Net.fetch('SDA')
-BOARD['A5'] += Net.fetch('SCL')
+BOARD['SDA/A4'] += Net.fetch('SDA')
+BOARD['SCL/A5'] += Net.fetch('SCL')
 
-BOARD['RX'] += Net.fetch('rx')
-BOARD['TX'] += Net.fetch('tx')
+BOARD['D0/RX'] += Net.fetch('rx')
+BOARD['D1/TX'] += Net.fetch('tx')
 
 '''
 

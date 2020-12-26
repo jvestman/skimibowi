@@ -219,6 +219,7 @@ class PeripheralsPage(QtWidgets.QWizardPage):
         self.usb_uart.addItem("FT232RL")
         self.usb_uart.addItem("CP2102N-A01-GQFN24")
         self.usb_uart.addItem("CP2104")
+        self.usb_uart.addItem("VUSB-AVR")
         self.registerField("usb_uart", self.usb_uart, "currentText")
         self.usb_connector_label = QtWidgets.QLabel()
         self.usb_connector_label.setText("USB Connector")

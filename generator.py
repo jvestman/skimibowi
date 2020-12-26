@@ -35,7 +35,7 @@ from arduino_generator import generate_atmega_arduino_board_connections
 from arduino_generator import generate_icsp
 from arduino_generator import generate_arduino_reset_button
 from arduino_generator import generate_arduino_ftdi_reset
-from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector
+from usb_uart_generator import generate_ftdi230, generate_ftdi232rl, generate_cp2104, generate_cp2102, generate_usb_connector, generate_vusb_avr
 from battery_manager_generator import generate_mcp73831, mcp73871
 
 
@@ -142,6 +142,9 @@ def generate(args):
         code += generate_subcircuit(generate_cp2104, args)
         if args['mcu'] in ['ESP-12E', 'ESP-07']:
             code += generate_subcircuit(generate_esp_uart_reset, args)
+
+    if args.get('usb_uart', False) == 'VUSB-AVR':
+        code += generate_vusb_avr(args)
 
     if args.get('hc12', False):
         code += generate_hc12(args)
@@ -265,6 +268,8 @@ def connect_power_network(args):
         requirements.add(generate_d)
         import_statements.add("from skidl import show")
         components = ['REGULATOR[\'VI\']', 'D("MBR0520LT")']
+    elif args.get('usb_connector', False) != 'No USB connector':
+        components = ['Net.fetch(\'+VBus\')']
     else:
         components = ['Net.fetch(\'+VBatt\')']
 
@@ -280,8 +285,8 @@ def connect_power_network(args):
 
     if args['powersource'] != 'No battery':
         components.append('BATTERY')
-    elif args.get('regulator_data', False):
-        components.append('Net.fetch(\'+VBus\')')
+    elif args.get('regulator', False) == 'No regulator':
+        components.append('Net.fetch(\'{mcurail}\')'.format(**args))
 
     line = " & ".join(components)
     return '\n' + line + '\n'
