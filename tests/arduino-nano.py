@@ -31,6 +31,11 @@ from skidl import Net
 from skidl import Part
 
 
+def R(value):
+    """Creates default resistor footprint"""
+    return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
+
+
 def Device(library, name, value=""):
     """Make part lookup and return the part with footprint set"""
     footprint = show(library, name).F2
@@ -54,6 +59,7 @@ U1 = Part('MCU_Microchip_ATmega', 'ATmega328P-AU', footprint='Package_QFP:TQFP-3
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
+U1['~RESET~/PC6'] & R('10k') & Net.fetch('+5V')
 
 # Crystal
 ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
@@ -110,12 +116,12 @@ FTDI230['RXD'] += Net.fetch('tx')
 FTDI230['3V3OUT'] += Net.fetch('+3V3')
 FTDI230['USBDM'] += Net.fetch('USBD-')
 FTDI230['USBDP'] += Net.fetch('USBD+')
-FTDI230['DTR'] += Net.fetch('DTR')
-FTDI230['RTS'] += Net.fetch('RTS')
+FTDI230['~DTR'] += Net.fetch('DTR')
+FTDI230['~RTS'] += Net.fetch('RTS')
 Net.fetch('GND') & C('100nF') & FTDI230['3V3OUT']
 
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~RESET~/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
@@ -124,8 +130,8 @@ BOARD['Vin'] += Net.fetch('Vin')
 BOARD['A4'] += Net.fetch('SDA')
 BOARD['A5'] += Net.fetch('SCL')
 
-BOARD['RX'] += Net.fetch('rx')
-BOARD['TX'] += Net.fetch('tx')
+BOARD['D0/RX'] += Net.fetch('rx')
+BOARD['D1/TX'] += Net.fetch('tx')
 
 BOARD['D2'] += U1['PD2']
 BOARD['D3'] += U1['PD3']
@@ -138,8 +144,6 @@ BOARD['A0'] += U1['PC0']
 BOARD['A1'] += U1['PC1']
 BOARD['A2'] += U1['PC2']
 BOARD['A3'] += U1['PC3']
-BOARD['A4'] += U1['PC4']
-BOARD['A5'] += U1['PC5']
 
 BOARD['D8'] += U1['PB0']
 BOARD['D9'] += U1['PB1']

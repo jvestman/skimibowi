@@ -37,3 +37,5 @@ usb_connector_footprint:
   footprint: USB_Mini-B_Lumberg_2486_01_Horizontal
   part: USB_B_Mini
 usb_uart: FT231
+crystal_footprint: CST
+crystal_frequency: 16Mhz

@@ -29,6 +29,8 @@ from passives_generator import generate_r, generate_c
 
 def generate_atmega328p(args):
     """Generate ATmega328P subsystem to circuit"""
+    args['crystal'] = generate_atmega_crystal(args)
+    requirements.add(generate_r)
     return '''
 U1 = Part('MCU_Microchip_ATmega', '{mcu}', footprint='{mcu_footprint}')
 
@@ -36,7 +38,28 @@ U1 = Part('MCU_Microchip_ATmega', '{mcu}', footprint='{mcu_footprint}')
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
+U1['~RESET~/PC6'] & R('10k') & Net.fetch('{mcurail}')
+{crystal}
+# Serial communications
+U1['PD1'] += Net.fetch('tx')
+U1['PD0'] += Net.fetch('rx')
 
+# I2C
+U1['PC4'] += Net.fetch('SDA')
+U1['PC5'] += Net.fetch('SCL')
+'''.format(**args)
+
+def generate_atmega_crystal(args):
+    """Generate crystal for ATmega328P"""
+    if args['crystal_footprint'] == 'HC-49':
+        requirements.add(generate_c)
+        return '''
+# Crystal
+ATMEGA_XTAL = Part('Device','Crystal', value="{crystal_frequency}",footprint='Crystal:Crystal_HC49-4H_Vertical')
+U1['XTAL1/PB6'] & C('18pF') & ATMEGA_XTAL & C('18pF') & U1['XTAL2/PB7']
+'''.format(**args)
+    if args['crystal_footprint'] == 'CST':
+        return '''
 # Crystal
 ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
 U1['XTAL1/PB6'] += ATMEGA_XTAL[1]
@@ -46,14 +69,6 @@ ATMEGA_XTAL[2] += Net.fetch('GND')
 ATMEGA_XTAL_R = Part('Device', 'R', value='1M', footprint='{resistor_footprint}')
 U1['XTAL1/PB6'] += ATMEGA_XTAL_R[1]
 U1['XTAL2/PB7'] += ATMEGA_XTAL_R[2]
-
-# Serial communications
-U1['PD1'] += Net.fetch('tx')
-U1['PD0'] += Net.fetch('rx')
-
-# I2C
-U1['PC4'] += Net.fetch('SDA')
-U1['PC5'] += Net.fetch('SCL')
 '''.format(**args)
 
 
@@ -109,10 +124,8 @@ SW_RESET[2] += Net.fetch('GND')
 
 def generate_arduino_ftdi_reset(args):
     """Generate connection to FTDI header reset"""
-    requirements.add(generate_r)
     requirements.add(generate_c)
     return '''
-U1['~RESET~/PC6'] & R('1k') & Net.fetch('{mcurail}')
 U1['~RESET~/PC6'] & C('100nF') & Net.fetch('RTS')
 '''.format(**args)
 
@@ -140,7 +153,7 @@ def generate_arduino_nano_v3_board_footprint():
     """Generate Arduino Nano V3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~RESET~/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
@@ -149,8 +162,8 @@ BOARD['Vin'] += Net.fetch('Vin')
 BOARD['A4'] += Net.fetch('SDA')
 BOARD['A5'] += Net.fetch('SCL')
 
-BOARD['RX'] += Net.fetch('rx')
-BOARD['TX'] += Net.fetch('tx')
+BOARD['D0/RX'] += Net.fetch('rx')
+BOARD['D1/TX'] += Net.fetch('tx')
 '''
 
 
@@ -168,8 +181,6 @@ BOARD['A0'] += U1['PC0']
 BOARD['A1'] += U1['PC1']
 BOARD['A2'] += U1['PC2']
 BOARD['A3'] += U1['PC3']
-BOARD['A4'] += U1['PC4']
-BOARD['A5'] += U1['PC5']
 
 BOARD['D8'] += U1['PB0']
 BOARD['D9'] += U1['PB1']

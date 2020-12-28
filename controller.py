@@ -183,6 +183,8 @@ def fill_variables(wizard):
         'onewire_connector': wizard.field('onewire_connector'),
         'common_footprint': wizard.field('common_footprint'),
         'transistor_footprint': wizard.field('transistor_footprint'),
+        'crystal_footprint': wizard.field('crystal_footprint'),
+        'crystal_frequency': wizard.field('crystal_frequency'),
         'resistor_footprint': resistor_footprints[wizard.field('common_footprint')],
         'capacitor_footprint': capacitor_footprints[wizard.field('common_footprint')],
         'led_footprint': led_footprints[wizard.field('common_footprint')],
@@ -225,7 +227,7 @@ def load_settings(wizard, settings_filename="settings.yml"):
                               'switch', 'reset', 'Flash button', 'Reset button', 'led', 'FTDI header', 'usb_connector', 'ina219',
                               'DS18B20', 'DS18B20U', 'usb_uart', 'common_footprint', 'board_footprint',
                               'regulator', 'onewire_connector', 'autoselect', 'hc12', 'generate_labels',
-                              'title', 'author', 'regulator_vin_bypass_cap', 'regulator_vout_bypass_cap', 'sh1106', 'si5351']:
+                              'title', 'author', 'regulator_vin_bypass_cap', 'regulator_vout_bypass_cap', 'sh1106', 'si5351', 'crystal_footprint', 'crystal_frequency']:
                     if field in settings:
                         wizard.setField(field, settings[field])
     except:

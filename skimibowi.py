@@ -86,6 +86,9 @@ class MCU(QtWidgets.QWizardPage):
         self.ftdi_header = QtWidgets.QCheckBox("FTDI header")
         self.led = QtWidgets.QCheckBox("Power-on led on GPIO0")
         self.icsp = QtWidgets.QCheckBox("ICSP header")
+        self.crystal_frequency_label = QtWidgets.QLabel("Crystal Frequency")
+        self.crystal_frequency = QIComboBox(self)
+        self.crystal_frequency.addItems(['10Mhz', '12MHz', '16MHz', '20MHz'])
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.comboBox)
         layout.addWidget(self.resetButton)
@@ -94,6 +97,8 @@ class MCU(QtWidgets.QWizardPage):
         layout.addWidget(self.ftdi_header)
         layout.addWidget(self.led)
         layout.addWidget(self.icsp)
+        layout.addWidget(self.crystal_frequency_label)
+        layout.addWidget(self.crystal_frequency)
         self.registerField("mcu", self.comboBox, "currentText")
         self.registerField("reset", self.resetLine)
         self.registerField("Reset button", self.resetButton)
@@ -101,6 +106,7 @@ class MCU(QtWidgets.QWizardPage):
         self.registerField("FTDI header", self.ftdi_header)
         self.registerField("led", self.led)
         self.registerField("icsp", self.icsp)
+        self.registerField("crystal_frequency", self.crystal_frequency, "currentText")
         self.setLayout(layout)
 
 
@@ -177,6 +183,12 @@ class FootprintsPage(QtWidgets.QWizardPage):
         self.transistor_footprint.addItems(["THT", "SOT-223", "SOT-23"])
         self.registerField('transistor_footprint', self.transistor_footprint, 'currentText')
 
+        self.crystal_footprint_label = QtWidgets.QLabel()
+        self.crystal_footprint_label.setText("Crystal footprint")
+        self.crystal_footprint = QIComboBox(self)
+        self.crystal_footprint.addItems(["HC-49", "CST"])
+        self.registerField('crystal_footprint', self.crystal_footprint, 'currentText')
+
         self.button_footprint_label = QtWidgets.QLabel()
         self.button_footprint_label.setText("Tactile button footprint")
         self.button_footprint = QIComboBox(self)
@@ -195,6 +207,8 @@ class FootprintsPage(QtWidgets.QWizardPage):
         layout.addWidget(self.common_footprint)
         layout.addWidget(self.transistor_footprint_label)
         layout.addWidget(self.transistor_footprint)
+        layout.addWidget(self.crystal_footprint_label)
+        layout.addWidget(self.crystal_footprint)
         layout.addWidget(self.button_footprint_label)
         layout.addWidget(self.button_footprint)
         layout.addWidget(self.board_footprint_label)
