@@ -1,5 +1,5 @@
 astroid==2.3.3
-future==0.18.2
+future==0.18.3
 graphviz==0.13.2
 isort==4.3.21
 kinparse==0.1.2
