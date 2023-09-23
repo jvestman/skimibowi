@@ -28,6 +28,10 @@
 from skidl import generate_netlist
 from skidl import Net
 from skidl import Part
+from skidl import set_default_tool
+from skidl import KICAD7
+
+set_default_tool(KICAD7)
 
 
 generate_netlist()

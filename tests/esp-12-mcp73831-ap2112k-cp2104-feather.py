@@ -31,6 +31,10 @@ import itertools
 from skidl import generate_netlist
 from skidl import Net
 from skidl import Part
+from skidl import set_default_tool
+from skidl import KICAD7
+
+set_default_tool(KICAD7)
 
 
 def subcircuit_label(name):
@@ -48,17 +52,17 @@ def C(value):
     return Part('Device', 'C', value=value, footprint='Capacitor_SMD:C_1206_3216Metric')
 
 
-def Device(library, name, value=""):
+def Device(library, name, value="", footprint=None):
     """Make part lookup and return the part with footprint set"""
-    footprint = show(library, name).F2
+    footprint = footprint or show(library, name).F2
     if not value:
         value=name
     return Part(library, name, value=value, footprint=footprint)
 
 
-def D(name,value=""):
+def D(name,value="",footprint=None):
     """Creates diode"""
-    return Device('Diode', name, value=value)
+    return Device('Diode', name, value=value, footprint=footprint)
 
 
 def connect_parts(a, b):
@@ -147,7 +151,7 @@ USBMICRO['GND'] += Net.fetch('GND')
 USBMICRO['D-'] += Net.fetch('USBD-')
 USBMICRO['D+'] += Net.fetch('USBD+')
 
-REGULATOR['VI'] & D("MBR0520LT") & BATTERY
+REGULATOR['VI'] & D("MBR0520LT", footprint='Diode_SMD:D_SOD-123')['A,K'] & BATTERY
 
 
 @subcircuit

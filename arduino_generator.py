@@ -153,7 +153,7 @@ def generate_arduino_nano_v3_board_footprint():
     """Generate Arduino Nano V3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['~RESET'] += U1['~{RESET}/PC6']
+BOARD['~{RESET}'] += U1['~{RESET}/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')

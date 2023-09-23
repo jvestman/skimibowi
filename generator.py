@@ -187,6 +187,8 @@ generate_netlist()
     import_statements.add('from skidl import generate_netlist')
     import_statements.add('from skidl import Net')
     import_statements.add('from skidl import Part')
+    import_statements.add('from skidl import set_default_tool')
+    import_statements.add('from skidl import KICAD7')
 
     import_code = "\n".join(import_statements)
 
@@ -220,6 +222,8 @@ generate_netlist()
 \"\"\"Creates Kicad netlist file for a microcontroller board\"\"\"
 
 {import_code}
+
+set_default_tool(KICAD7)
 
 """ + reqcode + code
 
@@ -267,7 +271,7 @@ def connect_power_network(args):
         requirements.add(generate_device)
         requirements.add(generate_d)
         import_statements.add("from skidl import show")
-        components = ['REGULATOR[\'VI\']', 'D("MBR0520LT")']
+        components = ['REGULATOR[\'VI\']', 'D("MBR0520LT", footprint=\'Diode_SMD:D_SOD-123\')[\'A,K\']']
     elif args.get('usb_connector', False) != 'No USB connector':
         components = ['Net.fetch(\'+VBus\')']
     else:

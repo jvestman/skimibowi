@@ -29,6 +29,10 @@ from skidl import show
 from skidl import generate_netlist
 from skidl import Net
 from skidl import Part
+from skidl import set_default_tool
+from skidl import KICAD7
+
+set_default_tool(KICAD7)
 
 
 def R(value):
@@ -36,17 +40,17 @@ def R(value):
     return Part('Device', 'R', value=value, footprint='Resistor_SMD:R_1206_3216Metric')
 
 
-def Device(library, name, value=""):
+def Device(library, name, value="", footprint=None):
     """Make part lookup and return the part with footprint set"""
-    footprint = show(library, name).F2
+    footprint = footprint or show(library, name).F2
     if not value:
         value=name
     return Part(library, name, value=value, footprint=footprint)
 
 
-def D(name,value=""):
+def D(name,value="",footprint=None):
     """Creates diode"""
-    return Device('Diode', name, value=value)
+    return Device('Diode', name, value=value, footprint=footprint)
 
 
 def C(value):
@@ -106,7 +110,7 @@ USBMICRO['GND'] += Net.fetch('GND')
 USBMICRO['D-'] += Net.fetch('USBD-')
 USBMICRO['D+'] += Net.fetch('USBD+')
 
-REGULATOR['VI'] & D("MBR0520LT") & FUSE
+REGULATOR['VI'] & D("MBR0520LT", footprint='Diode_SMD:D_SOD-123')['A,K'] & FUSE
 
 FTDI230 = Part('Interface_USB', 'FT231XS', footprint="Package_SO:SSOP-20_3.9x8.7mm_P0.635mm")
 FTDI230['VCC'] += Net.fetch('+5V')
@@ -116,12 +120,12 @@ FTDI230['RXD'] += Net.fetch('tx')
 FTDI230['3V3OUT'] += Net.fetch('+3V3')
 FTDI230['USBDM'] += Net.fetch('USBD-')
 FTDI230['USBDP'] += Net.fetch('USBD+')
-FTDI230['~DTR'] += Net.fetch('DTR')
-FTDI230['~RTS'] += Net.fetch('RTS')
+FTDI230['~{DTR}'] += Net.fetch('DTR')
+FTDI230['~{RTS}'] += Net.fetch('RTS')
 Net.fetch('GND') & C('100nF') & FTDI230['3V3OUT']
 
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['~RESET'] += U1['~{RESET}/PC6']
+BOARD['~{RESET}'] += U1['~{RESET}/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')

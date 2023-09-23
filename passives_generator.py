@@ -56,9 +56,9 @@ def generate_device(args):
     """Generate part lookup function"""
 
     return f"""
-def Device(library, name, value=""):
+def Device(library, name, value="", footprint=None):
     \"\"\"Make part lookup and return the part with footprint set\"\"\"
-    footprint = show(library, name).F2
+    footprint = footprint or show(library, name).F2
     if not value:
         value=name
     return Part(library, name, value=value, footprint=footprint)
@@ -68,7 +68,7 @@ def Device(library, name, value=""):
 def generate_d(args):
     """Generate part lookup function"""
     return f"""
-def D(name,value=""):
+def D(name,value="",footprint=None):
     \"\"\"Creates diode\"\"\"
-    return Device('Diode', name, value=value)
+    return Device('Diode', name, value=value, footprint=footprint)
 """
