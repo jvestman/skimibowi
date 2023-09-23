@@ -15,7 +15,7 @@ icsp: true
 ina219: false
 led: false
 led_footprint: LED_SMD:LED_1206_3216Metric
-mcu: ATmega328P-AU
+mcu: ATmega328P-A
 mcu_footprint: Package_QFP:TQFP-32_7x7mm_P0.8mm
 mcurail: +5V
 onewire_connector: No Onewire connector

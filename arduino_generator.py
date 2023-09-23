@@ -38,7 +38,7 @@ U1 = Part('MCU_Microchip_ATmega', '{mcu}', footprint='{mcu_footprint}')
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
-U1['~{RESET}/PC6'] & R('10k') & Net.fetch('{mcurail}')
+U1['~{{RESET}}/PC6'] & R('10k') & Net.fetch('{mcurail}')
 {crystal}
 # Serial communications
 U1['PD1'] += Net.fetch('tx')
@@ -109,7 +109,7 @@ ICSP_CONN[1] += U1['PB4']
 ICSP_CONN[2] += Net.fetch('+5V')
 ICSP_CONN[3] += U1['PB5']
 ICSP_CONN[4] += U1['PB3']
-ICSP_CONN[5] += U1['~RESET~/PC6']
+ICSP_CONN[5] += U1['~{RESET}/PC6']
 ICSP_CONN[6] += Net.fetch('GND')
 '''
 
@@ -118,7 +118,7 @@ def generate_arduino_reset_button():
     """Generate reset button"""
     return '''
 SW_RESET = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW_RESET[1] += U1['~RESET~/PC6']
+SW_RESET[1] += U1['~{RESET}/PC6']
 SW_RESET[2] += Net.fetch('GND')
 '''
 
@@ -126,7 +126,7 @@ def generate_arduino_ftdi_reset(args):
     """Generate connection to FTDI header reset"""
     requirements.add(generate_c)
     return '''
-U1['~RESET~/PC6'] & C('100nF') & Net.fetch('RTS')
+U1['~{RESET}/PC6'] & C('100nF') & Net.fetch('RTS')
 '''.format(**args)
 
 
@@ -134,7 +134,7 @@ def generate_arduino_uno_r3_board_footprint():
     """Generate Arduino Uno R3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Uno_R3', footprint='Module:Arduino_UNO_R3_WithMountingHoles')
-BOARD['~RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~{RESET}/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')
@@ -153,7 +153,7 @@ def generate_arduino_nano_v3_board_footprint():
     """Generate Arduino Nano V3 board layout footprint"""
     return '''
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['~RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~{RESET}/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')

@@ -159,12 +159,12 @@ def generate(args):
 
     if args.get('board_footprint', False) == 'Arduino Uno R3':
         code += generate_arduino_uno_r3_board_footprint()
-        if args['mcu'] in ['ATmega328P-PU', 'ATmega328P-AU', 'ATmega328P-MU']:
+        if args['mcu'] in ['ATmega328P-P', 'ATmega328P-A', 'ATmega328P-M']:
             code += generate_atmega_arduino_board_connections()
 
     if args.get('board_footprint', False) == 'Arduino Nano':
         code += generate_arduino_nano_v3_board_footprint()
-        if args['mcu'] in ['ATmega328P-PU', 'ATmega328P-AU', 'ATmega328P-MU']:
+        if args['mcu'] in ['ATmega328P-P', 'ATmega328P-A', 'ATmega328P-M']:
             code += generate_atmega_arduino_board_connections()
 
     if args.get('board_footprint', False) == 'Adafruit Feather':

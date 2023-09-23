@@ -59,10 +59,10 @@ U1 = Part('MCU_Microchip_ATmega', 'ATmega328P-A', footprint='Package_QFP:TQFP-32
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
-U1['~RESET~/PC6'] & R('10k') & Net.fetch('+5V')
+U1['~{RESET}/PC6'] & R('10k') & Net.fetch('+5V')
 
 # Crystal
-ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
+ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_Murata_CSTxExxV-3Pin_3.0x1.1mm')
 U1['XTAL1/PB6'] += ATMEGA_XTAL[1]
 U1['XTAL2/PB7'] += ATMEGA_XTAL[3]
 ATMEGA_XTAL[2] += Net.fetch('GND')
@@ -84,11 +84,11 @@ ICSP_CONN[1] += U1['PB4']
 ICSP_CONN[2] += Net.fetch('+5V')
 ICSP_CONN[3] += U1['PB5']
 ICSP_CONN[4] += U1['PB3']
-ICSP_CONN[5] += U1['~RESET~/PC6']
+ICSP_CONN[5] += U1['~{RESET}/PC6']
 ICSP_CONN[6] += Net.fetch('GND')
 
 SW_RESET = Part('Switch', 'SW_Push', footprint="Button_Switch_SMD:SW_SPST_B3U-1000P")
-SW_RESET[1] += U1['~RESET~/PC6']
+SW_RESET[1] += U1['~{RESET}/PC6']
 SW_RESET[2] += Net.fetch('GND')
 
 FUSE = Part('Device', 'Fuse', footprint='Fuse_1812_4532Metric')
