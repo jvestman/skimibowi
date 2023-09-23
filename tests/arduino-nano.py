@@ -53,7 +53,7 @@ def C(value):
     """Creates default capacitor footprint"""
     return Part('Device', 'C', value=value, footprint='Capacitor_SMD:C_1206_3216Metric')
 
-U1 = Part('MCU_Microchip_ATmega', 'ATmega328P-AU', footprint='Package_QFP:TQFP-32_7x7mm_P0.8mm')
+U1 = Part('MCU_Microchip_ATmega', 'ATmega328P-A', footprint='Package_QFP:TQFP-32_7x7mm_P0.8mm')
 
 # Power networks
 U1['VCC'] += Net.fetch('+5V')
@@ -121,7 +121,7 @@ FTDI230['~RTS'] += Net.fetch('RTS')
 Net.fetch('GND') & C('100nF') & FTDI230['3V3OUT']
 
 BOARD = Part('MCU_Module', 'Arduino_Nano_v3.x', footprint='Module:Arduino_Nano')
-BOARD['~RESET'] += U1['~RESET~/PC6']
+BOARD['~RESET'] += U1['~{RESET}/PC6']
 BOARD['+5V'] += Net.fetch('+5V')
 BOARD['3V3'] += Net.fetch('+3V3')
 BOARD['GND'] += Net.fetch('GND')

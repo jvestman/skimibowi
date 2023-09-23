@@ -112,7 +112,7 @@ def generate_esp():
 generate_esp()
 
 
-BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal')
+BATTERY = Part('Connector', 'Conn_01x02_Socket', footprint='JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal')
 BATTERY[1] += Net.fetch('+VBatt')
 BATTERY[2] += Net.fetch('GND')
 

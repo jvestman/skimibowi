@@ -59,7 +59,7 @@ def generate(args):
     if args.get('mcu') == "WeMos D1 mini":
         code += generate_subcircuit(generate_wemos_d1_mini, args)
 
-    if args.get('mcu') in ['ATmega328P-PU', "ATmega328P-AU", "ATmega328P-MU"]:
+    if args.get('mcu') in ['ATmega328P-P', "ATmega328P-A", "ATmega328P-M"]:
         code += generate_atmega328p(args)
         if args['icsp']:
             code += generate_icsp()
@@ -68,7 +68,7 @@ def generate(args):
         if args['FTDI header']:
             code += generate_arduino_ftdi_reset(args)
 
-    if args.get('mcu') in ['ATtiny85-20PU', 'ATtiny85-20SU', 'ATtiny85-20MU']:
+    if args.get('mcu') in ['ATtiny85-20P', 'ATtiny85-20S', 'ATtiny85-20M']:
         code += generate_attiny85(args)
 
     if args.get('mcu') in ['Arduino Nano']:
@@ -255,7 +255,7 @@ def generate_power_connector(args):
         args['battery_connector_pos'] = '+VBatt'
 
     return '''
-BATTERY = Part('Connector', 'Conn_01x02_Female', footprint='{powersource_footprint}')
+BATTERY = Part('Connector', 'Conn_01x02_Socket', footprint='{powersource_footprint}')
 BATTERY[1] += Net.fetch('{battery_connector_pos}')
 BATTERY[2] += Net.fetch('GND')
 '''.format(**args)
@@ -342,7 +342,7 @@ U2['DQ'] += Net.fetch('DQ')
 def generate_onewire_connector(args):
     """Generate connector for external onewire devices"""
     return '''
-ONEWIRECONN = Part('Connector', 'Conn_01x03_Female', footprint='{onewire_connector_footprint}')
+ONEWIRECONN = Part('Connector', 'Conn_01x03_Socket', footprint='{onewire_connector_footprint}')
 ONEWIRECONN[1] += Net.fetch('{mcurail}')
 ONEWIRECONN[2] += Net.fetch('DQ')
 ONEWIRECONN[3] += Net.fetch('GND')
@@ -391,7 +391,7 @@ def generate_ftdi_header(args):
     """Generate header for connecting FTDI programmer"""
 
     return '''
-FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Skimibowi:FTDI_Header')
+FTDI_HEADER = Part('Connector', 'Conn_01x06_Pin', footprint='Skimibowi:FTDI_Header')
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += Net.fetch('CTS')
 FTDI_HEADER[3] += Net.fetch('{mcurail}')

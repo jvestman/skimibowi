@@ -64,7 +64,7 @@ def generate_esp():
 generate_esp()
 
 
-FTDI_HEADER = Part('Connector', 'Conn_01x06_Female', footprint='Skimibowi:FTDI_Header')
+FTDI_HEADER = Part('Connector', 'Conn_01x06_Pin', footprint='Skimibowi:FTDI_Header')
 FTDI_HEADER[1] += Net.fetch('GND')
 FTDI_HEADER[2] += Net.fetch('CTS')
 FTDI_HEADER[3] += Net.fetch('+VBatt')

@@ -38,7 +38,7 @@ U1 = Part('MCU_Microchip_ATmega', '{mcu}', footprint='{mcu_footprint}')
 U1['VCC'] += Net.fetch('+5V')
 U1['AVCC'] += Net.fetch('+5V')
 U1['GND'] += Net.fetch('GND')
-U1['~RESET~/PC6'] & R('10k') & Net.fetch('{mcurail}')
+U1['~{RESET}/PC6'] & R('10k') & Net.fetch('{mcurail}')
 {crystal}
 # Serial communications
 U1['PD1'] += Net.fetch('tx')
@@ -61,7 +61,7 @@ U1['XTAL1/PB6'] & C('18pF') & ATMEGA_XTAL & C('18pF') & U1['XTAL2/PB7']
     if args['crystal_footprint'] == 'CST':
         return '''
 # Crystal
-ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_muRata_CSTxExxV-3Pin_3.0x1.1mm')
+ATMEGA_XTAL = Part('Device','Resonator', footprint='Resonator_SMD_Murata_CSTxExxV-3Pin_3.0x1.1mm')
 U1['XTAL1/PB6'] += ATMEGA_XTAL[1]
 U1['XTAL2/PB7'] += ATMEGA_XTAL[3]
 ATMEGA_XTAL[2] += Net.fetch('GND')
